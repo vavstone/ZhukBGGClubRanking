@@ -52,6 +52,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReorderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReorderForm.Designer.cs">
+      <DependentUpon>ReorderForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -64,6 +70,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ReorderForm.resx">
+      <DependentUpon>ReorderForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -75,6 +84,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Oli.Controls\Oli.Controls.csproj">
+      <Project>{3f1a45c7-96cb-4bad-a931-792d04b96128}</Project>
+      <Name>Oli.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ZhukBGGClubRanking.Core\ZhukBGGClubRanking.Core.csproj">
       <Project>{c043123f-8c46-4b82-8b18-d9e678e8e624}</Project>
       <Name>ZhukBGGClubRanking.Core</Name>

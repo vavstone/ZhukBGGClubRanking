@@ -13,8 +13,9 @@ namespace ZhukBGGClubRanking.Core
         public GameRatingList File { get; set; }
         public string FileNameWithoutExt { get; set; }
 
-        public static List<GameRatingListFile> LoadFromFolder(string folderFullName)
+        public static List<GameRatingListFile> LoadFromFolder()
         {
+            string folderFullName = Settings.ListsDir;
             var result = new List<GameRatingListFile>();
             foreach (var item in Directory.GetFiles(folderFullName).Where(c=>c.ToLower().EndsWith("csv")))
             {
@@ -23,6 +24,8 @@ namespace ZhukBGGClubRanking.Core
             }
             return result;
         }
+
+        
 
         public static GameRatingListFile LoadFromFile(string fileFullName)
         {
@@ -41,6 +44,16 @@ namespace ZhukBGGClubRanking.Core
             }
             grList.CalculateWeightByRating();
             return item;
+        }
+
+        public void SaveToFile()
+        {
+            string fileName = Path.Combine(Settings.ListsDir, this.FileNameWithoutExt + ".csv");
+            var txt = CsvWriter.WriteToText(
+                new[] {"Rank", "Item"},
+                File.GameList.OrderBy(c => c.Rating).Select(c => new[] {c.Rating.ToString(), c.Game}).ToList()
+            );
+            System.IO.File.WriteAllText(fileName, txt);
         }
     }
 }

@@ -17,15 +17,29 @@ namespace ZhukBGGClubRanking.WinApp
             InitializeComponent();
         }
 
+        public GameRatingList GetRatingInOpenedTab()
+        {
+            var currentTab = tabControl1.SelectedTab.Text;
+            return usersRatingListFiles.FirstOrDefault(c=>c.File.UserNames.Contains(currentTab)).File;
+        }
+
         private List<GameRatingListFile> usersRatingListFiles;
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            LoadUsersRatings();
+            SetButton2Text();
             PrepareDataGrid(dataGridView1);
-            usersRatingListFiles = GameRatingListFile.LoadFromFolder(Settings.ListsDir);
+        }
+
+        void LoadUsersRatings()
+        {
+            usersRatingListFiles = GameRatingListFile.LoadFromFolder();
+            tabControl1.TabPages.Clear();
+            checkedListBox1.Items.Clear();
             foreach (var item in usersRatingListFiles)
             {
-                checkedListBox1.Items.Add(item.FileNameWithoutExt,true);
+                checkedListBox1.Items.Add(item.FileNameWithoutExt, true);
                 var tabPage = new TabPage();
                 tabPage.Text = item.FileNameWithoutExt;
                 tabControl1.TabPages.Add(tabPage);
@@ -58,6 +72,43 @@ namespace ZhukBGGClubRanking.WinApp
             var checkedLists = usersRatingListFiles.Where(c=>checkedUserNames.Contains(c.File.UserNames.First())).Select(c => c.File).ToList();
             var result = GameRatingList.CalculateAvarageRating(checkedLists);
             dataGridView1.DataSource = result.GameList.OrderBy(c => c.Rating).ToList();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ReorderForm reorderForm = new ReorderForm();
+            reorderForm.RatingList = GetRatingInOpenedTab();
+            var otherCollections = usersRatingListFiles
+                .Where(c => c.File.UserNames.FirstOrDefault() != reorderForm.RatingList.UserNames.FirstOrDefault())
+                .Select(c => c.File).ToList();
+            var newGames = reorderForm.RatingList.GetGamesNotInCollectionButExistingInOthers(otherCollections);
+            if (newGames.Count > 0)
+            {
+                if (MessageBox.Show("В других коллекциях найдены игры, отсуствующие в вашем рейтинге. Добавить их?",
+                        "Подтверждение добавления",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question,
+                        MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                {
+                    reorderForm.NewGames = newGames;
+                }
+            }
+            reorderForm.ShowDialog(this);
+            LoadUsersRatings();
+        }
+
+        void SetButton2Text()
+        {
+            if (tabControl1.SelectedTab != null)
+            {
+                var selectedTabText = tabControl1.SelectedTab.Text;
+                button2.Text = "Пересмотреть рейтинг " + selectedTabText;
+            }
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetButton2Text();
         }
     }
 }

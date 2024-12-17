@@ -66,5 +66,17 @@ namespace ZhukBGGClubRanking.Core
             result.UserNames.AddRange(inList.SelectMany(c=>c.UserNames));
             return result;
         }
+
+        public List<GameRating> GetGamesNotInCollectionButExistingInOthers(List<GameRatingList> otherCollections)
+        {
+            var lastRating = GameList.Select(c => c.Rating).Max();
+            var result = new List<GameRating>();
+            foreach (var game in otherCollections.SelectMany(c=>c.GameList).Select(c=>c.Game).Distinct().OrderBy(c=>c))
+            {
+                if (!this.GameList.Any(c=>c.Game==game))
+                    result.Add(new GameRating {Game = game, Rating = lastRating++});
+            }
+            return result;
+        }
     }
 }
