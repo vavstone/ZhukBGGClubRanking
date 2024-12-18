@@ -71,7 +71,18 @@ namespace ZhukBGGClubRanking.Core
         {
             var lastRating = GameList.Select(c => c.Rating).Max();
             var result = new List<GameRating>();
-            foreach (var game in otherCollections.SelectMany(c=>c.GameList).Select(c=>c.Game).Distinct().OrderBy(c=>c))
+            var bggColl = BGGCollection.LoadFromFile();
+            var newGamesInCommonColl = new List<string>();
+            var allNewGames = new List<string>();
+            if (bggColl != null)
+            {
+                newGamesInCommonColl = bggColl.Items.Where(c=>c.Status.Own).Select(c => c.Name).ToList();
+                allNewGames.AddRange(newGamesInCommonColl);
+            }
+            allNewGames.AddRange(otherCollections.SelectMany(c=>c.GameList).Select(c=>c.Game));
+
+
+            foreach (var game in allNewGames.Distinct().OrderBy(c=>c))
             {
                 if (!this.GameList.Any(c=>c.Game==game))
                     result.Add(new GameRating {Game = game, Rating = lastRating++});

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Windows.Forms;
 using ZhukBGGClubRanking.Core;
@@ -55,7 +58,7 @@ namespace ZhukBGGClubRanking.WinApp
         {
             grid.AutoGenerateColumns = false;
             var colName = new DataGridViewTextBoxColumn();
-            colName.Width = 350;
+            colName.Width = 435;
             colName.HeaderText = "Название";
             colName.DataPropertyName = "Game";
             grid.Columns.Add(colName);
@@ -64,6 +67,9 @@ namespace ZhukBGGClubRanking.WinApp
             colRate.HeaderText = "Рейтинг";
             colRate.DataPropertyName = "Rating";
             grid.Columns.Add(colRate);
+            //TODO
+            //AddImagesColumn(grid);
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -72,6 +78,32 @@ namespace ZhukBGGClubRanking.WinApp
             var checkedLists = usersRatingListFiles.Where(c=>checkedUserNames.Contains(c.File.UserNames.First())).Select(c => c.File).ToList();
             var result = GameRatingList.CalculateAvarageRating(checkedLists);
             dataGridView1.DataSource = result.GameList.OrderBy(c => c.Rating).ToList();
+            //TODO
+            //AddImagesToDataGrid(dataGridView1);
+        }
+
+        void AddImagesColumn(DataGridView dataGridView)
+        {
+            DataGridViewImageColumn iconColumn = new DataGridViewImageColumn();
+            iconColumn.Name = "Pic";
+            iconColumn.Width = 60;
+            dataGridView.Columns.Add(iconColumn);
+        }
+
+        void AddImagesToDataGrid(DataGridView dataGridView)
+        {
+            for (int row = 0; row < dataGridView1.Rows.Count - 1; row++)
+            {
+                var uri =
+                    "https://cf.geekdo-images.com/Naw8y8J_s-8cvq1GoTON6w__thumb/img/ieH8A28KJe3truXqQe1nDXSpxUE=/fit-in/200x150/filters:strip_icc()/pic7416519.jpg";
+                HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(uri);
+                myRequest.Method = "GET";
+                HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
+                Image img = Image.FromStream(myResponse.GetResponseStream());
+                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(img, new Size(50, 50));
+                myResponse.Close();
+                ((DataGridViewImageCell)dataGridView1.Rows[row].Cells[2]).Value = bmp;
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -81,16 +113,16 @@ namespace ZhukBGGClubRanking.WinApp
             var otherCollections = usersRatingListFiles
                 .Where(c => c.File.UserNames.FirstOrDefault() != reorderForm.RatingList.UserNames.FirstOrDefault())
                 .Select(c => c.File).ToList();
-            var newGames = reorderForm.RatingList.GetGamesNotInCollectionButExistingInOthers(otherCollections);
-            if (newGames.Count > 0)
+            var newGamesInOthersColl = reorderForm.RatingList.GetGamesNotInCollectionButExistingInOthers(otherCollections);
+            if (newGamesInOthersColl.Count > 0)
             {
-                if (MessageBox.Show("В других коллекциях найдены игры, отсуствующие в вашем рейтинге. Добавить их?",
+                if (MessageBox.Show(string.Format("В других коллекциях найдены игры ({0} штук), отсуствующие в вашем рейтинге. Добавить их?",newGamesInOthersColl.Count),
                         "Подтверждение добавления",
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question,
                         MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                 {
-                    reorderForm.NewGames = newGames;
+                    reorderForm.NewGames = newGamesInOthersColl;
                 }
             }
             reorderForm.ShowDialog(this);
@@ -109,6 +141,22 @@ namespace ZhukBGGClubRanking.WinApp
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetButton2Text();
+        }
+
+        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+
+        }
+
+
+        private void dataGridView1_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

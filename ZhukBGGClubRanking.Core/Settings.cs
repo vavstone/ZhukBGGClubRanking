@@ -17,5 +17,10 @@ namespace ZhukBGGClubRanking.Core
         {
             get { return Path.Combine(RootDir, "lists"); }
         }
+
+        public static string CommonCollectionFilePath
+        {
+            get { return Path.Combine(RootDir, "club_collection", "ZhukBGclub.xml"); }
+        }
     }
 }

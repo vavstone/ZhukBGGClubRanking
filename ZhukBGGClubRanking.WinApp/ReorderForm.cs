@@ -16,8 +16,8 @@ namespace ZhukBGGClubRanking.WinApp
     {
         public ReorderForm()
         {
-            InitializeComponent();
-            dragDropBindingSource.DataSource = dragDropListBox1;
+            InitializeComponent(); 
+            //dragDropBindingSource.DataSource = dragDropListBox1;
         }
 
         public GameRatingList RatingList { get; set; }
@@ -86,34 +86,7 @@ namespace ZhukBGGClubRanking.WinApp
             }
         }
 
-        //ListViewItem heldDownItem;
-        //Point heldDownPoint;
         
-        //private void listView1_MouseDown_1(object sender, MouseEventArgs e)
-        //{
-        //    //listView1.AutoArrange = false;
-        //    heldDownItem = listView1.GetItemAt(e.X, e.Y);
-        //    if (heldDownItem != null)
-        //    {
-        //        heldDownPoint = new Point(e.X - heldDownItem.Position.X,
-        //            e.Y - heldDownItem.Position.Y);
-        //    }
-        //}
-
-        //private void listView1_MouseUp_1(object sender, MouseEventArgs e)
-        //{
-        //    heldDownItem = null;
-        //    //listView1.AutoArrange = true;   
-        //}
-
-        //private void listView1_MouseMove_1(object sender, MouseEventArgs e)
-        //{
-        //    if (heldDownItem != null)
-        //    {
-        //        heldDownItem.Position = new Point(e.Location.X - heldDownPoint.X,
-        //            e.Location.Y - heldDownPoint.Y);
-        //    }
-        //}
 
         private void button1_Click(object sender, EventArgs e)
         {

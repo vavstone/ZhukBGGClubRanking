@@ -48,16 +48,16 @@
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.checkedListBox1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 584);
+            this.panel1.Location = new System.Drawing.Point(0, 694);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1164, 77);
+            this.panel1.Size = new System.Drawing.Size(1142, 73);
             this.panel1.TabIndex = 1;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(813, 42);
+            this.button1.Location = new System.Drawing.Point(817, 47);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(339, 23);
+            this.button1.Size = new System.Drawing.Size(322, 23);
             this.button1.TabIndex = 1;
             this.button1.Text = "Рассчитать средний рейтинг для выбранных пользователей";
             this.button1.UseVisualStyleBackColor = true;
@@ -68,26 +68,30 @@
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Location = new System.Drawing.Point(3, 6);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(504, 64);
+            this.checkedListBox1.Size = new System.Drawing.Size(808, 64);
             this.checkedListBox1.TabIndex = 0;
             // 
             // panel2
             // 
             this.panel2.Controls.Add(this.dataGridView1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(629, 0);
+            this.panel2.Location = new System.Drawing.Point(584, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(535, 584);
+            this.panel2.Padding = new System.Windows.Forms.Padding(0, 6, 0, 4);
+            this.panel2.Size = new System.Drawing.Size(558, 694);
             this.panel2.TabIndex = 0;
             // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView1.Location = new System.Drawing.Point(0, 6);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(535, 584);
+            this.dataGridView1.Size = new System.Drawing.Size(558, 684);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView1_CellFormatting);
+            this.dataGridView1.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellMouseEnter);
+            this.dataGridView1.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellMouseLeave);
             // 
             // panel3
             // 
@@ -95,24 +99,26 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(629, 584);
+            this.panel3.Size = new System.Drawing.Size(584, 694);
             this.panel3.TabIndex = 2;
             // 
             // tabControl1
             // 
+            this.tabControl1.Alignment = System.Windows.Forms.TabAlignment.Left;
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(629, 584);
+            this.tabControl1.Size = new System.Drawing.Size(584, 694);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(813, 6);
+            this.button2.Location = new System.Drawing.Point(817, 6);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(339, 23);
+            this.button2.Size = new System.Drawing.Size(322, 23);
             this.button2.TabIndex = 2;
             this.button2.Text = "Пересмотреть свой рейтинг";
             this.button2.UseVisualStyleBackColor = true;
@@ -122,7 +128,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1164, 661);
+            this.ClientSize = new System.Drawing.Size(1142, 767);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
