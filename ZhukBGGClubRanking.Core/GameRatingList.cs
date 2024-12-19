@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ZhukBGGClubRanking.Core
 {
@@ -9,6 +7,13 @@ namespace ZhukBGGClubRanking.Core
     {
         public List<string> UserNames { get; set; }
         public List<GameRating> GameList { get; set; }
+        public BGGCollection BGGCollection { get; }
+
+        public void SetBGGCollection(BGGCollection bgGCollection)
+        {
+            foreach (var game in GameList)
+                game.BGGItem = bgGCollection.GetItemByName(game.Game);
+        }
 
         public GameRatingList()
         {

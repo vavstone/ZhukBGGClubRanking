@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Windows.Forms;
 using ZhukBGGClubRanking.Core;
 
@@ -19,6 +15,8 @@ namespace ZhukBGGClubRanking.WinApp
         {
             InitializeComponent();
         }
+
+        public BGGCollection CommonCollection { get; set; }
 
         public GameRatingList GetRatingInOpenedTab()
         {
@@ -33,6 +31,12 @@ namespace ZhukBGGClubRanking.WinApp
             LoadUsersRatings();
             SetButton2Text();
             PrepareDataGrid(dataGridView1);
+            LoadCommonCollection();
+        }
+
+        void LoadCommonCollection()
+        {
+            CommonCollection = BGGCollection.LoadFromFile();
         }
 
         void LoadUsersRatings()
@@ -57,19 +61,48 @@ namespace ZhukBGGClubRanking.WinApp
         public void PrepareDataGrid(DataGridView grid)
         {
             grid.AutoGenerateColumns = false;
-            var colName = new DataGridViewTextBoxColumn();
-            colName.Width = 435;
+            grid.AllowUserToAddRows = false;
+            grid.AllowUserToDeleteRows = false;
+            grid.ShowEditingIcon = false;
+            //var colName = new DataGridViewTextBoxColumn();
+            var colName = new DataGridViewLinkColumn();
+            colName.Width = 306;
             colName.HeaderText = "Название";
             colName.DataPropertyName = "Game";
+            colName.TrackVisitedState = false;
+            colName.LinkBehavior = LinkBehavior.HoverUnderline;
+            colName.LinkColor = Color.Black;
+            colName.ReadOnly = false;
             grid.Columns.Add(colName);
             var colRate = new DataGridViewTextBoxColumn();
             colRate.Width = 60;
             colRate.HeaderText = "Рейтинг";
             colRate.DataPropertyName = "Rating";
+            colRate.ReadOnly = true;
             grid.Columns.Add(colRate);
+            AddCommentsColumn(grid);
+            grid.CellContentClick += Grid_CellContentClick;
+            grid.RowsDefaultCellStyle.SelectionBackColor = Color.LightGray;
+            grid.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
             //TODO
             //AddImagesColumn(grid);
-            
+
+        }
+
+        private void Grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var grid = sender as DataGridView;
+            if (e.ColumnIndex == 0)
+            {
+                if (dataGridView1.Columns[e.ColumnIndex] is DataGridViewLinkColumn && e.RowIndex != -1)
+                {
+                    
+                    string cellContent = grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                    var url = Settings.UrlForGameBGGId(CommonCollection.GetItemByName(cellContent).ObjectId);
+                    ProcessStartInfo sInfo = new ProcessStartInfo(url);
+                    Process.Start(sInfo);
+                }
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -77,6 +110,7 @@ namespace ZhukBGGClubRanking.WinApp
             var checkedUserNames = checkedListBox1.CheckedItems.OfType<string>().ToList();
             var checkedLists = usersRatingListFiles.Where(c=>checkedUserNames.Contains(c.File.UserNames.First())).Select(c => c.File).ToList();
             var result = GameRatingList.CalculateAvarageRating(checkedLists);
+            result.SetBGGCollection(CommonCollection);
             dataGridView1.DataSource = result.GameList.OrderBy(c => c.Rating).ToList();
             //TODO
             //AddImagesToDataGrid(dataGridView1);
@@ -84,9 +118,9 @@ namespace ZhukBGGClubRanking.WinApp
 
         void AddImagesColumn(DataGridView dataGridView)
         {
-            DataGridViewImageColumn iconColumn = new DataGridViewImageColumn();
+            var iconColumn = new DataGridViewImageColumn();
             iconColumn.Name = "Pic";
-            iconColumn.Width = 60;
+            iconColumn.Width = 120;
             dataGridView.Columns.Add(iconColumn);
         }
 
@@ -104,6 +138,15 @@ namespace ZhukBGGClubRanking.WinApp
                 myResponse.Close();
                 ((DataGridViewImageCell)dataGridView1.Rows[row].Cells[2]).Value = bmp;
             }
+        }
+
+        void AddCommentsColumn(DataGridView dataGridView)
+        {
+            var col = new DataGridViewTextBoxColumn();
+            col.Name = "Владеют";
+            col.DataPropertyName = "BGGComments";
+            col.Width = 130;
+            dataGridView.Columns.Add(col);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -141,22 +184,6 @@ namespace ZhukBGGClubRanking.WinApp
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetButton2Text();
-        }
-
-        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-
-        }
-
-
-        private void dataGridView1_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void dataGridView1_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
     }
 }

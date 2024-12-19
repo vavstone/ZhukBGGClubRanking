@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 
 namespace ZhukBGGClubRanking.Core
 {
@@ -21,6 +17,11 @@ namespace ZhukBGGClubRanking.Core
         public static string CommonCollectionFilePath
         {
             get { return Path.Combine(RootDir, "club_collection", "ZhukBGclub.xml"); }
+        }
+
+        public static string UrlForGameBGGId(int id)
+        {
+            return string.Format("https://boardgamegeek.com/boardgame/{0}", id);
         }
     }
 }

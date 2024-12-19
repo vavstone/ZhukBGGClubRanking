@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Csv;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
-using System.Text;
-using Csv;
 
 namespace ZhukBGGClubRanking.Core
 {
@@ -15,11 +13,13 @@ namespace ZhukBGGClubRanking.Core
 
         public static List<GameRatingListFile> LoadFromFolder()
         {
+            var bggcoll = BGGCollection.LoadFromFile();
             string folderFullName = Settings.ListsDir;
             var result = new List<GameRatingListFile>();
             foreach (var item in Directory.GetFiles(folderFullName).Where(c=>c.ToLower().EndsWith("csv")))
             {
                 var file = LoadFromFile(item);
+                file.File.SetBGGCollection(bggcoll);
                 result.Add(file);
             }
             return result;

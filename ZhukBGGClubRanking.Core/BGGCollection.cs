@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace ZhukBGGClubRanking.Core
@@ -53,6 +50,9 @@ namespace ZhukBGGClubRanking.Core
 
             [XmlElement("numplays")]
             public int NumPlays { get; set; }
+
+            [XmlElement("comment")]
+            public string Comment { get; set; }
 
             public ItemElement()
             {
@@ -126,6 +126,11 @@ namespace ZhukBGGClubRanking.Core
                 }
             }
             return null;
+        }
+
+        public ItemElement GetItemByName(string name)
+        {
+            return Items.FirstOrDefault(c => c.Name.ToUpper() == name.ToUpper());
         }
     }
 }

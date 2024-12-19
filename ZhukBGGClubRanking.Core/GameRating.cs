@@ -1,14 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ZhukBGGClubRanking.Core
+﻿namespace ZhukBGGClubRanking.Core
 {
     public class GameRating
     {
         public string Game { get; set; }
         public int Rating { get; set; }
         public int Weight { get; set; }
+        public BGGCollection.ItemElement BGGItem { get; set; }
+
+        public string BGGComments
+        {
+            get
+            {
+                if (BGGItem != null)
+                    return BGGItem.Comment;
+                return string.Empty;
+            }
+        }
     }
 }
