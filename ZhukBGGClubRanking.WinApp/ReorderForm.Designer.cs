@@ -28,15 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.dragDropListBox1 = new Oli.Controls.DragDropListBox();
-            this.dragDropBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize)(this.dragDropBindingSource)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -112,7 +109,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ReorderForm";
             this.Load += new System.EventHandler(this.ReorderForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dragDropBindingSource)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -124,7 +120,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private Oli.Controls.DragDropListBox dragDropListBox1;
-        private System.Windows.Forms.BindingSource dragDropBindingSource;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;

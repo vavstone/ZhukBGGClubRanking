@@ -20,11 +20,12 @@ namespace ZhukBGGClubRanking.WinApp
 
         public GameRatingList GetRatingInOpenedTab()
         {
-            var currentTab = tabControl1.SelectedTab.Text;
+            var currentTab = GetCurrentSelectedUser();
             return usersRatingListFiles.FirstOrDefault(c=>c.File.UserNames.Contains(currentTab)).File;
         }
 
         private List<GameRatingListFile> usersRatingListFiles;
+        private GameRatingList currentAvarageRatingList;
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -47,14 +48,15 @@ namespace ZhukBGGClubRanking.WinApp
             foreach (var item in usersRatingListFiles)
             {
                 checkedListBox1.Items.Add(item.FileNameWithoutExt, true);
-                var tabPage = new TabPage();
-                tabPage.Text = item.FileNameWithoutExt;
+                var tabPage = new TabPage(item.FileNameWithoutExt);
+                tabPage.Name = item.FileNameWithoutExt;
                 tabControl1.TabPages.Add(tabPage);
                 var grid = new DataGridView();
                 grid.Dock = DockStyle.Fill;
                 PrepareDataGrid(grid);
                 grid.DataSource = item.File.GameList.OrderBy(c => c.Rating).ToList();
                 tabPage.Controls.Add(grid);
+                grid.ClearSelection();
             }
         }
 
@@ -67,12 +69,12 @@ namespace ZhukBGGClubRanking.WinApp
             //var colName = new DataGridViewTextBoxColumn();
             var colName = new DataGridViewLinkColumn();
             colName.Width = 306;
+            //colName.Width =246;
             colName.HeaderText = "Название";
             colName.DataPropertyName = "Game";
             colName.TrackVisitedState = false;
             colName.LinkBehavior = LinkBehavior.HoverUnderline;
-            colName.LinkColor = Color.Black;
-            colName.ReadOnly = false;
+            colName.LinkColor = DefaultForeColor;
             grid.Columns.Add(colName);
             var colRate = new DataGridViewTextBoxColumn();
             colRate.Width = 60;
@@ -86,6 +88,8 @@ namespace ZhukBGGClubRanking.WinApp
             grid.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
             //TODO
             //AddImagesColumn(grid);
+
+            //AddTestColumn(grid);
 
         }
 
@@ -107,38 +111,72 @@ namespace ZhukBGGClubRanking.WinApp
 
         private void button1_Click(object sender, EventArgs e)
         {
+            UpdateAvarateRating();   
+        }
+
+        void UpdateAvarateRating()
+        {
             var checkedUserNames = checkedListBox1.CheckedItems.OfType<string>().ToList();
-            var checkedLists = usersRatingListFiles.Where(c=>checkedUserNames.Contains(c.File.UserNames.First())).Select(c => c.File).ToList();
-            var result = GameRatingList.CalculateAvarageRating(checkedLists);
-            result.SetBGGCollection(CommonCollection);
-            dataGridView1.DataSource = result.GameList.OrderBy(c => c.Rating).ToList();
+            var checkedLists = usersRatingListFiles.Where(c => checkedUserNames.Contains(c.File.UserNames.First())).Select(c => c.File).ToList();
+            currentAvarageRatingList = GameRatingList.CalculateAvarageRating(checkedLists);
+            currentAvarageRatingList.SetBGGCollection(CommonCollection);
+            CalcComplianceAverateRatingToSelectedUser();
+            dataGridView1.DataSource = currentAvarageRatingList.GameList.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
+            dataGridView1.ClearSelection();
+            UpdateDataGridViewColors();
             //TODO
             //AddImagesToDataGrid(dataGridView1);
+
         }
 
-        void AddImagesColumn(DataGridView dataGridView)
+        void CalcComplianceAverateRatingToSelectedUser()
         {
-            var iconColumn = new DataGridViewImageColumn();
-            iconColumn.Name = "Pic";
-            iconColumn.Width = 120;
-            dataGridView.Columns.Add(iconColumn);
-        }
-
-        void AddImagesToDataGrid(DataGridView dataGridView)
-        {
-            for (int row = 0; row < dataGridView1.Rows.Count - 1; row++)
+            var currentSelectedUser = GetCurrentSelectedUser();
+            if (!string.IsNullOrWhiteSpace(currentSelectedUser) && currentAvarageRatingList!=null)
             {
-                var uri =
-                    "https://cf.geekdo-images.com/Naw8y8J_s-8cvq1GoTON6w__thumb/img/ieH8A28KJe3truXqQe1nDXSpxUE=/fit-in/200x150/filters:strip_icc()/pic7416519.jpg";
-                HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(uri);
-                myRequest.Method = "GET";
-                HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
-                Image img = Image.FromStream(myResponse.GetResponseStream());
-                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(img, new Size(50, 50));
-                myResponse.Close();
-                ((DataGridViewImageCell)dataGridView1.Rows[row].Cells[2]).Value = bmp;
+                var userRatingFile =
+                    usersRatingListFiles.FirstOrDefault(c => c.File.UserNames.Contains(currentSelectedUser));
+                if (userRatingFile != null)
+                {
+                    foreach (var game in currentAvarageRatingList.GameList.OrderBy(c=>c.Rating))
+                    {
+                        var averageRating = game.Rating;
+                        var userGame =
+                            userRatingFile.File.GameList.FirstOrDefault(c => c.Game.ToUpper() == game.Game.ToUpper());
+                        if (userGame != null)
+                        {
+                            var userRating = userGame.Rating;
+                            var maxRatingSize = currentAvarageRatingList.GameList.Select(c => c.Rating).Max();
+                            game.CompliancePercent = (int)Utils.GetCompliancePercent(averageRating, userRating, maxRatingSize);
+                        }
+                    }
+                }
             }
         }
+
+        //void AddImagesColumn(DataGridView dataGridView)
+        //{
+        //    var iconColumn = new DataGridViewImageColumn();
+        //    iconColumn.Name = "Pic";
+        //    iconColumn.Width = 120;
+        //    dataGridView.Columns.Add(iconColumn);
+        //}
+
+        //void AddImagesToDataGrid(DataGridView dataGridView)
+        //{
+        //    for (int row = 0; row < dataGridView1.Rows.Count - 1; row++)
+        //    {
+        //        var uri =
+        //            "https://cf.geekdo-images.com/Naw8y8J_s-8cvq1GoTON6w__thumb/img/ieH8A28KJe3truXqQe1nDXSpxUE=/fit-in/200x150/filters:strip_icc()/pic7416519.jpg";
+        //        HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(uri);
+        //        myRequest.Method = "GET";
+        //        HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
+        //        Image img = Image.FromStream(myResponse.GetResponseStream());
+        //        System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(img, new Size(50, 50));
+        //        myResponse.Close();
+        //        ((DataGridViewImageCell)dataGridView1.Rows[row].Cells[2]).Value = bmp;
+        //    }
+        //}
 
         void AddCommentsColumn(DataGridView dataGridView)
         {
@@ -148,6 +186,15 @@ namespace ZhukBGGClubRanking.WinApp
             col.Width = 130;
             dataGridView.Columns.Add(col);
         }
+
+        //void AddTestColumn(DataGridView dataGridView)
+        //{
+        //    var col = new DataGridViewTextBoxColumn();
+        //    col.Name = "test";
+        //    col.DataPropertyName = "CompliancePercent";
+        //    col.Width = 50;
+        //    dataGridView.Columns.Add(col);
+        //}
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -172,18 +219,62 @@ namespace ZhukBGGClubRanking.WinApp
             LoadUsersRatings();
         }
 
-        void SetButton2Text()
+        string GetCurrentSelectedUser()
         {
             if (tabControl1.SelectedTab != null)
-            {
-                var selectedTabText = tabControl1.SelectedTab.Text;
-                button2.Text = "Пересмотреть рейтинг " + selectedTabText;
-            }
+                return tabControl1.SelectedTab.Text;
+            return string.Empty;
+        }
+
+        void SetButton2Text()
+        {
+            var currentSelectedUser = GetCurrentSelectedUser();
+            if (!string.IsNullOrEmpty(currentSelectedUser))
+                button2.Text = "Пересмотреть рейтинг " + currentSelectedUser;
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetButton2Text();
+            CalcComplianceAverateRatingToSelectedUser();
+            UpdateDataGridViewColors();
+            SetCheckBoxSelected(GetCurrentSelectedUser());
+        }
+
+        void UpdateDataGridViewColors()
+        {
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                var complProc = (dataGridView1.DataSource as List<GameRating>)[row.Index].CompliancePercent;
+                var colors = Utils.GetGradientColors(Color.White, Color.LightGreen, 102);
+                var color = colors.ElementAt(complProc);
+                dataGridView1.Rows[row.Index].Cells[0].Style.BackColor = color;
+            }
+        }
+
+        void SetTabControlSelected(string userName)
+        {
+            tabControl1.SelectTab(userName);
+        }
+
+        void SetCheckBoxSelected(string userName)
+        {
+            var indexByUserName = 0;
+            foreach (var item in checkedListBox1.Items)
+            {
+                if (item.ToString() == userName)
+                {
+                    checkedListBox1.SelectedIndex = indexByUserName;
+                    return;
+                }
+                indexByUserName++;
+            }
+        }
+
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selectedUser = checkedListBox1.SelectedItem.ToString();
+            SetTabControlSelected(selectedUser);
         }
     }
 }

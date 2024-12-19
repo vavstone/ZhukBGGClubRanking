@@ -7,7 +7,7 @@ namespace ZhukBGGClubRanking.Core
     {
         public List<string> UserNames { get; set; }
         public List<GameRating> GameList { get; set; }
-        public BGGCollection BGGCollection { get; }
+        //public BGGCollection BGGCollection { get; }
 
         public void SetBGGCollection(BGGCollection bgGCollection)
         {
