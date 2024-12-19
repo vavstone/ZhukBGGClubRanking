@@ -102,9 +102,13 @@ namespace ZhukBGGClubRanking.WinApp
                 {
                     
                     string cellContent = grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                    var url = Settings.UrlForGameBGGId(CommonCollection.GetItemByName(cellContent).ObjectId);
-                    ProcessStartInfo sInfo = new ProcessStartInfo(url);
-                    Process.Start(sInfo);
+                    var gameInBGGColl = CommonCollection.GetItemByName(cellContent);
+                    if (gameInBGGColl != null)
+                    {
+                        var url = Settings.UrlForGameBGGId(gameInBGGColl.ObjectId);
+                        ProcessStartInfo sInfo = new ProcessStartInfo(url);
+                        Process.Start(sInfo);
+                    }
                 }
             }
         }
