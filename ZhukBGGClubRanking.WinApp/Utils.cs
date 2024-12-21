@@ -43,5 +43,15 @@ namespace ZhukBGGClubRanking.WinApp
             if (res > 100) return 100;
             return res;
         }
+
+        public static double GetCompliancePercent_v2(double userRating, double maxUserRatingSize)
+        {
+            var coeff = 3;
+            var step = 100 / maxUserRatingSize;
+            var res = 100 - (userRating - 1)* coeff * step;
+            if (res < 0) return 0;
+            if (res > 100) return 100;
+            return res;
+        }
     }
 }

@@ -134,7 +134,7 @@ namespace ZhukBGGClubRanking.WinApp
             var checkedLists = usersRatingListFiles.Where(c => checkedUserNames.Contains(c.RatingList.UserNames.First())).Select(c => c.RatingList).ToList();
             currentAvarageRatingList = GameRatingList.CalculateAvarageRating(checkedLists, CommonCollection);
             currentAvarageRatingList.SetBGGCollection(CommonCollection);
-            CalcComplianceAverateRatingToSelectedUser();
+            CalcComplianceAverateRatingToSelectedUser_v2();
             dataGridView1.DataSource = currentAvarageRatingList.GameList.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
             dataGridView1.ClearSelection();
             UpdateDataGridViewColors();
@@ -162,6 +162,31 @@ namespace ZhukBGGClubRanking.WinApp
                             var userRating = userGame.Rating;
                             var maxRatingSize = currentAvarageRatingList.GameList.Select(c => c.Rating).Max();
                             game.CompliancePercent = (int)Utils.GetCompliancePercent(averageRating, userRating, maxRatingSize);
+                        }
+                    }
+                }
+            }
+        }
+
+        void CalcComplianceAverateRatingToSelectedUser_v2()
+        {
+            var currentSelectedUser = GetCurrentSelectedUser();
+            if (!string.IsNullOrWhiteSpace(currentSelectedUser) && currentAvarageRatingList != null)
+            {
+                var userRatingFile =
+                    usersRatingListFiles.FirstOrDefault(c => c.RatingList.UserNames.Contains(currentSelectedUser));
+                if (userRatingFile != null)
+                {
+                    foreach (var game in currentAvarageRatingList.GameList)
+                    {
+                        //var averageRating = game.Rating;
+                        var userGame =
+                            userRatingFile.RatingList.GameList.FirstOrDefault(c => c.GameEng.ToUpper() == game.GameEng.ToUpper());
+                        if (userGame != null)
+                        {
+                            var userRating = userGame.Rating;
+                            var maxRatingSize = userRatingFile.RatingList.GameList.Select(c => c.Rating).Max();
+                            game.CompliancePercent = (int)Utils.GetCompliancePercent_v2(userRating, maxRatingSize);
                         }
                     }
                 }
@@ -250,7 +275,7 @@ namespace ZhukBGGClubRanking.WinApp
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetButton2Text();
-            CalcComplianceAverateRatingToSelectedUser();
+            CalcComplianceAverateRatingToSelectedUser_v2();
             UpdateDataGridViewColors();
             SetCheckBoxSelected(GetCurrentSelectedUser());
         }
@@ -260,7 +285,7 @@ namespace ZhukBGGClubRanking.WinApp
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 var complProc = (dataGridView1.DataSource as List<GameRating>)[row.Index].CompliancePercent;
-                var colors = Utils.GetGradientColors(Color.White, Color.LightGreen, 102);
+                var colors = Utils.GetGradientColors(Color.White, Color.LimeGreen, 102);
                 var color = colors.ElementAt(complProc);
                 dataGridView1.Rows[row.Index].Cells[0].Style.BackColor = color;
             }
