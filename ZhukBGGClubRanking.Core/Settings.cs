@@ -19,6 +19,11 @@ namespace ZhukBGGClubRanking.Core
             get { return Path.Combine(RootDir, "club_collection", "collection.xml"); }
         }
 
+        public static string GamesNamesTranslateFilePath
+        {
+            get { return Path.Combine(RootDir, "translate", "collection.csv"); }
+        }
+
         public static string UrlForGameBGGId(int id)
         {
             return string.Format("https://boardgamegeek.com/boardgame/{0}", id);

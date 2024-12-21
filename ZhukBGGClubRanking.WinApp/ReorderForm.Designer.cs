@@ -30,10 +30,10 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.dragDropListBox1 = new Oli.Controls.DragDropListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.dragDropListBox1 = new Oli.Controls.DragDropListBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -50,24 +50,13 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(298, 22);
+            this.button2.Location = new System.Drawing.Point(360, 31);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
             this.button2.Text = "Сбросить";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // dragDropListBox1
-            // 
-            this.dragDropListBox1.AllowDrop = true;
-            this.dragDropListBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dragDropListBox1.FormattingEnabled = true;
-            this.dragDropListBox1.Location = new System.Drawing.Point(0, 0);
-            this.dragDropListBox1.Name = "dragDropListBox1";
-            this.dragDropListBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.dragDropListBox1.Size = new System.Drawing.Size(385, 654);
-            this.dragDropListBox1.TabIndex = 3;
             // 
             // label1
             // 
@@ -86,7 +75,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 654);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(385, 57);
+            this.panel1.Size = new System.Drawing.Size(447, 57);
             this.panel1.TabIndex = 5;
             // 
             // panel2
@@ -95,14 +84,25 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(385, 654);
+            this.panel2.Size = new System.Drawing.Size(447, 654);
             this.panel2.TabIndex = 6;
+            // 
+            // dragDropListBox1
+            // 
+            this.dragDropListBox1.AllowDrop = true;
+            this.dragDropListBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dragDropListBox1.FormattingEnabled = true;
+            this.dragDropListBox1.Location = new System.Drawing.Point(0, 0);
+            this.dragDropListBox1.Name = "dragDropListBox1";
+            this.dragDropListBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.dragDropListBox1.Size = new System.Drawing.Size(447, 654);
+            this.dragDropListBox1.TabIndex = 3;
             // 
             // ReorderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(385, 711);
+            this.ClientSize = new System.Drawing.Size(447, 711);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "ReorderForm";

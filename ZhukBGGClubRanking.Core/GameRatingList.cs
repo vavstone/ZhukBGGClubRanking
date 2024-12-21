@@ -7,12 +7,19 @@ namespace ZhukBGGClubRanking.Core
     {
         public List<string> UserNames { get; set; }
         public List<GameRating> GameList { get; set; }
-        //public BGGCollection BGGCollection { get; }
+        public BGGCollection CommonCollection { get; set; }
 
         public void SetBGGCollection(BGGCollection bgGCollection)
         {
+            CommonCollection = bgGCollection;
             foreach (var game in GameList)
-                game.BGGItem = bgGCollection.GetItemByName(game.Game);
+            {
+                game.BGGItem = CommonCollection.GetItemByName(game.GameEng);
+                if (game.BGGItem != null)
+                {
+                    game.GameRus = game.BGGItem.NameRus;
+                }
+            }
         }
 
         public GameRatingList()
@@ -47,7 +54,7 @@ namespace ZhukBGGClubRanking.Core
         }
 
 
-        public static GameRatingList CalculateAvarageRating(List<GameRatingList> inList)
+        public static GameRatingList CalculateAvarageRating(List<GameRatingList> inList, BGGCollection commonCollection)
         {
             var maxCollectionSize = inList.Select(c => c.GameList.Count).Max();
             foreach (var gameRatingList in inList)
@@ -61,36 +68,50 @@ namespace ZhukBGGClubRanking.Core
                 commonRating.AddRange(item.GameList);
             }
 
-            var commonGamesListUnigue = commonRating.Select(c => c.Game).Distinct();
-            foreach (var item in commonGamesListUnigue)
+            var commonGamesListUnigue = commonRating.Select(c => c.GameEng).Distinct();
+            foreach (var gameName in commonGamesListUnigue)
             {
-                var sumWeigth = commonRating.Where(c => c.Game == item).Sum(c => c.Weight);
-                result.GameList.Add(new GameRating {Game = item, Weight = sumWeigth});
+                var sumWeigth = commonRating.Where(c => c.GameEng == gameName).Sum(c => c.Weight);
+                var bggItem = commonCollection.GetItemByName(gameName);
+                var gameItem = new GameRating();
+                if (bggItem != null)
+                {
+                    gameItem.GameEng = bggItem.Name;
+                    gameItem.GameRus = bggItem.NameRus;
+                    gameItem.BGGItem = bggItem;
+                }
+                else
+                {
+                    gameItem.GameEng = gameName;
+                }
+
+                gameItem.Weight = sumWeigth;
+                result.GameList.Add(gameItem);
             }
             result.CalculateRatingByWeight();
             result.UserNames.AddRange(inList.SelectMany(c=>c.UserNames));
             return result;
         }
 
-        public List<GameRating> GetGamesNotInCollectionButExistingInOthers(List<GameRatingList> otherCollections)
+        public List<GameRating> GetGamesNotInCollectionButExistingInOthers(List<GameRatingList> otherCollections, BGGCollection commonCollection)
         {
             var lastRating = GameList.Select(c => c.Rating).Max();
             var result = new List<GameRating>();
-            var bggColl = BGGCollection.LoadFromFile();
-            var newGamesInCommonColl = new List<string>();
-            var allNewGames = new List<string>();
-            if (bggColl != null)
+            //var bggColl = BGGCollection.LoadFromFile();
+            var gamesInCommonColl = new List<string>();
+            var allGames = new List<string>();
+            if (commonCollection != null)
             {
-                newGamesInCommonColl = bggColl.Items.Where(c=>c.Status.Own).Select(c => c.Name).ToList();
-                allNewGames.AddRange(newGamesInCommonColl);
+                gamesInCommonColl = commonCollection.Items.Where(c=>c.Status.Own).Select(c => c.Name).ToList();
+                allGames.AddRange(gamesInCommonColl);
             }
-            allNewGames.AddRange(otherCollections.SelectMany(c=>c.GameList).Select(c=>c.Game));
+            allGames.AddRange(otherCollections.SelectMany(c=>c.GameList).Select(c=>c.GameEng).Distinct());
 
 
-            foreach (var game in allNewGames.Distinct().OrderBy(c=>c))
+            foreach (var game in allGames.Distinct().OrderBy(c=>c))
             {
-                if (!this.GameList.Any(c=>c.Game==game))
-                    result.Add(new GameRating {Game = game, Rating = lastRating++});
+                if (!this.GameList.Any(c=>c.GameEng==game))
+                    result.Add(new GameRating {GameEng = game, GameRus = commonCollection.GamesTranslation.GetNameRus(game), Rating = lastRating++});
             }
             return result;
         }

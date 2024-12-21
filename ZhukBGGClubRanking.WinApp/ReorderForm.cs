@@ -56,7 +56,7 @@ namespace ZhukBGGClubRanking.WinApp
             foreach (var item in dragDropListBox1.Items)
             {
                 if (!string.IsNullOrWhiteSpace(item.ToString()))
-                    result.GameList.Add(new GameRating {Game = item.ToString(), Rating = counter++});
+                    result.GameList.Add(new GameRating {GameEng = GameRating.GetGameNameEngFromFormattedName(item.ToString()), Rating = counter++});
             }
             result.CalculateWeightByRating();
             return result;
@@ -72,7 +72,7 @@ namespace ZhukBGGClubRanking.WinApp
             {
                 var updatedList = GetUpdatedGameRatingListFromForm();
                 var ratingListFile = new GameRatingListFile();
-                ratingListFile.File = updatedList;
+                ratingListFile.RatingList = updatedList;
                 ratingListFile.FileNameWithoutExt = updatedList.UserNames.FirstOrDefault();
                 ratingListFile.SaveToFile();
                 this.Close();

@@ -11,38 +11,46 @@ namespace ZhukBGGClubRanking.WinApp
 {
     public partial class Form1 : Form
     {
+        public GamesNamesTranslateFile GamesTranslate { get; set; }
+        public BGGCollection CommonCollection { get; set; }
+        private List<GameRatingListFile> usersRatingListFiles;
+        private GameRatingList currentAvarageRatingList;
+
         public Form1()
         {
             InitializeComponent();
+            LoadGamesTranslate();
+            LoadCommonCollection();
+            LoadUsersRatings();
         }
-
-        public BGGCollection CommonCollection { get; set; }
 
         public GameRatingList GetRatingInOpenedTab()
         {
             var currentTab = GetCurrentSelectedUser();
-            return usersRatingListFiles.FirstOrDefault(c=>c.File.UserNames.Contains(currentTab)).File;
+            return usersRatingListFiles.FirstOrDefault(c=>c.RatingList.UserNames.Contains(currentTab)).RatingList;
         }
 
-        private List<GameRatingListFile> usersRatingListFiles;
-        private GameRatingList currentAvarageRatingList;
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            LoadUsersRatings();
+           
             SetButton2Text();
             PrepareDataGrid(dataGridView1);
-            LoadCommonCollection();
         }
 
         void LoadCommonCollection()
         {
-            CommonCollection = BGGCollection.LoadFromFile();
+            CommonCollection = BGGCollection.LoadFromFile(GamesTranslate);
+        }
+
+        void LoadGamesTranslate()
+        {
+            GamesTranslate = GamesNamesTranslateFile.LoadFromFile();
         }
 
         void LoadUsersRatings()
         {
-            usersRatingListFiles = GameRatingListFile.LoadFromFolder();
+            usersRatingListFiles = GameRatingListFile.LoadFromFolder(CommonCollection);
             tabControl1.TabPages.Clear();
             checkedListBox1.Items.Clear();
             foreach (var item in usersRatingListFiles)
@@ -54,7 +62,7 @@ namespace ZhukBGGClubRanking.WinApp
                 var grid = new DataGridView();
                 grid.Dock = DockStyle.Fill;
                 PrepareDataGrid(grid);
-                grid.DataSource = item.File.GameList.OrderBy(c => c.Rating).ToList();
+                grid.DataSource = item.RatingList.GameList.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
                 tabPage.Controls.Add(grid);
                 grid.ClearSelection();
             }
@@ -68,7 +76,7 @@ namespace ZhukBGGClubRanking.WinApp
             grid.ShowEditingIcon = false;
             //var colName = new DataGridViewTextBoxColumn();
             var colName = new DataGridViewLinkColumn();
-            colName.Width = 306;
+            colName.Width = 364;
             //colName.Width =246;
             colName.HeaderText = "Название";
             colName.DataPropertyName = "Game";
@@ -96,13 +104,15 @@ namespace ZhukBGGClubRanking.WinApp
         private void Grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             var grid = sender as DataGridView;
+            var gameRatingList = grid.DataSource as List<GameRating>;
             if (e.ColumnIndex == 0)
             {
                 if (dataGridView1.Columns[e.ColumnIndex] is DataGridViewLinkColumn && e.RowIndex != -1)
                 {
                     
-                    string cellContent = grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                    var gameInBGGColl = CommonCollection.GetItemByName(cellContent);
+                    //string cellContent = grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                    var ratingItem = gameRatingList[e.RowIndex];
+                    var gameInBGGColl = ratingItem.BGGItem;
                     if (gameInBGGColl != null)
                     {
                         var url = Settings.UrlForGameBGGId(gameInBGGColl.ObjectId);
@@ -121,8 +131,8 @@ namespace ZhukBGGClubRanking.WinApp
         void UpdateAvarateRating()
         {
             var checkedUserNames = checkedListBox1.CheckedItems.OfType<string>().ToList();
-            var checkedLists = usersRatingListFiles.Where(c => checkedUserNames.Contains(c.File.UserNames.First())).Select(c => c.File).ToList();
-            currentAvarageRatingList = GameRatingList.CalculateAvarageRating(checkedLists);
+            var checkedLists = usersRatingListFiles.Where(c => checkedUserNames.Contains(c.RatingList.UserNames.First())).Select(c => c.RatingList).ToList();
+            currentAvarageRatingList = GameRatingList.CalculateAvarageRating(checkedLists, CommonCollection);
             currentAvarageRatingList.SetBGGCollection(CommonCollection);
             CalcComplianceAverateRatingToSelectedUser();
             dataGridView1.DataSource = currentAvarageRatingList.GameList.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
@@ -139,14 +149,14 @@ namespace ZhukBGGClubRanking.WinApp
             if (!string.IsNullOrWhiteSpace(currentSelectedUser) && currentAvarageRatingList!=null)
             {
                 var userRatingFile =
-                    usersRatingListFiles.FirstOrDefault(c => c.File.UserNames.Contains(currentSelectedUser));
+                    usersRatingListFiles.FirstOrDefault(c => c.RatingList.UserNames.Contains(currentSelectedUser));
                 if (userRatingFile != null)
                 {
                     foreach (var game in currentAvarageRatingList.GameList.OrderBy(c=>c.Rating))
                     {
                         var averageRating = game.Rating;
                         var userGame =
-                            userRatingFile.File.GameList.FirstOrDefault(c => c.Game.ToUpper() == game.Game.ToUpper());
+                            userRatingFile.RatingList.GameList.FirstOrDefault(c => c.Game.ToUpper() == game.Game.ToUpper());
                         if (userGame != null)
                         {
                             var userRating = userGame.Rating;
@@ -202,12 +212,12 @@ namespace ZhukBGGClubRanking.WinApp
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ReorderForm reorderForm = new ReorderForm();
+            var reorderForm = new ReorderForm();
             reorderForm.RatingList = GetRatingInOpenedTab();
             var otherCollections = usersRatingListFiles
-                .Where(c => c.File.UserNames.FirstOrDefault() != reorderForm.RatingList.UserNames.FirstOrDefault())
-                .Select(c => c.File).ToList();
-            var newGamesInOthersColl = reorderForm.RatingList.GetGamesNotInCollectionButExistingInOthers(otherCollections);
+                .Where(c => c.RatingList.UserNames.FirstOrDefault() != reorderForm.RatingList.UserNames.FirstOrDefault())
+                .Select(c => c.RatingList).ToList();
+            var newGamesInOthersColl = reorderForm.RatingList.GetGamesNotInCollectionButExistingInOthers(otherCollections,CommonCollection);
             if (newGamesInOthersColl.Count > 0)
             {
                 if (MessageBox.Show(string.Format("В других коллекциях найдены игры ({0} штук), отсуствующие в вашем рейтинге. Добавить их?",newGamesInOthersColl.Count),
@@ -277,8 +287,12 @@ namespace ZhukBGGClubRanking.WinApp
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var selectedUser = checkedListBox1.SelectedItem.ToString();
-            SetTabControlSelected(selectedUser);
+            var selectedItem = checkedListBox1.SelectedItem;
+            if (selectedItem != null)
+            {
+                var selectedUser = selectedItem.ToString();
+                SetTabControlSelected(selectedUser);
+            }
         }
     }
 }

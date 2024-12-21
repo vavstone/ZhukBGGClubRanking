@@ -20,6 +20,8 @@ namespace ZhukBGGClubRanking.Core
         [XmlElement("item")]
         public List<ItemElement> Items { get; set; }
 
+        public GamesNamesTranslateFile GamesTranslation { get; set; }
+
         public BGGCollection()
         {
             Items  = new List<ItemElement>();
@@ -32,6 +34,8 @@ namespace ZhukBGGClubRanking.Core
 
             [XmlElement("name")]
             public string Name { get; set; } = "";
+
+            public string NameRus { get; set; } = "";
 
             [XmlElement("yearpublished")]
             public int YearPublished { get; set; }
@@ -115,14 +119,18 @@ namespace ZhukBGGClubRanking.Core
             }
         }
 
-        public static BGGCollection LoadFromFile()
+        public static BGGCollection LoadFromFile(GamesNamesTranslateFile gamesTranslation)
         {
+
             if (File.Exists(Settings.CommonCollectionFilePath))
             {
                 var serializer = new XmlSerializer(typeof(BGGCollection));
                 using (StreamReader reader = new StreamReader(Settings.CommonCollectionFilePath))
                 {
-                    return (BGGCollection) serializer.Deserialize(reader);
+                    var res = (BGGCollection)serializer.Deserialize(reader);
+                    res.GamesTranslation = gamesTranslation;
+                    res.UpplyTranslation();
+                    return res;
                 }
             }
             return null;
@@ -131,6 +139,16 @@ namespace ZhukBGGClubRanking.Core
         public ItemElement GetItemByName(string name)
         {
             return Items.FirstOrDefault(c => c.Name.ToUpper() == name.ToUpper());
+        }
+
+        public void UpplyTranslation()
+        {
+            foreach (var game in GamesTranslation.TranslateList)
+            {
+                var bggItem = GetItemByName(game.NameEng);
+                if (bggItem != null)
+                    bggItem.NameRus = game.NameRus;
+            }
         }
     }
 }
