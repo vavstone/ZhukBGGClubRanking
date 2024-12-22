@@ -1,4 +1,7 @@
-﻿namespace ZhukBGGClubRanking.Core
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace ZhukBGGClubRanking.Core
 {
     public class GameRating
     {
@@ -17,6 +20,12 @@
         public int Weight { get; set; }
         public int CompliancePercent { get; set; }
         public BGGCollection.ItemElement BGGItem { get; set; }
+        public List<UserRating> UserRating { get; set; }
+
+        public GameRating()
+        {
+            UserRating = new List<UserRating>();
+        }
 
         public string BGGComments
         {
@@ -41,5 +50,7 @@
 
             return formattedName;
         }
+
+        public string UserRatingString { get; set; }
     }
 }

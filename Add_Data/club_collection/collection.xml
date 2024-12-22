@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<items totalitems="172" termsofuse="https://boardgamegeek.com/xmlapi/termsofuse" pubdate="Thu, 19 Dec 2024 07:21:23 +0000">
+<items totalitems="180" termsofuse="https://boardgamegeek.com/xmlapi/termsofuse" pubdate="Sat, 21 Dec 2024 19:11:01 +0000">
 		<item objecttype="thing" objectid="316377" subtype="boardgame" collid="126601647">
 	<name sortindex="1">7 Wonders (Second Edition)</name>
 		<yearpublished>2020</yearpublished>			<image>https://cf.geekdo-images.com/Naw8y8J_s-8cvq1GoTON6w__original/img/8wVEVzdf5BoPvSiscnGvCAPNe2Q=/0x0/filters:format(jpeg)/pic7416519.jpg</image>
@@ -88,8 +88,8 @@
 	<name sortindex="1">Barrage</name>
 		<yearpublished>2019</yearpublished>			<image>https://cf.geekdo-images.com/jEPmWvvYpqkWrKOzqIHFsg__original/img/rkHKwkUqpQC7PAGG7n2gbrcQiUY=/0x0/filters:format(png)/pic4336469.png</image>
 		<thumbnail>https://cf.geekdo-images.com/jEPmWvvYpqkWrKOzqIHFsg__thumb/img/kMLIpeqA6UcUvQg2AdMwwQoEIfU=/fit-in/200x150/filters:strip_icc()/pic4336469.png</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:16:56" />
-	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:21:06" />
+	<numplays>0</numplays>			<comment>VAV + Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="281549" subtype="boardgame" collid="126596290">
 	<name sortindex="1">Beast</name>
 		<yearpublished>2022</yearpublished>			<image>https://cf.geekdo-images.com/-9NLgO6ASOHgZtMtamqjxw__original/img/h0pnI_UvkAQfMPhQq-7dKzEcHlc=/0x0/filters:format(png)/pic6418160.png</image>
@@ -132,6 +132,12 @@
 		<thumbnail>https://cf.geekdo-images.com/tHVtPzu82mBpeQbbZkV6EA__thumb/img/AghH1bAEhqzvyRcP3cy5G-rz0So=/fit-in/200x150/filters:strip_icc()/pic3469216.jpg</thumbnail>
 			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:20:46" />
 	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+		<item objecttype="thing" objectid="249277" subtype="boardgame" collid="126799342">
+	<name sortindex="1">Brazil: Imperial</name>
+		<yearpublished>2021</yearpublished>			<image>https://cf.geekdo-images.com/KuiDNcMdWaeDe5_-rISFRQ__original/img/lLQh6xW5n-SW9LNNMiSloEh3XUM=/0x0/filters:format(jpeg)/pic6222695.jpg</image>
+		<thumbnail>https://cf.geekdo-images.com/KuiDNcMdWaeDe5_-rISFRQ__thumb/img/Mfht3Q1IcjyVG8A2fdDBP--MWf8=/fit-in/200x150/filters:strip_icc()/pic6222695.jpg</thumbnail>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:21:33" />
+	<numplays>0</numplays>			<comment>Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="155362" subtype="boardgame" collid="126619743">
 	<name sortindex="1">Ca$h &#039;n Guns: Second Edition</name>
 		<yearpublished>2014</yearpublished>			<image>https://cf.geekdo-images.com/b4qSA5fvVJe9QQOKPCMoNA__original/img/WVKN6ArSni8knEze0BT4VOYB-AY=/0x0/filters:format(jpeg)/pic2907864.jpg</image>
@@ -142,32 +148,38 @@
 	<name sortindex="1">Café</name>
 		<yearpublished>2020</yearpublished>			<image>https://cf.geekdo-images.com/_k736Etdsm6zTTOnF3RXYw__original/img/tD_Y2Snn8smL3DfwPgzIt-dZDJA=/0x0/filters:format(jpeg)/pic5410171.jpg</image>
 		<thumbnail>https://cf.geekdo-images.com/_k736Etdsm6zTTOnF3RXYw__thumb/img/Ux0zQYYi1zO7fjbrUZ9LIrmiRAU=/fit-in/200x150/filters:strip_icc()/pic5410171.jpg</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-18 12:07:02" />
-	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:22:44" />
+	<numplays>0</numplays>			<comment>VAV + Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="283155" subtype="boardgame" collid="126638462">
 	<name sortindex="1">Calico</name>
 		<yearpublished>2020</yearpublished>			<image>https://cf.geekdo-images.com/qGkU6XsF1448F_A4P8TY5Q__original/img/sm-qIkkIoKuYRUgkfP6kkXTm1QY=/0x0/filters:format(jpeg)/pic8124431.jpg</image>
 		<thumbnail>https://cf.geekdo-images.com/qGkU6XsF1448F_A4P8TY5Q__thumb/img/l5ODCWYHD8_1x-WFqf-TJZhXT38=/fit-in/200x150/filters:strip_icc()/pic8124431.jpg</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-16 14:05:22" />
-	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-20 11:57:39" />
+	<numplays>0</numplays>			<comment>VAV + BLBL</comment>				</item>
 		<item objecttype="thing" objectid="171131" subtype="boardgame" collid="126592921">
 	<name sortindex="1">Captain Sonar</name>
 		<yearpublished>2016</yearpublished>			<image>https://cf.geekdo-images.com/Dpu5nFJu4UUJ4Y50WyKueg__original/img/feQTYcCwgIg4LneCYIoaWz12Z24=/0x0/filters:format(jpeg)/pic7069368.jpg</image>
 		<thumbnail>https://cf.geekdo-images.com/Dpu5nFJu4UUJ4Y50WyKueg__thumb/img/tRPNrLtteyfINpaFLLqEjyfTA10=/fit-in/200x150/filters:strip_icc()/pic7069368.jpg</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:37:24" />
-	<numplays>0</numplays>			<comment>BLVL</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:23:20" />
+	<numplays>0</numplays>			<comment>BLVL + Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="822" subtype="boardgame" collid="126592428">
 	<name sortindex="1">Carcassonne</name>
 		<yearpublished>2000</yearpublished>			<image>https://cf.geekdo-images.com/okM0dq_bEXnbyQTOvHfwRA__original/img/aVZEXAI-cUtuunNfPhjeHlS4fwQ=/0x0/filters:format(png)/pic6544250.png</image>
 		<thumbnail>https://cf.geekdo-images.com/okM0dq_bEXnbyQTOvHfwRA__thumb/img/88274KiOg94wziybVHyW8AeOiXg=/fit-in/200x150/filters:strip_icc()/pic6544250.png</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:23:31" />
-	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:22:25" />
+	<numplays>0</numplays>			<comment>VAV + BLVL + Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="295947" subtype="boardgame" collid="126596886">
 	<name sortindex="1">Cascadia</name>
 		<yearpublished>2021</yearpublished>			<image>https://cf.geekdo-images.com/MjeJZfulbsM1DSV3DrGJYA__original/img/B374C04Eip7fmQBGJzgiOTp-jyQ=/0x0/filters:format(jpeg)/pic5100691.jpg</image>
 		<thumbnail>https://cf.geekdo-images.com/MjeJZfulbsM1DSV3DrGJYA__thumb/img/tVSFjSxYEcw7sKj3unIIQV8kxoc=/fit-in/200x150/filters:strip_icc()/pic5100691.jpg</thumbnail>
 			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 11:32:37" />
 	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+		<item objecttype="thing" objectid="84876" subtype="boardgame" collid="126799409">
+	<name sortindex="5">The Castles of Burgundy</name>
+		<yearpublished>2011</yearpublished>			<image>https://cf.geekdo-images.com/5CFwjd8zTcGYVUnkXh04hw__original/img/N8btACZrnEYK1amBNk26VBdcGwc=/0x0/filters:format(jpeg)/pic1176894.jpg</image>
+		<thumbnail>https://cf.geekdo-images.com/5CFwjd8zTcGYVUnkXh04hw__thumb/img/0AG_6zsfYQjqlUHG0-_8lcjp8rc=/fit-in/200x150/filters:strip_icc()/pic1176894.jpg</thumbnail>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:24:51" />
+	<numplays>0</numplays>			<comment>Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="382315" subtype="boardgame" collid="126634861">
 	<name sortindex="1">Century: Big Box</name>
 		<yearpublished>2023</yearpublished>			<image>https://cf.geekdo-images.com/wHakScdsKjEo7F2RMvsT8g__original/img/BuOxY5lgtjhxEPRSZzqhyvlooQU=/0x0/filters:format(png)/pic7400020.png</image>
@@ -178,8 +190,8 @@
 	<name sortindex="1">Cerberus</name>
 		<yearpublished>2018</yearpublished>			<image>https://cf.geekdo-images.com/ABZviyGtdvSexTS3l1Q6cA__original/img/Yo24SiXhbm5wY00JJILHtaH6iwg=/0x0/filters:format(png)/pic4244549.png</image>
 		<thumbnail>https://cf.geekdo-images.com/ABZviyGtdvSexTS3l1Q6cA__thumb/img/DnW03G2_pqOgoA76-YWQB87x_GA=/fit-in/200x150/filters:strip_icc()/pic4244549.png</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-16 02:20:43" />
-	<numplays>0</numplays>			<comment>Stas_L</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-20 11:58:12" />
+	<numplays>0</numplays>			<comment>Stas_L + BLVL</comment>				</item>
 		<item objecttype="thing" objectid="478" subtype="boardgame" collid="126619623">
 	<name sortindex="1">Citadels</name>
 		<yearpublished>2000</yearpublished>			<image>https://cf.geekdo-images.com/42iW4E-vOumFXRQAiSf-GA__original/img/ochY5pK4sq4vtzkka0OPRwsGLOE=/0x0/filters:format(jpeg)/pic3239104.jpg</image>
@@ -262,8 +274,14 @@
 	<name sortindex="1">Dune: Imperium</name>
 		<yearpublished>2020</yearpublished>			<image>https://cf.geekdo-images.com/PhjygpWSo-0labGrPBMyyg__original/img/mZzaBAEEJpMlHWWmC0R6Su0OibQ=/0x0/filters:format(jpeg)/pic5666597.jpg</image>
 		<thumbnail>https://cf.geekdo-images.com/PhjygpWSo-0labGrPBMyyg__thumb/img/JGgY-nBmkyB8WRp8vcoBLlNMQ5U=/fit-in/200x150/filters:strip_icc()/pic5666597.jpg</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:18:00" />
-	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-20 11:58:45" />
+	<numplays>0</numplays>			<comment>VAV + BLVL</comment>				</item>
+		<item objecttype="thing" objectid="397598" subtype="boardgame" collid="126812148">
+	<name sortindex="1">Dune: Imperium – Uprising</name>
+		<yearpublished>2023</yearpublished>			<image>https://cf.geekdo-images.com/UVUkjMV_Q2paVUIUP30Vvw__original/img/BoUtCkd1NRO0bR1R5EwL51xIuXA=/0x0/filters:format(jpeg)/pic7664424.jpg</image>
+		<thumbnail>https://cf.geekdo-images.com/UVUkjMV_Q2paVUIUP30Vvw__thumb/img/H6qmxJrRFjtOAPZOfDoZ480-46I=/fit-in/200x150/filters:strip_icc()/pic7664424.jpg</thumbnail>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 12:48:59" />
+	<numplays>0</numplays>			<comment>BLVL</comment>				</item>
 		<item objecttype="thing" objectid="367150" subtype="boardgame" collid="126592682">
 	<name sortindex="1">Dune: War for Arrakis</name>
 		<yearpublished>2024</yearpublished>			<image>https://cf.geekdo-images.com/b_Uo-x3szhupSWeQdw5bdg__original/img/FGqkNWPyWBiERARxf5eLuLt831o=/0x0/filters:format(jpeg)/pic7088918.jpg</image>
@@ -310,8 +328,8 @@
 	<name sortindex="1">Feed the Kraken</name>
 		<yearpublished>2022</yearpublished>			<image>https://cf.geekdo-images.com/iiLwb5kt1h7yb9So-F95Fg__original/img/hG5LQvlsHyDOSOEqNFa8LqX4v1Q=/0x0/filters:format(jpeg)/pic5735695.jpg</image>
 		<thumbnail>https://cf.geekdo-images.com/iiLwb5kt1h7yb9So-F95Fg__thumb/img/PWg3soWPzau0P1FMtoRzOdmo3TA=/fit-in/200x150/filters:strip_icc()/pic5735695.jpg</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:19:04" />
-	<numplays>0</numplays>			<comment>BLVL</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:26:16" />
+	<numplays>0</numplays>			<comment>BLVL + Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="157354" subtype="boardgame" collid="126620074">
 	<name sortindex="1">Five Tribes: The Djinns of Naqala</name>
 		<yearpublished>2014</yearpublished>			<image>https://cf.geekdo-images.com/dmo-WD6HZHVUPrbVHunaTw__original/img/PS9HXrThM8Pepbd-cuA1tX8KCYU=/0x0/filters:format(jpeg)/pic2055255.jpg</image>
@@ -346,8 +364,8 @@
 	<name sortindex="1">Galaxy Trucker (Second Edition)</name>
 		<yearpublished>2021</yearpublished>			<image>https://cf.geekdo-images.com/1gQABuftAVgk1qshkMyDEw__original/img/7GY1ZXeZkWkWki5QLAbfdX-EGp0=/0x0/filters:format(jpeg)/pic6125184.jpg</image>
 		<thumbnail>https://cf.geekdo-images.com/1gQABuftAVgk1qshkMyDEw__thumb/img/Ovni6sWuvyfj9LWn-hnHzpCELF8=/fit-in/200x150/filters:strip_icc()/pic6125184.jpg</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:25:01" />
-	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-20 11:59:23" />
+	<numplays>0</numplays>			<comment>VAV + BLVL</comment>				</item>
 		<item objecttype="thing" objectid="125153" subtype="boardgame" collid="126593002">
 	<name sortindex="5">The Gallerist</name>
 		<yearpublished>2015</yearpublished>			<image>https://cf.geekdo-images.com/ie1GSt1XV04sXQXt-3O1UQ__original/img/59dZRZePEgtcupkRSA2zohZuHpM=/0x0/filters:format(png)/pic2503200.png</image>
@@ -418,8 +436,8 @@
 	<name sortindex="1">Harmonies</name>
 		<yearpublished>2024</yearpublished>			<image>https://cf.geekdo-images.com/A_XP2_VN3ugyqPhezowB_w__original/img/_Rv8lSr3fC1oDRkrQleQW2H2yCs=/0x0/filters:format(png)/pic8026369.png</image>
 		<thumbnail>https://cf.geekdo-images.com/A_XP2_VN3ugyqPhezowB_w__thumb/img/ln5eKAzhse2PIHvWn7bu-jiW_uk=/fit-in/200x150/filters:strip_icc()/pic8026369.png</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:57:19" />
-	<numplays>0</numplays>			<comment>BLVL</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:27:19" />
+	<numplays>0</numplays>			<comment>BLVL + Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="35677" subtype="boardgame" collid="126635787">
 	<name sortindex="4">Le Havre</name>
 		<yearpublished>2008</yearpublished>			<image>https://cf.geekdo-images.com/y7Rqd3S6J7vyVhicR1bqTQ__original/img/tQFXv1w2R-J-1cjyaKG9LAS2UOs=/0x0/filters:format(jpeg)/pic6091101.jpg</image>
@@ -474,6 +492,12 @@
 		<thumbnail>https://cf.geekdo-images.com/od4vDTdXGPSVc-kjLqM11w__thumb/img/T2ukKoCUNv2LMxg5GOlOb8WTzNI=/fit-in/200x150/filters:strip_icc()/pic4651175.jpg</thumbnail>
 			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-16 11:46:37" />
 	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+		<item objecttype="thing" objectid="284378" subtype="boardgame" collid="126799417">
+	<name sortindex="1">Kanban EV</name>
+		<yearpublished>2020</yearpublished>			<image>https://cf.geekdo-images.com/L2Wn-zUqkcHgqvwvY212Ig__original/img/Htra4hvxjBlejtNEIUns_B3CNNc=/0x0/filters:format(jpeg)/pic4924232.jpg</image>
+		<thumbnail>https://cf.geekdo-images.com/L2Wn-zUqkcHgqvwvY212Ig__thumb/img/RQunBacBw949DkYBgzoS5YaXgJo=/fit-in/200x150/filters:strip_icc()/pic4924232.jpg</thumbnail>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:25:18" />
+	<numplays>0</numplays>			<comment>Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="299684" subtype="boardgame" collid="126635587">
 	<name sortindex="1">Khôra: Rise of an Empire</name>
 		<yearpublished>2021</yearpublished>			<image>https://cf.geekdo-images.com/Bo-JkTTZmznNwVPg9AMb5w__original/img/WDG19Q0xjPkotJH0fKsazlKZXSs=/0x0/filters:format(jpeg)/pic6078973.jpg</image>
@@ -490,8 +514,8 @@
 	<name sortindex="1">Lata</name>
 		<yearpublished>2023</yearpublished>			<image>https://cf.geekdo-images.com/7eFKLGEMBAELQLTS2ECgMA__original/img/b23BPr4G1SepaQNFwURMfWn_e5E=/0x0/filters:format(jpeg)/pic7358600.jpg</image>
 		<thumbnail>https://cf.geekdo-images.com/7eFKLGEMBAELQLTS2ECgMA__thumb/img/mkYNtT-0l2BTxhdP3F1wNtBJiaA=/fit-in/200x150/filters:strip_icc()/pic7358600.jpg</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-16 12:39:04" />
-	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:29:32" />
+	<numplays>0</numplays>			<comment>VAV + Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="236191" subtype="boardgame" collid="126596488">
 	<name sortindex="1">London (Second Edition)</name>
 		<yearpublished>2017</yearpublished>			<image>https://cf.geekdo-images.com/TMbEUs1GZpO96P5ubsqQew__original/img/SqRqsqHdyI0R04-efEQpIyzjbIA=/0x0/filters:format(jpeg)/pic3693999.jpg</image>
@@ -502,8 +526,8 @@
 	<name sortindex="1">Lost Ruins of Arnak</name>
 		<yearpublished>2020</yearpublished>			<image>https://cf.geekdo-images.com/6GqH14TJJhza86BX5HCLEQ__original/img/CXqwimJPonWy1oyXEMgPN_ZVmUI=/0x0/filters:format(jpeg)/pic5674958.jpg</image>
 		<thumbnail>https://cf.geekdo-images.com/6GqH14TJJhza86BX5HCLEQ__thumb/img/J8SVmGOJXZGxNjkT3xYNQU7Haxg=/fit-in/200x150/filters:strip_icc()/pic5674958.jpg</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:19:39" />
-	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-20 12:00:20" />
+	<numplays>0</numplays>			<comment>VAV + BLVL</comment>				</item>
 		<item objecttype="thing" objectid="248562" subtype="boardgame" collid="126620191">
 	<name sortindex="1">Mage Knight: Ultimate Edition</name>
 		<yearpublished>2018</yearpublished>			<image>https://cf.geekdo-images.com/jgsT5y5qKlOR08CuHG7xfw__original/img/mnPgX4nM_l1JnXFE16dAZjGS8sw=/0x0/filters:format(jpeg)/pic4411189.jpg</image>
@@ -582,6 +606,12 @@
 		<thumbnail>https://cf.geekdo-images.com/4KSmlm59w0GwLIlgDnJDAQ__thumb/img/P20AxSqNHOEM5qT_doqeeE7JAHQ=/fit-in/200x150/filters:strip_icc()/pic8211747.png</thumbnail>
 			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:26:30" />
 	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+		<item objecttype="thing" objectid="13308" subtype="boardgame" collid="126799541">
+	<name sortindex="1">Niagara</name>
+		<yearpublished>2004</yearpublished>			<image>https://cf.geekdo-images.com/IgYBUVpyseRNS8Pf9Ie6_A__original/img/AV_zpzbyAaOYQSb8kUTzk8-0GH0=/0x0/filters:format(jpeg)/pic7572713.jpg</image>
+		<thumbnail>https://cf.geekdo-images.com/IgYBUVpyseRNS8Pf9Ie6_A__thumb/img/0R6n59pmnjaP921YLEKnE3pzHG4=/fit-in/200x150/filters:strip_icc()/pic7572713.jpg</thumbnail>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:30:32" />
+	<numplays>0</numplays>			<comment>Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="293014" subtype="boardgame" collid="126601785">
 	<name sortindex="1">Nidavellir</name>
 		<yearpublished>2020</yearpublished>			<image>https://cf.geekdo-images.com/PX7t5xXDLI2XqxoTShLayg__original/img/KYzd3fBTCxrRxEvNvzabNbll7Wg=/0x0/filters:format(jpeg)/pic5039625.jpg</image>
@@ -772,8 +802,8 @@
 	<name sortindex="1">Scythe</name>
 		<yearpublished>2016</yearpublished>			<image>https://cf.geekdo-images.com/7k_nOxpO9OGIjhLq2BUZdA__original/img/HlDb9F365w0tSP8uD1vf1pfniQE=/0x0/filters:format(jpeg)/pic3163924.jpg</image>
 		<thumbnail>https://cf.geekdo-images.com/7k_nOxpO9OGIjhLq2BUZdA__thumb/img/eQ69OEDdjYjfKg6q5Navee87skU=/fit-in/200x150/filters:strip_icc()/pic3163924.jpg</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:24:21" />
-	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-20 12:01:12" />
+	<numplays>0</numplays>			<comment>VAV + BLVL</comment>				</item>
 		<item objecttype="thing" objectid="367220" subtype="boardgame" collid="126634975">
 	<name sortindex="1">Sea Salt &amp; Paper</name>
 		<yearpublished>2022</yearpublished>			<image>https://cf.geekdo-images.com/CIh_rXKoRw9z8K0PJxT8nQ__original/img/AX2wyHhWFgVh5OArXAjVHY-nFZg=/0x0/filters:format(jpeg)/pic6973911.jpg</image>
@@ -880,8 +910,8 @@
 	<name sortindex="1">Ticket to Ride: Europe</name>
 		<yearpublished>2005</yearpublished>			<image>https://cf.geekdo-images.com/0K1AOciqlMVUWFPLTJSiww__original/img/O37sCRSJLq4S8EpCxFDNVsNBuxE=/0x0/filters:format(jpeg)/pic66668.jpg</image>
 		<thumbnail>https://cf.geekdo-images.com/0K1AOciqlMVUWFPLTJSiww__thumb/img/RDvu2FvsYVVH8icp1VsilUlqUGI=/fit-in/200x150/filters:strip_icc()/pic66668.jpg</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 10:54:51" />
-	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-20 12:01:59" />
+	<numplays>0</numplays>			<comment>VAV + BLVL</comment>				</item>
 		<item objecttype="thing" objectid="31627" subtype="boardgame" collid="126633062">
 	<name sortindex="1">Ticket to Ride: Nordic Countries</name>
 		<yearpublished>2007</yearpublished>			<image>https://cf.geekdo-images.com/bCdjNIu-O_SzVCfMLZY_KQ__original/img/GhYRV-yJmYEiTaZsZcnEA04YucA=/0x0/filters:format(png)/pic7634498.png</image>
@@ -900,6 +930,18 @@
 		<thumbnail>https://cf.geekdo-images.com/02c2OrgtQ7YsLZWm6pVXSw__thumb/img/f8Ngrp7C0R4wtnPsA09awXW2MeU=/fit-in/200x150/filters:strip_icc()/pic6620308.png</thumbnail>
 			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 11:13:00" />
 	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+		<item objecttype="thing" objectid="257527" subtype="boardgame" collid="126799530">
+	<name sortindex="1">Trapwords</name>
+		<yearpublished>2018</yearpublished>			<image>https://cf.geekdo-images.com/aU1dLvPuTgGY0NsFajD9HQ__original/img/Ca6SXTVgQ7PFf0mHrorNI8iZOxc=/0x0/filters:format(jpeg)/pic4327157.jpg</image>
+		<thumbnail>https://cf.geekdo-images.com/aU1dLvPuTgGY0NsFajD9HQ__thumb/img/LKC4wxSMYreK8hbG82sNjUFdDiY=/fit-in/200x150/filters:strip_icc()/pic4327157.jpg</thumbnail>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:30:05" />
+	<numplays>0</numplays>			<comment>Vadim_B</comment>				</item>
+		<item objecttype="thing" objectid="255668" subtype="boardgame" collid="126799252">
+	<name sortindex="1">Trickerion: Collector&#039;s Edition</name>
+		<yearpublished>2019</yearpublished>			<image>https://cf.geekdo-images.com/hWxrNSHxNtf-ynX13FyN4w__original/img/uIskCBDhLMpEjXrMgj-Unoj1qZc=/0x0/filters:format(png)/pic5301842.png</image>
+		<thumbnail>https://cf.geekdo-images.com/hWxrNSHxNtf-ynX13FyN4w__thumb/img/y0iFR77cs6d2v-2l2k9bzEh6oBs=/fit-in/200x150/filters:strip_icc()/pic5301842.png</thumbnail>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:17:41" />
+	<numplays>0</numplays>			<comment>Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="73439" subtype="boardgame" collid="126596792">
 	<name sortindex="1">Troyes</name>
 		<yearpublished>2010</yearpublished>			<image>https://cf.geekdo-images.com/fBIe-aEPtJKC-ceNlspK6A__original/img/otcIVdG4ebZmK1SjUtzma18JtJ4=/0x0/filters:format(jpeg)/pic750583.jpg</image>
@@ -930,6 +972,12 @@
 		<thumbnail>https://cf.geekdo-images.com/kXf7mDyDYuHg6oe8yTUIEA__thumb/img/or9mAn4ClljY_wO_zvsLJDqs9tU=/fit-in/200x150/filters:strip_icc()/pic4604439.jpg</thumbnail>
 			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 11:14:21" />
 	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+		<item objecttype="thing" objectid="329500" subtype="boardgame" collid="126799561">
+	<name sortindex="1">Unconscious Mind</name>
+		<yearpublished>2024</yearpublished>			<image>https://cf.geekdo-images.com/ufkAbhulnKJ7uDpi09TXOQ__original/img/hhBc0bcNj9U3t-4trByrjrO8-ro=/0x0/filters:format(jpeg)/pic7127448.jpg</image>
+		<thumbnail>https://cf.geekdo-images.com/ufkAbhulnKJ7uDpi09TXOQ__thumb/img/XBP7p0D1bkzDXkoOuXSiavW26Ig=/fit-in/200x150/filters:strip_icc()/pic7127448.jpg</thumbnail>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:31:34" />
+	<numplays>0</numplays>			<comment>Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="268864" subtype="boardgame" collid="126706736">
 	<name sortindex="1">Undaunted: Normandy</name>
 		<yearpublished>2019</yearpublished>			<image>https://cf.geekdo-images.com/iCd6hMGDzsQ_UXh00iKsJA__original/img/QhbQ2AMud-_H0fliiSIvc0dowOU=/0x0/filters:format(jpeg)/pic4602347.jpg</image>
@@ -1000,8 +1048,8 @@
 	<name sortindex="5">The White Castle</name>
 		<yearpublished>2023</yearpublished>			<image>https://cf.geekdo-images.com/qXT1U-nFh9PE8ujfdmI7dA__original/img/jzmifZJ0Sg2Js7hmQjzX7bEHVBY=/0x0/filters:format(jpeg)/pic7754663.jpg</image>
 		<thumbnail>https://cf.geekdo-images.com/qXT1U-nFh9PE8ujfdmI7dA__thumb/img/ru1l95gdKNXSsByDglE9Xxgu0kE=/fit-in/200x150/filters:strip_icc()/pic7754663.jpg</thumbnail>
-			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:19:57" />
-	<numplays>0</numplays>			<comment>VAV</comment>				</item>
+			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-21 05:32:39" />
+	<numplays>0</numplays>			<comment>VAV + Vadim_B</comment>				</item>
 		<item objecttype="thing" objectid="335427" subtype="boardgame" collid="126592496">
 	<name sortindex="1">Wild: Serengeti</name>
 		<yearpublished>2022</yearpublished>			<image>https://cf.geekdo-images.com/_hN8NvO0BV_Ws6eALXCKAA__original/img/v4O6V2mF4mfBgl5Qzpe2JxSRrI4=/0x0/filters:format(png)/pic6106524.png</image>
