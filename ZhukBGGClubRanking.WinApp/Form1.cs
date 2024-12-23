@@ -77,24 +77,29 @@ namespace ZhukBGGClubRanking.WinApp
         {
             foreach (var gameToFill in currentList.GameList)
             {
-                foreach (var list in allLists)
+                var currentListUser = currentList.UserNames.FirstOrDefault();
+                if (currentListUser != null)
                 {
-                    var game = list.GameList.FirstOrDefault(c => c.GameEng.ToUpper() == gameToFill.GameEng.ToUpper());
-                    if (game != null)
+                    foreach (var list in allLists.Where(c=>c.UserNames.FirstOrDefault()!=currentListUser))
                     {
-                        gameToFill.UserRating.Add(new UserRating {UserName = list.UserNames.FirstOrDefault(), Rating = game.Rating});
+                        var game = list.GameList.FirstOrDefault(
+                            c => c.GameEng.ToUpper() == gameToFill.GameEng.ToUpper());
+                        if (game != null)
+                        {
+                            gameToFill.UserRating.Add(new UserRating
+                                {UserName = list.UserNames.FirstOrDefault(), Rating = game.Rating});
+                        }
+                    }
+
+                    if (gameToFill.UserRating.Any())
+                    {
+                        var splitter = "; ";
+                        var resultStr = "";
+                        foreach (var item in gameToFill.UserRating.OrderBy(c => c.Rating).ThenBy(c => c.UserName))
+                            resultStr += string.Format("{0} - {1}{2}", item.Rating, item.UserName, splitter);
+                        gameToFill.UserRatingString = resultStr.Substring(0, resultStr.Length - splitter.Length);
                     }
                 }
-
-                if (gameToFill.UserRating.Any())
-                {
-                    var splitter = "; ";
-                    var resultStr = "";
-                    foreach (var item in gameToFill.UserRating.OrderBy(c => c.Rating).ThenBy(c => c.UserName))
-                        resultStr += string.Format("{0} - {1}{2}", item.Rating, item.UserName, splitter);
-                    gameToFill.UserRatingString = resultStr.Substring(0, resultStr.Length - splitter.Length);
-                }
-
             }
         }
 
