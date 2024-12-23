@@ -136,6 +136,32 @@ namespace ZhukBGGClubRanking.WinApp
 
             //AddTestColumn(grid);
 
+            grid.MouseWheel += new MouseEventHandler(DataGridView_MouseWheel);
+            grid.MouseEnter += new EventHandler(DataGridView_MouseEnter);
+
+        }
+
+        private void DataGridView_MouseEnter(object sender, EventArgs e)
+        {
+            var grid = sender as DataGridView;
+            grid.Focus();
+        }
+
+        void DataGridView_MouseWheel(object sender, MouseEventArgs e)
+        {
+            var grid = sender as DataGridView;
+            int currentIndex = grid.FirstDisplayedScrollingRowIndex;
+            int scrollLines = SystemInformation.MouseWheelScrollLines;
+
+            if (e.Delta > 0)
+            {
+                grid.FirstDisplayedScrollingRowIndex = Math.Max(0, currentIndex - scrollLines);
+            }
+            else if (e.Delta < 0)
+            {
+                if (grid.Rows.Count > (currentIndex + scrollLines))
+                    grid.FirstDisplayedScrollingRowIndex = currentIndex + scrollLines;
+            }
         }
 
         private void Grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
