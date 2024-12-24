@@ -48,6 +48,9 @@
             this.panel7 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
             this.panel9 = new System.Windows.Forms.Panel();
+            this.предпочитаемыйИсточникИнформацииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSelectTesera = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSelectBGG = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -211,6 +214,8 @@
             // 
             // настройкиToolStripMenuItem
             // 
+            this.настройкиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.предпочитаемыйИсточникИнформацииToolStripMenuItem});
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
             this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
             this.настройкиToolStripMenuItem.Text = "Настройки";
@@ -274,6 +279,35 @@
             this.panel9.Size = new System.Drawing.Size(776, 44);
             this.panel9.TabIndex = 5;
             // 
+            // предпочитаемыйИсточникИнформацииToolStripMenuItem
+            // 
+            this.предпочитаемыйИсточникИнформацииToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuSelectTesera,
+            this.menuSelectBGG});
+            this.предпочитаемыйИсточникИнформацииToolStripMenuItem.Name = "предпочитаемыйИсточникИнформацииToolStripMenuItem";
+            this.предпочитаемыйИсточникИнформацииToolStripMenuItem.Size = new System.Drawing.Size(303, 22);
+            this.предпочитаемыйИсточникИнформацииToolStripMenuItem.Text = "Предпочитаемый источник информации";
+            // 
+            // menuSelectTesera
+            // 
+            this.menuSelectTesera.Checked = true;
+            this.menuSelectTesera.CheckOnClick = true;
+            this.menuSelectTesera.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.menuSelectTesera.Name = "menuSelectTesera";
+            this.menuSelectTesera.Size = new System.Drawing.Size(205, 22);
+            this.menuSelectTesera.Text = "Tesera (русскоязычный)";
+            this.menuSelectTesera.CheckedChanged += new System.EventHandler(this.menuSelectTesera_CheckedChanged);
+            this.menuSelectTesera.Click += new System.EventHandler(this.menuSelectTesera_Click);
+            // 
+            // menuSelectBGG
+            // 
+            this.menuSelectBGG.CheckOnClick = true;
+            this.menuSelectBGG.Name = "menuSelectBGG";
+            this.menuSelectBGG.Size = new System.Drawing.Size(205, 22);
+            this.menuSelectBGG.Text = "BGG (англоязычный)";
+            this.menuSelectBGG.CheckedChanged += new System.EventHandler(this.menuSelectBGG_CheckedChanged);
+            this.menuSelectBGG.Click += new System.EventHandler(this.menuSelectBGG_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -333,6 +367,9 @@
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.Panel panel9;
         private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.ToolStripMenuItem предпочитаемыйИсточникИнформацииToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuSelectTesera;
+        private System.Windows.Forms.ToolStripMenuItem menuSelectBGG;
     }
 }
 

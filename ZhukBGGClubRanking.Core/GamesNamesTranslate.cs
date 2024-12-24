@@ -10,5 +10,6 @@ namespace ZhukBGGClubRanking.Core
     {
         public string NameEng { get; set; }
         public string NameRus { get; set; }
+        public string TeseraName { get; set; }
     }
 }

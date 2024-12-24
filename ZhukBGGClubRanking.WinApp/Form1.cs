@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Windows.Forms;
 using ZhukBGGClubRanking.Core;
 
@@ -14,6 +16,8 @@ namespace ZhukBGGClubRanking.WinApp
         public BGGCollection CommonCollection { get; set; }
         private List<GameRatingListFile> usersRatingListFiles;
         private GameRatingList currentAvarageRatingList;
+
+        public bool TeseraPreferable = true;
 
         public Form1()
         {
@@ -192,13 +196,18 @@ namespace ZhukBGGClubRanking.WinApp
                     
                     //string cellContent = grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
                     var ratingItem = gameRatingList[e.RowIndex];
+                    string url = string.Empty;
+                    var teseraUrl = GetTeseraCardUrl(ratingItem.GameEng);
+                    var bggUrl = string.Empty;
                     var gameInBGGColl = ratingItem.BGGItem;
                     if (gameInBGGColl != null)
-                    {
-                        var url = Settings.UrlForGameBGGId(gameInBGGColl.ObjectId);
-                        ProcessStartInfo sInfo = new ProcessStartInfo(url);
-                        Process.Start(sInfo);
-                    }
+                        bggUrl = GetBGGCardUrl(gameInBGGColl.ObjectId);
+                    if (TeseraPreferable)
+                        url = teseraUrl;
+                    if (string.IsNullOrWhiteSpace(url))
+                        url = bggUrl;
+                    ProcessStartInfo sInfo = new ProcessStartInfo(url);
+                    Process.Start(sInfo);
                 }
             }
         }
@@ -483,6 +492,61 @@ namespace ZhukBGGClubRanking.WinApp
         private void lbltrBarTopX_Click(object sender, EventArgs e)
         {
 
+        }
+
+
+
+        public string GetTeseraCardUrl(string gameEng)
+        {
+            var teseraName = GamesTranslate.GetTeseraName(gameEng);
+            if (!string.IsNullOrEmpty(teseraName))
+                return Settings.TeseraCardPrefixUrl + teseraName;
+            return null;
+        }
+
+        public string GetBGGCardUrl(int bggObjectId)
+        {
+            return Settings.BGGCardPrefixUrl + bggObjectId;
+        }
+
+        private void menuSelectTesera_CheckedChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void menuSelectBGG_CheckedChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void menuSelectTesera_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
+            if (menuItem.CheckState == CheckState.Checked)
+            {
+                TeseraPreferable = true;
+                menuSelectBGG.Checked = false;
+            }
+            else if (menuItem.CheckState == CheckState.Unchecked)
+            {
+                TeseraPreferable = false;
+                menuSelectBGG.Checked = true;
+            }
+        }
+
+        private void menuSelectBGG_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
+            if (menuItem.CheckState == CheckState.Checked)
+            {
+                TeseraPreferable = false;
+                menuSelectTesera.Checked = false;
+            }
+            else if (menuItem.CheckState == CheckState.Unchecked)
+            {
+                TeseraPreferable = true;
+                menuSelectTesera.Checked = true;
+            }
         }
     }
 }

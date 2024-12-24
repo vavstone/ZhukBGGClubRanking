@@ -24,9 +24,19 @@ namespace ZhukBGGClubRanking.Core
             get { return Path.Combine(RootDir, "translate", "collection.csv"); }
         }
 
-        public static string UrlForGameBGGId(int id)
+        public static string BGGCardPrefixUrl
         {
-            return string.Format("https://boardgamegeek.com/boardgame/{0}", id);
+            get { return "https://boardgamegeek.com/boardgame/"; }
+        }
+
+        //public static string UrlForGameBGGId(int id)
+        //{
+        //    return string.Format("https://boardgamegeek.com/boardgame/{0}", id);
+        //}
+
+        public static string TeseraCardPrefixUrl
+        {
+            get { return "https://tesera.ru/game/"; }
         }
     }
 }

@@ -21,6 +21,7 @@ namespace ZhukBGGClubRanking.Core
                 var gr = new GamesNamesTranslate();
                 gr.NameEng =  arItem[0];
                 gr.NameRus = arItem[1];
+                gr.TeseraName = arItem[2];
                 list.Add(gr);
             }
             return result;
@@ -31,6 +32,14 @@ namespace ZhukBGGClubRanking.Core
             var item = TranslateList.FirstOrDefault(c => c.NameEng == nameEng);
             if (item!=null)
                 return item.NameRus;
+            return string.Empty;
+        }
+
+        public string GetTeseraName(string nameEng)
+        {
+            var item = TranslateList.FirstOrDefault(c => c.NameEng == nameEng);
+            if (item != null)
+                return item.TeseraName;
             return string.Empty;
         }
     }
