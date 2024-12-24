@@ -54,16 +54,65 @@ namespace ZhukBGGClubRanking.Core
         }
 
 
-        public static GameRatingList CalculateAvarageRating(List<GameRatingList> inList, BGGCollection commonCollection)
+        public static GameRatingList CalculateAvarageRating(List<GameRatingList> inList, BGGCollection commonCollection,
+            int topXPos)
         {
-            var maxCollectionSize = inList.Select(c => c.GameList.Count).Max();
+            var selectedRatings = new List<GameRatingList>();
+            var maxCollSize = inList.Select(c => c.GameList.Count).Max();
+            var onlyTop = topXPos < maxCollSize;
+
+            var gamesToSkip = new List<string>();
+            if (onlyTop)
+            {
+
+                foreach (var gameRatingList in inList)
+                {
+                    var list = gameRatingList.GameList.OrderBy(c => c.Rating).ToList();
+                    if (onlyTop)
+                        gamesToSkip.AddRange(list.Skip(topXPos).Select(c => c.GameEng));
+                }
+            }
+
+            gamesToSkip = gamesToSkip.Distinct().ToList();
+
             foreach (var gameRatingList in inList)
             {
-                gameRatingList.CalculateWeightByRating(maxCollectionSize);
+                var newRating = new GameRatingList();
+                selectedRatings.Add(newRating);
+                var list = gameRatingList.GameList.Where(c => gamesToSkip.All(c1 => c1 != c.GameEng))
+                    .OrderBy(c => c.Rating).ToList();
+                newRating.GameList = list;
             }
+
+            if (onlyTop)
+            {
+                foreach (var gameRatingList in selectedRatings)
+                {
+                    var newRating = new List<GameRating>();
+                    foreach (var rating in gameRatingList.GameList)
+                    {
+                        var gameInOtherRatings =
+                            selectedRatings.Select(c => c.GameList).All(c => c.Any(c1 => c1.GameEng == rating.GameEng));
+                        if (gameInOtherRatings)
+                            newRating.Add(rating);
+                    }
+
+                    gameRatingList.GameList = newRating;
+                }
+            }
+
+
+
+            var newMaxCollectionSize = selectedRatings.Select(c => c.GameList.Count).Max();
+
+            foreach (var gameRatingList in selectedRatings)
+            {
+                gameRatingList.CalculateWeightByRating(newMaxCollectionSize);
+            }
+
             var result = new GameRatingList();
             var commonRating = new List<GameRating>();
-            foreach (var item in inList)
+            foreach (var item in selectedRatings)
             {
                 commonRating.AddRange(item.GameList);
             }
@@ -88,8 +137,10 @@ namespace ZhukBGGClubRanking.Core
                 gameItem.Weight = sumWeigth;
                 result.GameList.Add(gameItem);
             }
+
             result.CalculateRatingByWeight();
-            result.UserNames.AddRange(inList.SelectMany(c=>c.UserNames));
+            result.GameList = result.GameList.OrderBy(c => c.Rating).ToList();
+            result.UserNames.AddRange(selectedRatings.SelectMany(c => c.UserNames));
             return result;
         }
 
@@ -97,7 +148,6 @@ namespace ZhukBGGClubRanking.Core
         {
             var lastRating = GameList.Select(c => c.Rating).Max();
             var result = new List<GameRating>();
-            //var bggColl = BGGCollection.LoadFromFile();
             var gamesInCommonColl = new List<string>();
             var allGames = new List<string>();
             if (commonCollection != null)
@@ -110,7 +160,7 @@ namespace ZhukBGGClubRanking.Core
 
             foreach (var game in allGames.Distinct().OrderBy(c=>c))
             {
-                if (!this.GameList.Any(c=>c.GameEng==game))
+                if (GameList.All(c => c.GameEng != game))
                     result.Add(new GameRating {GameEng = game, GameRus = commonCollection.GamesTranslation.GetNameRus(game), Rating = lastRating++});
             }
             return result;

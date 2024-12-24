@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using ZhukBGGClubRanking.Core;
 
 namespace ZhukBGGClubRanking.WinApp
 {
@@ -52,6 +54,31 @@ namespace ZhukBGGClubRanking.WinApp
             if (res < 0) return 0;
             if (res > 100) return 100;
             return res;
+        }
+
+        public static void CalcComplianceAverateRatingToSelectedUser_v2(string currentSelectedUser, GameRatingList currentAvarageRatingList, List<GameRatingListFile> ratingListFiles)
+        {
+            
+            if (!string.IsNullOrWhiteSpace(currentSelectedUser) && currentAvarageRatingList != null)
+            {
+                var userRatingFile =
+                    ratingListFiles.FirstOrDefault(c => c.RatingList.UserNames.Contains(currentSelectedUser));
+                if (userRatingFile != null)
+                {
+                    foreach (var game in currentAvarageRatingList.GameList)
+                    {
+                        //var averageRating = game.Rating;
+                        var userGame =
+                            userRatingFile.RatingList.GameList.FirstOrDefault(c => c.GameEng.ToUpper() == game.GameEng.ToUpper());
+                        if (userGame != null)
+                        {
+                            var userRating = userGame.Rating;
+                            var maxRatingSize = userRatingFile.RatingList.GameList.Select(c => c.Rating).Max();
+                            game.CompliancePercent = (int)Utils.GetCompliancePercent_v2(userRating, maxRatingSize);
+                        }
+                    }
+                }
+            }
         }
     }
 }

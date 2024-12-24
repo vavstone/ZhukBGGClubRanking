@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Net;
 using System.Windows.Forms;
 using ZhukBGGClubRanking.Core;
 
@@ -33,9 +32,10 @@ namespace ZhukBGGClubRanking.WinApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
             SetButton2Text();
             PrepareDataGrid(dataGridView1,false);
+            SetTrBarTopXValue();
+            SetFormCaption();
         }
 
         void LoadCommonCollection()
@@ -70,7 +70,6 @@ namespace ZhukBGGClubRanking.WinApp
                 tabPage.Controls.Add(grid);
                 grid.ClearSelection();
             }
-
         }
 
         private void UpdateGamesCrossRatings(GameRatingList currentList, IEnumerable<GameRatingList> allLists)
@@ -109,9 +108,9 @@ namespace ZhukBGGClubRanking.WinApp
             grid.AllowUserToAddRows = false;
             grid.AllowUserToDeleteRows = false;
             grid.ShowEditingIcon = false;
-            //var colName = new DataGridViewTextBoxColumn();
+            grid.RowHeadersVisible = false;
             var colName = new DataGridViewLinkColumn();
-            colName.Width = 330;
+            colName.Width = 350;
             //colName.Width =246;
             colName.HeaderText = "Название";
             colName.DataPropertyName = "Game";
@@ -131,14 +130,32 @@ namespace ZhukBGGClubRanking.WinApp
             grid.CellContentClick += Grid_CellContentClick;
             grid.RowsDefaultCellStyle.SelectionBackColor = Color.LightGray;
             grid.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
+
             //TODO
             //AddImagesColumn(grid);
-
             //AddTestColumn(grid);
 
-            grid.MouseWheel += new MouseEventHandler(DataGridView_MouseWheel);
-            grid.MouseEnter += new EventHandler(DataGridView_MouseEnter);
+            grid.MouseWheel += DataGridView_MouseWheel;
+            grid.MouseEnter += DataGridView_MouseEnter;
 
+        }
+
+        void AddCommentsColumn(DataGridView dataGridView)
+        {
+            var col = new DataGridViewTextBoxColumn();
+            col.Name = "Владеют";
+            col.DataPropertyName = "BGGComments";
+            col.Width = 150;
+            dataGridView.Columns.Add(col);
+        }
+
+        void AddAllRatingsColumn(DataGridView dataGridView)
+        {
+            var col = new DataGridViewTextBoxColumn();
+            col.Name = "Рейтинг у игроков";
+            col.DataPropertyName = "UserRatingString";
+            col.Width = 225;
+            dataGridView.Columns.Add(col);
         }
 
         private void DataGridView_MouseEnter(object sender, EventArgs e)
@@ -191,13 +208,25 @@ namespace ZhukBGGClubRanking.WinApp
             UpdateAvarateRating();   
         }
 
+        List<string> GetSelectedUsers()
+        {
+            return checkedListBox1.CheckedItems.OfType<string>().ToList();
+        }
+
+        List<GameRatingList> GetSelectedUsersRatings()
+        {
+            var checkedUserNames = GetSelectedUsers();
+            return usersRatingListFiles.Where(c => checkedUserNames.Contains(c.RatingList.UserNames.First())).Select(c => c.RatingList).ToList();
+        }
+
         void UpdateAvarateRating()
         {
-            var checkedUserNames = checkedListBox1.CheckedItems.OfType<string>().ToList();
-            var checkedLists = usersRatingListFiles.Where(c => checkedUserNames.Contains(c.RatingList.UserNames.First())).Select(c => c.RatingList).ToList();
-            currentAvarageRatingList = GameRatingList.CalculateAvarageRating(checkedLists, CommonCollection);
+            //var isOnlyGamesInAllRatings = IsOnlyGamesInAllRatings();
+            var topValue = GetTopXValue();
+            var checkedLists = GetSelectedUsersRatings();
+            currentAvarageRatingList = GameRatingList.CalculateAvarageRating(checkedLists, CommonCollection, topValue);
             currentAvarageRatingList.SetBGGCollection(CommonCollection);
-            CalcComplianceAverateRatingToSelectedUser_v2();
+            Utils.CalcComplianceAverateRatingToSelectedUser_v2(GetCurrentSelectedUser(),currentAvarageRatingList, usersRatingListFiles);
             dataGridView1.DataSource = currentAvarageRatingList.GameList.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
             dataGridView1.ClearSelection();
             UpdateDataGridViewColors();
@@ -206,55 +235,61 @@ namespace ZhukBGGClubRanking.WinApp
 
         }
 
-        void CalcComplianceAverateRatingToSelectedUser()
+        void SetTrBarTopXValue()
         {
-            var currentSelectedUser = GetCurrentSelectedUser();
-            if (!string.IsNullOrWhiteSpace(currentSelectedUser) && currentAvarageRatingList!=null)
-            {
-                var userRatingFile =
-                    usersRatingListFiles.FirstOrDefault(c => c.RatingList.UserNames.Contains(currentSelectedUser));
-                if (userRatingFile != null)
-                {
-                    foreach (var game in currentAvarageRatingList.GameList.OrderBy(c=>c.Rating))
-                    {
-                        var averageRating = game.Rating;
-                        var userGame =
-                            userRatingFile.RatingList.GameList.FirstOrDefault(c => c.Game.ToUpper() == game.Game.ToUpper());
-                        if (userGame != null)
-                        {
-                            var userRating = userGame.Rating;
-                            var maxRatingSize = currentAvarageRatingList.GameList.Select(c => c.Rating).Max();
-                            game.CompliancePercent = (int)Utils.GetCompliancePercent(averageRating, userRating, maxRatingSize);
-                        }
-                    }
-                }
-            }
+            var checkedLists = GetSelectedUsersRatings();
+            var maxCollSize = checkedLists.Select(c => c.GameList.Count).Max();
+            trBarOnlyTop.Maximum = maxCollSize;
+            SetCurrentTbBarToxValue(maxCollSize);
+            SetlblTrBarToxValue();
         }
 
-        void CalcComplianceAverateRatingToSelectedUser_v2()
+        void SetCurrentTbBarToxValue(int val)
         {
-            var currentSelectedUser = GetCurrentSelectedUser();
-            if (!string.IsNullOrWhiteSpace(currentSelectedUser) && currentAvarageRatingList != null)
-            {
-                var userRatingFile =
-                    usersRatingListFiles.FirstOrDefault(c => c.RatingList.UserNames.Contains(currentSelectedUser));
-                if (userRatingFile != null)
-                {
-                    foreach (var game in currentAvarageRatingList.GameList)
-                    {
-                        //var averageRating = game.Rating;
-                        var userGame =
-                            userRatingFile.RatingList.GameList.FirstOrDefault(c => c.GameEng.ToUpper() == game.GameEng.ToUpper());
-                        if (userGame != null)
-                        {
-                            var userRating = userGame.Rating;
-                            var maxRatingSize = userRatingFile.RatingList.GameList.Select(c => c.Rating).Max();
-                            game.CompliancePercent = (int)Utils.GetCompliancePercent_v2(userRating, maxRatingSize);
-                        }
-                    }
-                }
-            }
+            trBarOnlyTop.Value = val;
         }
+
+        void SetlblTrBarToxValue()
+        {
+            lbltrBarTopX.Text = string.Format("Учитывать топ {0} игр рейтинга выбранных участников", trBarOnlyTop.Value);
+        }
+
+        int GetTopXValue()
+        {
+            return trBarOnlyTop.Value;
+        }
+
+        //bool IsOnlyGamesInAllRatings()
+        //{
+        //    return cbGamesOnlyInAllRatings.Checked;
+        //}
+
+        //void CalcComplianceAverateRatingToSelectedUser()
+        //{
+        //    var currentSelectedUser = GetCurrentSelectedUser();
+        //    if (!string.IsNullOrWhiteSpace(currentSelectedUser) && currentAvarageRatingList!=null)
+        //    {
+        //        var userRatingFile =
+        //            usersRatingListFiles.FirstOrDefault(c => c.RatingList.UserNames.Contains(currentSelectedUser));
+        //        if (userRatingFile != null)
+        //        {
+        //            foreach (var game in currentAvarageRatingList.GameList.OrderBy(c=>c.Rating))
+        //            {
+        //                var averageRating = game.Rating;
+        //                var userGame =
+        //                    userRatingFile.RatingList.GameList.FirstOrDefault(c => c.Game.ToUpper() == game.Game.ToUpper());
+        //                if (userGame != null)
+        //                {
+        //                    var userRating = userGame.Rating;
+        //                    var maxRatingSize = currentAvarageRatingList.GameList.Select(c => c.Rating).Max();
+        //                    game.CompliancePercent = (int)Utils.GetCompliancePercent(averageRating, userRating, maxRatingSize);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        
 
         //void AddImagesColumn(DataGridView dataGridView)
         //{
@@ -280,23 +315,7 @@ namespace ZhukBGGClubRanking.WinApp
         //    }
         //}
 
-        void AddCommentsColumn(DataGridView dataGridView)
-        {
-            var col = new DataGridViewTextBoxColumn();
-            col.Name = "Владеют";
-            col.DataPropertyName = "BGGComments";
-            col.Width = 130;
-            dataGridView.Columns.Add(col);
-        }
-
-        void AddAllRatingsColumn(DataGridView dataGridView)
-        {
-            var col = new DataGridViewTextBoxColumn();
-            col.Name = "Рейтинг у игроков";
-            col.DataPropertyName = "UserRatingString";
-            col.Width = 229;
-            dataGridView.Columns.Add(col);
-        }
+        
 
         //void AddTestColumn(DataGridView dataGridView)
         //{
@@ -347,9 +366,17 @@ namespace ZhukBGGClubRanking.WinApp
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetButton2Text();
-            CalcComplianceAverateRatingToSelectedUser_v2();
+            Utils.CalcComplianceAverateRatingToSelectedUser_v2(GetCurrentSelectedUser(), currentAvarageRatingList, usersRatingListFiles);
             UpdateDataGridViewColors();
-            SetCheckBoxSelected(GetCurrentSelectedUser());
+            //SetCheckBoxSelected(GetCurrentSelectedUser());
+            SetFormCaption();
+        }
+
+        void SetFormCaption()
+        {
+            var appName = "ZhukBGGClubRanking";
+            var selectedUser = GetCurrentSelectedUser();
+            this.Text = string.Format("{0}. Рейтинг участника {1}", appName, selectedUser);
         }
 
         void UpdateDataGridViewColors()
@@ -363,33 +390,99 @@ namespace ZhukBGGClubRanking.WinApp
             }
         }
 
-        void SetTabControlSelected(string userName)
-        {
-            tabControl1.SelectTab(userName);
-        }
+        //void SetTabControlSelected(string userName)
+        //{
+        //    tabControl1.SelectTab(userName);
+        //}
 
-        void SetCheckBoxSelected(string userName)
-        {
-            var indexByUserName = 0;
-            foreach (var item in checkedListBox1.Items)
-            {
-                if (item.ToString() == userName)
-                {
-                    checkedListBox1.SelectedIndex = indexByUserName;
-                    return;
-                }
-                indexByUserName++;
-            }
-        }
+        //void SetCheckBoxSelected(string userName)
+        //{
+        //    var indexByUserName = 0;
+        //    foreach (var item in checkedListBox1.Items)
+        //    {
+        //        if (item.ToString() == userName)
+        //        {
+        //            checkedListBox1.SelectedIndex = indexByUserName;
+        //            return;
+        //        }
+        //        indexByUserName++;
+        //    }
+        //}
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var selectedItem = checkedListBox1.SelectedItem;
-            if (selectedItem != null)
+            if (checkedListBox1.CheckedIndices.Count > 0)
             {
-                var selectedUser = selectedItem.ToString();
-                SetTabControlSelected(selectedUser);
+                var selectedItem = checkedListBox1.SelectedItem;
+                if (selectedItem != null)
+                {
+                    var selectedUser = selectedItem.ToString();
+                    //SetTabControlSelected(selectedUser);
+                    SetTrBarTopXValue();
+                    SetlblTrBarToxValue();
+                }
             }
+        }
+
+        private void checkedListBox1_ItemCheck_1(object sender, ItemCheckEventArgs e)
+        {
+            if (checkedListBox1.CheckedIndices.Count == 1 &&
+                e.NewValue == CheckState.Unchecked &&
+                e.CurrentValue == CheckState.Checked)
+            {
+                int index = checkedListBox1.CheckedIndices[0];
+                SetItemCallback d = new SetItemCallback(this.SetItem);
+                d.BeginInvoke(index, null, null);
+            } 
+            //else if (checkedListBox1.CheckedIndices.Count == 0)
+            //{
+            //    var selectedItem = checkedListBox1.SelectedItem;
+            //    if (selectedItem != null)
+            //    {
+            //        var selectedUser = selectedItem.ToString();
+            //        SetTabControlSelected(selectedUser);
+            //    }
+            //}
+
+        }
+
+
+
+        private delegate void SetItemCallback(int index);
+
+        private void SetItem(int index)
+        {
+            if (this.checkedListBox1.InvokeRequired)
+            {
+                SetItemCallback d = new SetItemCallback(SetItem);
+                this.Invoke(d, new object[] { index });
+            }
+            else
+            {
+                checkedListBox1.SetItemChecked(index, true);
+            }
+        }
+
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("ZhukBGGClubRanking версия 0.1", "О программе", MessageBoxButtons.OK,
+                MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+        }
+
+        private void trBarOnlyTop_Scroll(object sender, EventArgs e)
+        {
+            SetlblTrBarToxValue();
+            UpdateAvarateRating();
+        }
+
+        //private void cbGamesOnlyInAllRatings_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    UpdateAvarateRating();
+        //}
+
+        private void lbltrBarTopX_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

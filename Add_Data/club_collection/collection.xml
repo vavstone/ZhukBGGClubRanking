@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<items totalitems="231" termsofuse="https://boardgamegeek.com/xmlapi/termsofuse" pubdate="Mon, 23 Dec 2024 06:52:33 +0000">
+<items totalitems="230" termsofuse="https://boardgamegeek.com/xmlapi/termsofuse" pubdate="Tue, 24 Dec 2024 08:52:28 +0000">
 		<item objecttype="thing" objectid="316377" subtype="boardgame" collid="126601647">
 	<name sortindex="1">7 Wonders (Second Edition)</name>
 		<yearpublished>2020</yearpublished>			<image>https://cf.geekdo-images.com/Naw8y8J_s-8cvq1GoTON6w__original/img/8wVEVzdf5BoPvSiscnGvCAPNe2Q=/0x0/filters:format(jpeg)/pic7416519.jpg</image>
@@ -1014,12 +1014,6 @@
 		<thumbnail>https://cf.geekdo-images.com/_nPXf80oO-wC8eW2drZx1Q__thumb/img/jxw0q-ua1ix06a8HUM0X5FLpHJA=/fit-in/200x150/filters:strip_icc()/pic6166144.jpg</thumbnail>
 			<status own="1" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="0"  preordered="0" lastmodified="2024-12-15 09:39:12" />
 	<numplays>0</numplays>			<comment>BLVL</comment>				</item>
-		<item objecttype="thing" objectid="375459" subtype="boardgame" collid="126598114">
-	<name sortindex="1">Speakeasy</name>
-		<yearpublished>2025</yearpublished>			<image>https://cf.geekdo-images.com/Y7vIlh-m_Ugnv0jrUuOW3g__original/img/anztl_yjkT6QMcW4p5Dit7KAChE=/0x0/filters:format(jpeg)/pic8165052.jpg</image>
-		<thumbnail>https://cf.geekdo-images.com/Y7vIlh-m_Ugnv0jrUuOW3g__thumb/img/pTIdvbosIWlLSxorWRMWkUkeSj8=/fit-in/200x150/filters:strip_icc()/pic8165052.jpg</thumbnail>
-			<status own="0" prevowned="0" fortrade="0" want="0" wanttoplay="0" wanttobuy="0" wishlist="1" wishlistpriority="4" preordered="0" lastmodified="2024-12-15 12:05:48" />
-	<numplays>0</numplays>							<wishlistcomment>VAV</wishlistcomment></item>
 		<item objecttype="thing" objectid="364073" subtype="boardgame" collid="126598941">
 	<name sortindex="1">Splendor Duel</name>
 		<yearpublished>2022</yearpublished>			<image>https://cf.geekdo-images.com/V1PyFDPNFY4bJFgreLPxmQ__original/img/NelFMJToi6WYyDQheBZiwCP7-qE=/0x0/filters:format(jpeg)/pic6929347.jpg</image>
