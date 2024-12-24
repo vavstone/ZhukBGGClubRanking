@@ -117,6 +117,7 @@ namespace ZhukBGGClubRanking.WinApp
             colName.Width = 350;
             //colName.Width =246;
             colName.HeaderText = "Название";
+            colName.Name = "Game";
             colName.DataPropertyName = "Game";
             colName.TrackVisitedState = false;
             colName.LinkBehavior = LinkBehavior.HoverUnderline;
@@ -125,12 +126,20 @@ namespace ZhukBGGClubRanking.WinApp
             var colRate = new DataGridViewTextBoxColumn();
             colRate.Width = 60;
             colRate.HeaderText = "Рейтинг";
+            colRate.Name = "Rating";
             colRate.DataPropertyName = "Rating";
             colRate.ReadOnly = true;
             grid.Columns.Add(colRate);
             if (generateAllRatingsColumn)
                 AddAllRatingsColumn(grid);
-            AddCommentsColumn(grid);
+
+            var col = new DataGridViewTextBoxColumn();
+            col.HeaderText = "Владеют";
+            col.Name = "BGGComments";
+            col.DataPropertyName = "BGGComments";
+            col.Width = 150;
+            grid.Columns.Add(col);
+
             grid.CellContentClick += Grid_CellContentClick;
             grid.RowsDefaultCellStyle.SelectionBackColor = Color.LightGray;
             grid.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
@@ -142,21 +151,64 @@ namespace ZhukBGGClubRanking.WinApp
             grid.MouseWheel += DataGridView_MouseWheel;
             grid.MouseEnter += DataGridView_MouseEnter;
 
+            grid.ColumnHeaderMouseClick += Grid_ColumnHeaderMouseClick;
+
         }
 
-        void AddCommentsColumn(DataGridView dataGridView)
+        private int _previousIndex;
+        private bool _sortDirection;
+        private void Grid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            var col = new DataGridViewTextBoxColumn();
-            col.Name = "Владеют";
-            col.DataPropertyName = "BGGComments";
-            col.Width = 150;
-            dataGridView.Columns.Add(col);
+            var grid = sender as DataGridView;
+            if (e.ColumnIndex == _previousIndex)
+                _sortDirection ^= true; // toggle direction
+
+            grid.DataSource = SortData((List<GameRating>)grid.DataSource, grid.Columns[e.ColumnIndex].Name, _sortDirection);
+
+            _previousIndex = e.ColumnIndex;
+            if (grid == dataGridView1)
+                UpdateDataGridViewColors();
         }
+
+        public List<GameRating> SortData(List<GameRating> list, string column, bool ascending)
+        {
+            //return ascending ?
+            //    list.OrderBy(c => c.GetType().GetProperty(column)).ToList() :
+            //    list.OrderByDescending(c => c.GetType().GetProperty(column)).ToList();
+            if (ascending)
+            {
+                if (column== "Game")
+                 list = list.OrderBy(c => c.Game).ToList();
+                else if (column == "Rating")
+                    list = list.OrderBy(c => c.Rating).ToList();
+                else if (column == "BGGComments")
+                    list = list.OrderBy(c => c.BGGComments).ToList();
+                else if (column == "UserRatingString")
+                    list = list.OrderBy(c => c.UserRating.Any() ? c.UserRating.Min(c1 => c1.Rating) : 1000).
+                        ThenBy(c => c.UserRating.Any() ? c.UserRating.Max(c1 => c1.Rating) : 1000).ToList();
+
+            }
+            else
+            {
+                if (column == "Game")
+                    list = list.OrderByDescending(c => c.Game).ToList();
+                else if (column == "Rating")
+                    list = list.OrderByDescending(c => c.Rating).ToList();
+                else if (column == "BGGComments")
+                    list = list.OrderByDescending(c => c.BGGComments).ToList();
+                list = list.OrderByDescending(c => c.UserRating.Any() ? c.UserRating.Min(c1 => c1.Rating) : 1000).
+                    ThenByDescending(c => c.UserRating.Any() ? c.UserRating.Max(c1 => c1.Rating) : 1000).ToList();
+            }
+
+            return list;
+        }
+
 
         void AddAllRatingsColumn(DataGridView dataGridView)
         {
             var col = new DataGridViewTextBoxColumn();
-            col.Name = "Рейтинг у игроков";
+            col.HeaderText = "Рейтинг у игроков";
+            col.Name = "UserRatingString";
             col.DataPropertyName = "UserRatingString";
             col.Width = 225;
             dataGridView.Columns.Add(col);
