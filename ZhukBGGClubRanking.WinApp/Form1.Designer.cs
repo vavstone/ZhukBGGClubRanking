@@ -296,7 +296,6 @@
             this.menuSelectTesera.Name = "menuSelectTesera";
             this.menuSelectTesera.Size = new System.Drawing.Size(205, 22);
             this.menuSelectTesera.Text = "Tesera (русскоязычный)";
-            this.menuSelectTesera.CheckedChanged += new System.EventHandler(this.menuSelectTesera_CheckedChanged);
             this.menuSelectTesera.Click += new System.EventHandler(this.menuSelectTesera_Click);
             // 
             // menuSelectBGG
@@ -305,7 +304,6 @@
             this.menuSelectBGG.Name = "menuSelectBGG";
             this.menuSelectBGG.Size = new System.Drawing.Size(205, 22);
             this.menuSelectBGG.Text = "BGG (англоязычный)";
-            this.menuSelectBGG.CheckedChanged += new System.EventHandler(this.menuSelectBGG_CheckedChanged);
             this.menuSelectBGG.Click += new System.EventHandler(this.menuSelectBGG_Click);
             // 
             // Form1

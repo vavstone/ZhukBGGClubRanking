@@ -494,8 +494,6 @@ namespace ZhukBGGClubRanking.WinApp
 
         }
 
-
-
         public string GetTeseraCardUrl(string gameEng)
         {
             var teseraName = GamesTranslate.GetTeseraName(gameEng);
@@ -507,16 +505,6 @@ namespace ZhukBGGClubRanking.WinApp
         public string GetBGGCardUrl(int bggObjectId)
         {
             return Settings.BGGCardPrefixUrl + bggObjectId;
-        }
-
-        private void menuSelectTesera_CheckedChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void menuSelectBGG_CheckedChanged(object sender, EventArgs e)
-        {
-            
         }
 
         private void menuSelectTesera_Click(object sender, EventArgs e)
