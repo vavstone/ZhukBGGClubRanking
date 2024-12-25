@@ -20,11 +20,11 @@ namespace ZhukBGGClubRanking.Core
         public int Weight { get; set; }
         public int CompliancePercent { get; set; }
         public BGGCollection.ItemElement BGGItem { get; set; }
-        public List<UserRating> UserRating { get; set; }
+        public UsersRating UsersRating { get; set; }
 
         public GameRating()
         {
-            UserRating = new List<UserRating>();
+            UsersRating = new UsersRating();
         }
 
         public string BGGComments

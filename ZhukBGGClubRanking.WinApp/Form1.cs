@@ -40,6 +40,17 @@ namespace ZhukBGGClubRanking.WinApp
             PrepareDataGrid(dataGridView1,false);
             SetTrBarTopXValue();
             SetFormCaption();
+            ClearSelectionInAllGrids();
+        }
+
+        void ClearSelectionInAllGrids()
+        {
+            dataGridView1.ClearSelection();
+            foreach (TabPage page in tabControl1.TabPages)
+            {
+                var grid = page.Controls[0] as DataGridView;
+                grid.ClearSelection();
+            }
         }
 
         void LoadCommonCollection()
@@ -89,16 +100,16 @@ namespace ZhukBGGClubRanking.WinApp
                             c => c.GameEng.ToUpper() == gameToFill.GameEng.ToUpper());
                         if (game != null)
                         {
-                            gameToFill.UserRating.Add(new UserRating
+                            gameToFill.UsersRating.UserRating.Add(new UserRating
                                 {UserName = list.UserNames.FirstOrDefault(), Rating = game.Rating});
                         }
                     }
 
-                    if (gameToFill.UserRating.Any())
+                    if (gameToFill.UsersRating.UserRating.Any())
                     {
                         var splitter = "; ";
                         var resultStr = "";
-                        foreach (var item in gameToFill.UserRating.OrderBy(c => c.Rating).ThenBy(c => c.UserName))
+                        foreach (var item in gameToFill.UsersRating.UserRating.OrderBy(c => c.Rating).ThenBy(c => c.UserName))
                             resultStr += string.Format("{0} - {1}{2}", item.Rating, item.UserName, splitter);
                         gameToFill.UserRatingString = resultStr.Substring(0, resultStr.Length - splitter.Length);
                     }
@@ -113,6 +124,8 @@ namespace ZhukBGGClubRanking.WinApp
             grid.AllowUserToDeleteRows = false;
             grid.ShowEditingIcon = false;
             grid.RowHeadersVisible = false;
+
+
             var colName = new DataGridViewLinkColumn();
             colName.Width = 350;
             //colName.Width =246;
@@ -168,6 +181,8 @@ namespace ZhukBGGClubRanking.WinApp
             _previousIndex = e.ColumnIndex;
             if (grid == dataGridView1)
                 UpdateDataGridViewColors();
+
+            grid.ClearSelection();
         }
 
         public List<GameRating> SortData(List<GameRating> list, string column, bool ascending)
@@ -184,8 +199,9 @@ namespace ZhukBGGClubRanking.WinApp
                 else if (column == "BGGComments")
                     list = list.OrderBy(c => c.BGGComments).ToList();
                 else if (column == "UserRatingString")
-                    list = list.OrderBy(c => c.UserRating.Any() ? c.UserRating.Min(c1 => c1.Rating) : 1000).
-                        ThenBy(c => c.UserRating.Any() ? c.UserRating.Max(c1 => c1.Rating) : 1000).ToList();
+                    //list = list.OrderBy(c => c.UsersRating.UserRating.Any() ? c.UsersRating.UserRating.Min(c1 => c1.Rating) : 1000).
+                    //    ThenBy(c => c.UsersRating.UserRating.Any() ? c.UsersRating.UserRating.Max(c1 => c1.Rating) : 1000).ToList();
+                    list = list.OrderBy(c => c.UsersRating).ToList();
 
             }
             else
@@ -196,8 +212,10 @@ namespace ZhukBGGClubRanking.WinApp
                     list = list.OrderByDescending(c => c.Rating).ToList();
                 else if (column == "BGGComments")
                     list = list.OrderByDescending(c => c.BGGComments).ToList();
-                list = list.OrderByDescending(c => c.UserRating.Any() ? c.UserRating.Min(c1 => c1.Rating) : 1000).
-                    ThenByDescending(c => c.UserRating.Any() ? c.UserRating.Max(c1 => c1.Rating) : 1000).ToList();
+                else if (column == "UserRatingString")
+                    //list = list.OrderByDescending(c => c.UsersRating.UserRating.Any() ? c.UsersRating.UserRating.Min(c1 => c1.Rating) : 1000).
+                    //    ThenByDescending(c => c.UsersRating.UserRating.Any() ? c.UsersRating.UserRating.Max(c1 => c1.Rating) : 1000).ToList();
+                    list = list.OrderByDescending(c => c.UsersRating).ToList();
             }
 
             return list;
@@ -431,6 +449,7 @@ namespace ZhukBGGClubRanking.WinApp
             UpdateDataGridViewColors();
             //SetCheckBoxSelected(GetCurrentSelectedUser());
             SetFormCaption();
+            ClearSelectionInAllGrids();
         }
 
         void SetFormCaption()
