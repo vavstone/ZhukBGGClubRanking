@@ -14,7 +14,7 @@ namespace ZhukBGGClubRanking.Core
         {
             var result = new GamesNamesTranslateFile();
             var list = new List<GamesNamesTranslate>();
-            result.TranslateList = list;
+            
             var csvArray = Csv.CsvReader.ReadFromText(System.IO.File.ReadAllText(Settings.GamesNamesTranslateFilePath));
             foreach (var arItem in csvArray.OrderBy(c => c.Values[0]))
             {
@@ -22,8 +22,20 @@ namespace ZhukBGGClubRanking.Core
                 gr.NameEng =  arItem[0];
                 gr.NameRus = arItem[1];
                 gr.TeseraName = arItem[2];
+                gr.ParentEngName = arItem[3];
                 list.Add(gr);
             }
+
+            foreach (var item in list)
+            {
+                if (!string.IsNullOrWhiteSpace(item.ParentEngName))
+                {
+                    var parent = list.FirstOrDefault(c => c.NameEng == item.ParentEngName);
+                    if (parent != null)
+                        item.Parent = parent;
+                }
+            }
+            result.TranslateList = list;
             return result;
         }
 

@@ -33,7 +33,7 @@ namespace ZhukBGGClubRanking.WinApp
         private void AddNewGames()
         {
             dragDropListBox1.Items.Add(" ");
-            foreach (var game in NewGames.OrderBy(c => c.Rating))
+            foreach (var game in NewGames.OrderBy(c => c.Game))
             {
                 dragDropListBox1.Items.Add(game.Game);
             }

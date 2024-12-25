@@ -40,8 +40,17 @@ namespace ZhukBGGClubRanking.Core
                 var gr = new GameRating();
                 gr.GameEng =  arItem[1];
                 gr.Rating = Int32.Parse(arItem[0]);
-                grList.GameList.Add(gr);
+                var isAdditionToGame = false;
+                var gameInfo =
+                    commonCollection.GamesTranslation.TranslateList.FirstOrDefault(c => c.NameEng == gr.GameEng);
+                if (gameInfo != null && gameInfo.Parent != null)
+                    isAdditionToGame = true;
+                if (!isAdditionToGame)
+                {
+                    grList.GameList.Add(gr);
+                }
             }
+            grList.ReCalculateRatingAfterRemoveItems();
             grList.CalculateWeightByRating();
             grList.SetBGGCollection(commonCollection);
             return item;
