@@ -15,10 +15,11 @@ namespace ZhukBGGClubRanking.Core
             foreach (var game in GameList)
             {
                 game.BGGItem = CommonCollection.GetItemByName(game.GameEng);
-                if (game.BGGItem != null)
-                {
-                    game.GameRus = game.BGGItem.NameRus;
-                }
+                //if (game.BGGItem != null)
+                //{
+                //    game.GameRus = game.BGGItem.NameRus;
+                //}
+                game.GameRus = CommonCollection.GamesTranslation.GetNameRus(game.GameEng);
             }
         }
 
