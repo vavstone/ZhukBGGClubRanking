@@ -412,7 +412,7 @@ namespace ZhukBGGClubRanking.WinApp
             var otherCollections = usersRatingListFiles
                 .Where(c => c.RatingList.UserNames.FirstOrDefault() != reorderForm.RatingList.UserNames.FirstOrDefault())
                 .Select(c => c.RatingList).ToList();
-            var newGamesInOthersColl = reorderForm.RatingList.GetGamesNotInCollectionButExistingInOthers(otherCollections,CommonCollection);
+            var newGamesInOthersColl = reorderForm.RatingList.GetGamesNotInCollectionButExistingInOthers(otherCollections);
             if (newGamesInOthersColl.Count > 0)
             {
                 if (MessageBox.Show(string.Format("В других коллекциях найдены игры ({0} штук), отсуствующие в вашем рейтинге. Добавить их?",newGamesInOthersColl.Count),

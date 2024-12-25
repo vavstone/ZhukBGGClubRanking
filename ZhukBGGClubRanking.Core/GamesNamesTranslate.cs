@@ -11,5 +11,12 @@ namespace ZhukBGGClubRanking.Core
         public string NameEng { get; set; }
         public string NameRus { get; set; }
         public string TeseraName { get; set; }
+        internal string ParentEngName { get; set; }
+
+        public GamesNamesTranslate Parent
+        {
+            get;
+            set;
+        }
     }
 }

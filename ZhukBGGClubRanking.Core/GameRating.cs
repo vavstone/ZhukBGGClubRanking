@@ -16,6 +16,7 @@ namespace ZhukBGGClubRanking.Core
         }
         public string GameEng { get; set; }
         public string GameRus { get; set; }
+        public string ParentGameEng { get; set; }
         public int Rating { get; set; }
         public int Weight { get; set; }
         public int CompliancePercent { get; set; }

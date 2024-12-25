@@ -53,6 +53,16 @@ namespace ZhukBGGClubRanking.Core
             }
         }
 
+        public void ReCalculateRatingAfterRemoveItems()
+        {
+            if (GameList.Count == 0) return;
+            var curRating = 1;
+            foreach (var item in GameList.OrderBy(c => c.Rating))
+            {
+                item.Rating = curRating++;
+            }
+        }
+
 
         public static GameRatingList CalculateAvarageRating(List<GameRatingList> inList, BGGCollection commonCollection,
             int topXPos)
@@ -144,16 +154,21 @@ namespace ZhukBGGClubRanking.Core
             return result;
         }
 
-        public List<GameRating> GetGamesNotInCollectionButExistingInOthers(List<GameRatingList> otherCollections, BGGCollection commonCollection)
+        public List<GameRating> GetGamesNotInCollectionButExistingInOthers(List<GameRatingList> otherCollections)
         {
             var lastRating = GameList.Select(c => c.Rating).Max();
             var result = new List<GameRating>();
             var gamesInCommonColl = new List<string>();
             var allGames = new List<string>();
-            if (commonCollection != null)
+            if (CommonCollection != null)
             {
-                gamesInCommonColl = commonCollection.Items.Where(c=>c.Status.Own).Select(c => c.Name).ToList();
-                allGames.AddRange(gamesInCommonColl);
+                gamesInCommonColl = CommonCollection.Items.Where(c=>c.Status.Own).Select(c => c.Name).ToList();
+                foreach (var commonGame in gamesInCommonColl)
+                {
+                    if (!CommonCollection.GamesTranslation.TranslateList.Any(c=>c.NameEng==commonGame || c.Parent==null))
+                        allGames.Add(commonGame);
+                }
+                
             }
             allGames.AddRange(otherCollections.SelectMany(c=>c.GameList).Select(c=>c.GameEng).Distinct());
 
@@ -161,7 +176,7 @@ namespace ZhukBGGClubRanking.Core
             foreach (var game in allGames.Distinct().OrderBy(c=>c))
             {
                 if (GameList.All(c => c.GameEng != game))
-                    result.Add(new GameRating {GameEng = game, GameRus = commonCollection.GamesTranslation.GetNameRus(game), Rating = lastRating++});
+                    result.Add(new GameRating {GameEng = game, GameRus = CommonCollection.GamesTranslation.GetNameRus(game), Rating = lastRating++});
             }
             return result;
         }
