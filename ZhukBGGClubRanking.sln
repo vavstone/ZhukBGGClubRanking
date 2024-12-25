@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhukBGGClubRanking.WinApp",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oli.Controls", "Oli.Controls\Oli.Controls.csproj", "{3F1A45C7-96CB-4BAD-A931-792D04B96128}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TlrkTestWinApp", "TlrkTestWinApp\TlrkTestWinApp.csproj", "{AC02D180-BC35-404A-85C6-3464D9CC6B2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3F1A45C7-96CB-4BAD-A931-792D04B96128}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F1A45C7-96CB-4BAD-A931-792D04B96128}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F1A45C7-96CB-4BAD-A931-792D04B96128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC02D180-BC35-404A-85C6-3464D9CC6B2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC02D180-BC35-404A-85C6-3464D9CC6B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC02D180-BC35-404A-85C6-3464D9CC6B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC02D180-BC35-404A-85C6-3464D9CC6B2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
