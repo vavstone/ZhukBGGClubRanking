@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oli.Controls", "Oli.Control
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TlrkTestWinApp", "TlrkTestWinApp\TlrkTestWinApp.csproj", "{AC02D180-BC35-404A-85C6-3464D9CC6B2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{C7525300-CB12-406B-8180-034D197E380A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{AC02D180-BC35-404A-85C6-3464D9CC6B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC02D180-BC35-404A-85C6-3464D9CC6B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC02D180-BC35-404A-85C6-3464D9CC6B2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7525300-CB12-406B-8180-034D197E380A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7525300-CB12-406B-8180-034D197E380A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7525300-CB12-406B-8180-034D197E380A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7525300-CB12-406B-8180-034D197E380A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
