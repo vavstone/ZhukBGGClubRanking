@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BGGCollection.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="UserSettings.cs" />
     <Compile Include="UsersRating.cs" />
     <Compile Include="UserRating.cs" />
     <Compile Include="GamesNamesTranslate.cs" />

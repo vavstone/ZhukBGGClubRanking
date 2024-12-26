@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using System.Windows.Forms;
 using ZhukBGGClubRanking.Core;
 
@@ -17,11 +15,12 @@ namespace ZhukBGGClubRanking.WinApp
         private List<GameRatingListFile> usersRatingListFiles;
         private GameRatingList currentAvarageRatingList;
 
-        public bool TeseraPreferable = true;
+        public UserSettings userSettings { get; set; }
 
         public Form1()
         {
             InitializeComponent();
+            userSettings = UserSettings.GetUserSettings();
             LoadGamesTranslate();
             LoadCommonCollection();
             LoadUsersRatings();
@@ -40,6 +39,7 @@ namespace ZhukBGGClubRanking.WinApp
             PrepareDataGrid(dataGridView1,false);
             SetTrBarTopXValue();
             SetFormCaption();
+            UpdateAvarateRating();
             ClearSelectionInAllGrids();
         }
 
@@ -92,9 +92,8 @@ namespace ZhukBGGClubRanking.WinApp
             foreach (var gameToFill in currentList.GameList)
             {
                 var currentListUser = currentList.UserNames.FirstOrDefault();
-                if (currentListUser != null)
-                {
-                    foreach (var list in allLists.Where(c=>c.UserNames.FirstOrDefault()!=currentListUser))
+
+                    foreach (var list in allLists.Where(c=>string.IsNullOrWhiteSpace(currentListUser) || c.UserNames.FirstOrDefault()!= currentListUser))
                     {
                         var game = list.GameList.FirstOrDefault(
                             c => c.GameEng.ToUpper() == gameToFill.GameEng.ToUpper());
@@ -113,22 +112,22 @@ namespace ZhukBGGClubRanking.WinApp
                             resultStr += string.Format("{0} - {1}{2}", item.Rating, item.UserName, splitter);
                         gameToFill.UserRatingString = resultStr.Substring(0, resultStr.Length - splitter.Length);
                     }
-                }
+                
             }
         }
 
-        public void PrepareDataGrid(DataGridView grid, bool generateAllRatingsColumn)
+        public void CreateGridColumns(DataGridView grid, bool isUserRatingGrid)
         {
-            grid.AutoGenerateColumns = false;
-            grid.AllowUserToAddRows = false;
-            grid.AllowUserToDeleteRows = false;
-            grid.ShowEditingIcon = false;
-            grid.RowHeadersVisible = false;
+            TableSettings settings;
+            if (isUserRatingGrid)
+                settings = userSettings.Tables.UserRatingTable;
+            else
+                settings = userSettings.Tables.AverageRatingTable;
 
+            grid.Columns.Clear();
 
             var colName = new DataGridViewLinkColumn();
-            colName.Width = 350;
-            //colName.Width =246;
+            colName.Width = 310;
             colName.HeaderText = "Название";
             colName.Name = "Game";
             colName.DataPropertyName = "Game";
@@ -136,36 +135,64 @@ namespace ZhukBGGClubRanking.WinApp
             colName.LinkBehavior = LinkBehavior.HoverUnderline;
             colName.LinkColor = DefaultForeColor;
             grid.Columns.Add(colName);
-            var colRate = new DataGridViewTextBoxColumn();
-            colRate.Width = 60;
-            colRate.HeaderText = "Рейтинг";
-            colRate.Name = "Rating";
-            colRate.DataPropertyName = "Rating";
-            colRate.ReadOnly = true;
-            grid.Columns.Add(colRate);
-            if (generateAllRatingsColumn)
-                AddAllRatingsColumn(grid);
 
-            var col = new DataGridViewTextBoxColumn();
-            col.HeaderText = "Владеют";
-            col.Name = "BGGComments";
-            col.DataPropertyName = "BGGComments";
-            col.Width = 150;
-            grid.Columns.Add(col);
+            if (settings.ShowRating)
+            {
+                var colRate = new DataGridViewTextBoxColumn();
+                colRate.Width = 50;
+                colRate.HeaderText = "Рейтинг";
+                colRate.Name = "Rating";
+                colRate.DataPropertyName = "Rating";
+                colRate.ReadOnly = true;
+                grid.Columns.Add(colRate);
+            }
 
-            grid.CellContentClick += Grid_CellContentClick;
-            grid.RowsDefaultCellStyle.SelectionBackColor = Color.LightGray;
-            grid.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
+            if (settings.ShowUsersRating)
+            {
+                var col = new DataGridViewTextBoxColumn();
+                col.HeaderText = "Рейтинг у игроков";
+                col.Name = "UserRatingString";
+                col.DataPropertyName = "UserRatingString";
+                col.Width = 193;
+                grid.Columns.Add(col);
+            }
+
+            if (settings.ShowOwners)
+            {
+                var col1 = new DataGridViewTextBoxColumn();
+                col1.HeaderText = "Владеют";
+                col1.Name = "BGGComments";
+                col1.DataPropertyName = "BGGComments";
+                col1.Width = 120;
+                grid.Columns.Add(col1);
+            }
 
             //TODO
             //AddImagesColumn(grid);
             //AddTestColumn(grid);
+        }
+
+        public void PrepareDataGrid(DataGridView grid, bool isUserRatingGrid)
+        {
+            
+
+            grid.AutoGenerateColumns = false;
+            grid.AllowUserToAddRows = false;
+            grid.AllowUserToDeleteRows = false;
+            grid.ShowEditingIcon = false;
+            grid.RowHeadersVisible = false;
+
+            CreateGridColumns(grid,isUserRatingGrid);
+            
+            grid.CellContentClick += Grid_CellContentClick;
+
+            grid.RowsDefaultCellStyle.SelectionBackColor = Color.LightGray;
+            grid.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
 
             grid.MouseWheel += DataGridView_MouseWheel;
             grid.MouseEnter += DataGridView_MouseEnter;
 
             grid.ColumnHeaderMouseClick += Grid_ColumnHeaderMouseClick;
-
         }
 
         private int _previousIndex;
@@ -187,9 +214,6 @@ namespace ZhukBGGClubRanking.WinApp
 
         public List<GameRating> SortData(List<GameRating> list, string column, bool ascending)
         {
-            //return ascending ?
-            //    list.OrderBy(c => c.GetType().GetProperty(column)).ToList() :
-            //    list.OrderByDescending(c => c.GetType().GetProperty(column)).ToList();
             if (ascending)
             {
                 if (column== "Game")
@@ -199,8 +223,6 @@ namespace ZhukBGGClubRanking.WinApp
                 else if (column == "BGGComments")
                     list = list.OrderBy(c => c.BGGComments).ToList();
                 else if (column == "UserRatingString")
-                    //list = list.OrderBy(c => c.UsersRating.UserRating.Any() ? c.UsersRating.UserRating.Min(c1 => c1.Rating) : 1000).
-                    //    ThenBy(c => c.UsersRating.UserRating.Any() ? c.UsersRating.UserRating.Max(c1 => c1.Rating) : 1000).ToList();
                     list = list.OrderBy(c => c.UsersRating).ToList();
 
             }
@@ -213,24 +235,12 @@ namespace ZhukBGGClubRanking.WinApp
                 else if (column == "BGGComments")
                     list = list.OrderByDescending(c => c.BGGComments).ToList();
                 else if (column == "UserRatingString")
-                    //list = list.OrderByDescending(c => c.UsersRating.UserRating.Any() ? c.UsersRating.UserRating.Min(c1 => c1.Rating) : 1000).
-                    //    ThenByDescending(c => c.UsersRating.UserRating.Any() ? c.UsersRating.UserRating.Max(c1 => c1.Rating) : 1000).ToList();
                     list = list.OrderByDescending(c => c.UsersRating).ToList();
             }
-
             return list;
         }
 
 
-        void AddAllRatingsColumn(DataGridView dataGridView)
-        {
-            var col = new DataGridViewTextBoxColumn();
-            col.HeaderText = "Рейтинг у игроков";
-            col.Name = "UserRatingString";
-            col.DataPropertyName = "UserRatingString";
-            col.Width = 225;
-            dataGridView.Columns.Add(col);
-        }
 
         private void DataGridView_MouseEnter(object sender, EventArgs e)
         {
@@ -272,7 +282,7 @@ namespace ZhukBGGClubRanking.WinApp
                     var gameInBGGColl = ratingItem.BGGItem;
                     if (gameInBGGColl != null)
                         bggUrl = GetBGGCardUrl(gameInBGGColl.ObjectId);
-                    if (TeseraPreferable)
+                    if (userSettings.TeseraPreferable)
                         url = teseraUrl;
                     if (string.IsNullOrWhiteSpace(url))
                         url = bggUrl;
@@ -305,6 +315,7 @@ namespace ZhukBGGClubRanking.WinApp
             var checkedLists = GetSelectedUsersRatings();
             currentAvarageRatingList = GameRatingList.CalculateAvarageRating(checkedLists, CommonCollection, topValue);
             currentAvarageRatingList.SetBGGCollection(CommonCollection);
+            UpdateGamesCrossRatings(currentAvarageRatingList, usersRatingListFiles.Select(c => c.RatingList));
             Utils.CalcComplianceAverateRatingToSelectedUser_v2(GetCurrentSelectedUser(),currentAvarageRatingList, usersRatingListFiles);
             dataGridView1.DataSource = currentAvarageRatingList.GameList.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
             dataGridView1.ClearSelection();
@@ -545,8 +556,8 @@ namespace ZhukBGGClubRanking.WinApp
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("ZhukBGGClubRanking версия 0.1", "О программе", MessageBoxButtons.OK,
-                MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+            var about = new About();
+            about.ShowDialog();
         }
 
         private void trBarOnlyTop_Scroll(object sender, EventArgs e)
@@ -583,12 +594,12 @@ namespace ZhukBGGClubRanking.WinApp
             ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
             if (menuItem.CheckState == CheckState.Checked)
             {
-                TeseraPreferable = true;
+                userSettings.TeseraPreferable = true;
                 menuSelectBGG.Checked = false;
             }
             else if (menuItem.CheckState == CheckState.Unchecked)
             {
-                TeseraPreferable = false;
+                userSettings.TeseraPreferable = false;
                 menuSelectBGG.Checked = true;
             }
         }
@@ -598,13 +609,38 @@ namespace ZhukBGGClubRanking.WinApp
             ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
             if (menuItem.CheckState == CheckState.Checked)
             {
-                TeseraPreferable = false;
+                userSettings.TeseraPreferable = false;
                 menuSelectTesera.Checked = false;
             }
             else if (menuItem.CheckState == CheckState.Unchecked)
             {
-                TeseraPreferable = true;
+                userSettings.TeseraPreferable = true;
                 menuSelectTesera.Checked = true;
+            }
+        }
+
+        private void menuTablesColumns_Click(object sender, EventArgs e)
+        {
+            var selectTablesColumnsForm = new SelectTablesColumns();
+            var result = selectTablesColumnsForm.CustomShow(userSettings.Tables);
+            if (result == DialogResult.OK && (selectTablesColumnsForm.UserTableSettingsChanged || selectTablesColumnsForm.AverageTableSettingsChanged))
+            {
+                userSettings.Tables = selectTablesColumnsForm.Settings;
+                if (selectTablesColumnsForm.UserTableSettingsChanged)
+                {
+                    foreach (var tab in tabControl1.TabPages)
+                    {
+                       var grid = (tab as TabPage).Controls[0] as DataGridView;
+                        CreateGridColumns(grid, true);
+
+                    }
+                }
+                if (selectTablesColumnsForm.AverageTableSettingsChanged)
+                {
+                    CreateGridColumns(dataGridView1,false);
+                }
+                ClearSelectionInAllGrids();
+                UpdateDataGridViewColors();
             }
         }
     }
