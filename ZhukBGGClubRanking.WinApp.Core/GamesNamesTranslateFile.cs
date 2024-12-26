@@ -3,19 +3,25 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ZhukBGGClubRanking.Core;
 
-namespace ZhukBGGClubRanking.Core
+namespace ZhukBGGClubRanking.WinApp.Core
 {
     public class GamesNamesTranslateFile
     {
-        public List<GamesNamesTranslate> TranslateList { get; set; }
+        public GamesNamesTranslateList GamesTranslate { get; set; }
+
+        public GamesNamesTranslateFile()
+        {
+            GamesTranslate = new GamesNamesTranslateList();
+        }
 
         public static GamesNamesTranslateFile LoadFromFile()
         {
             var result = new GamesNamesTranslateFile();
             var list = new List<GamesNamesTranslate>();
             
-            var csvArray = Csv.CsvReader.ReadFromText(System.IO.File.ReadAllText(Settings.GamesNamesTranslateFilePath));
+            var csvArray = CsvReader.ReadFromText(System.IO.File.ReadAllText(Settings.GamesNamesTranslateFilePath));
             foreach (var arItem in csvArray.OrderBy(c => c.Values[0]))
             {
                 var gr = new GamesNamesTranslate();
@@ -35,24 +41,10 @@ namespace ZhukBGGClubRanking.Core
                         item.Parent = parent;
                 }
             }
-            result.TranslateList = list;
+            result.GamesTranslate.TranslateList = list;
             return result;
         }
 
-        public string GetNameRus(string nameEng)
-        {
-            var item = TranslateList.FirstOrDefault(c => c.NameEng == nameEng);
-            if (item!=null)
-                return item.NameRus;
-            return string.Empty;
-        }
-
-        public string GetTeseraName(string nameEng)
-        {
-            var item = TranslateList.FirstOrDefault(c => c.NameEng == nameEng);
-            if (item != null)
-                return item.TeseraName;
-            return string.Empty;
-        }
+        
     }
 }

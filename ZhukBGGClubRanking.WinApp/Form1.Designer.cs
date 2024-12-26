@@ -46,12 +46,13 @@
             this.предпочитаемыйИсточникИнформацииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSelectTesera = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSelectBGG = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuTablesColumns = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panel3 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.menuTablesColumns = new System.Windows.Forms.ToolStripMenuItem();
+            this.button3 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel7.SuspendLayout();
@@ -166,6 +167,7 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.button3);
             this.panel4.Controls.Add(this.button2);
             this.panel4.Controls.Add(this.button1);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Right;
@@ -250,6 +252,13 @@
             this.menuSelectBGG.Text = "BGG (англоязычный)";
             this.menuSelectBGG.Click += new System.EventHandler(this.menuSelectBGG_Click);
             // 
+            // menuTablesColumns
+            // 
+            this.menuTablesColumns.Name = "menuTablesColumns";
+            this.menuTablesColumns.Size = new System.Drawing.Size(303, 22);
+            this.menuTablesColumns.Text = "Отображение колонок таблиц...";
+            this.menuTablesColumns.Click += new System.EventHandler(this.menuTablesColumns_Click);
+            // 
             // AboutToolStripMenuItem
             // 
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
@@ -308,12 +317,15 @@
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
-            // menuTablesColumns
+            // button3
             // 
-            this.menuTablesColumns.Name = "menuTablesColumns";
-            this.menuTablesColumns.Size = new System.Drawing.Size(303, 22);
-            this.menuTablesColumns.Text = "Отображение колонок таблиц...";
-            this.menuTablesColumns.Click += new System.EventHandler(this.menuTablesColumns_Click);
+            this.button3.Location = new System.Drawing.Point(6, 9);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(319, 23);
+            this.button3.TabIndex = 3;
+            this.button3.Text = "test web api";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // Form1
             // 
@@ -378,6 +390,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuSelectTesera;
         private System.Windows.Forms.ToolStripMenuItem menuSelectBGG;
         private System.Windows.Forms.ToolStripMenuItem menuTablesColumns;
+        private System.Windows.Forms.Button button3;
     }
 }
 

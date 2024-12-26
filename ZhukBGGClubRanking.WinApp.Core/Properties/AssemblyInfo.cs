@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ZhukBGGClubRanking.Core")]
+[assembly: AssemblyTitle("ZhukBGGClubRanking.WinApp.Core")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ZhukBGGClubRanking.Core")]
+[assembly: AssemblyProduct("ZhukBGGClubRanking.WinApp.Core")]
 [assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c043123f-8c46-4b82-8b18-d9e678e8e624")]
+[assembly: Guid("dac04874-dba5-47cd-be61-df1fa9c446b4")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -5,12 +5,13 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ZhukBGGClubRanking.Core;
+using ZhukBGGClubRanking.WinApp.Core;
 
 namespace ZhukBGGClubRanking.WinApp
 {
     public partial class Form1 : Form
     {
-        public GamesNamesTranslateFile GamesTranslate { get; set; }
+        public GamesNamesTranslateList GamesTranslate { get; set; }
         public BGGCollection CommonCollection { get; set; }
         private List<GameRatingListFile> usersRatingListFiles;
         private GameRatingList currentAvarageRatingList;
@@ -55,12 +56,13 @@ namespace ZhukBGGClubRanking.WinApp
 
         void LoadCommonCollection()
         {
-            CommonCollection = BGGCollection.LoadFromFile(GamesTranslate);
+            CommonCollection = BGGCollection.LoadFromFile();
+            CommonCollection.UpplyTranslation(GamesTranslate);
         }
 
         void LoadGamesTranslate()
         {
-            GamesTranslate = GamesNamesTranslateFile.LoadFromFile();
+            GamesTranslate = GamesNamesTranslateFile.LoadFromFile().GamesTranslate;
         }
 
         void LoadUsersRatings()
@@ -642,6 +644,20 @@ namespace ZhukBGGClubRanking.WinApp
                 ClearSelectionInAllGrids();
                 UpdateDataGridViewColors();
             }
+        }
+
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var res = await TestWebApi.Test();
+                MessageBox.Show("пришло!");
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
+            
         }
     }
 }
