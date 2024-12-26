@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace ZhukBGGClubRanking.Core
+namespace ZhukBGGClubRanking.WinApp.Core
 {
     public static class Settings
     {
@@ -14,10 +14,10 @@ namespace ZhukBGGClubRanking.Core
             get { return Path.Combine(RootDir, "lists"); }
         }
 
-        public static string CommonCollectionFilePath
-        {
-            get { return Path.Combine(RootDir, "club_collection", "collection.xml"); }
-        }
+        //public static string CommonCollectionFilePath
+        //{
+        //    get { return Path.Combine(RootDir, "club_collection", "collection.xml"); }
+        //}
 
         public static string GamesNamesTranslateFilePath
         {

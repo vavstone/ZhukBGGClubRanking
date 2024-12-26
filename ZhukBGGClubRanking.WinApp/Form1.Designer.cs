@@ -46,12 +46,12 @@
             this.предпочитаемыйИсточникИнформацииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSelectTesera = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSelectBGG = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuTablesColumns = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panel3 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.menuTablesColumns = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel7.SuspendLayout();
@@ -250,6 +250,13 @@
             this.menuSelectBGG.Text = "BGG (англоязычный)";
             this.menuSelectBGG.Click += new System.EventHandler(this.menuSelectBGG_Click);
             // 
+            // menuTablesColumns
+            // 
+            this.menuTablesColumns.Name = "menuTablesColumns";
+            this.menuTablesColumns.Size = new System.Drawing.Size(303, 22);
+            this.menuTablesColumns.Text = "Отображение колонок таблиц...";
+            this.menuTablesColumns.Click += new System.EventHandler(this.menuTablesColumns_Click);
+            // 
             // AboutToolStripMenuItem
             // 
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
@@ -307,13 +314,6 @@
             this.tabControl1.Size = new System.Drawing.Size(720, 691);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
-            // 
-            // menuTablesColumns
-            // 
-            this.menuTablesColumns.Name = "menuTablesColumns";
-            this.menuTablesColumns.Size = new System.Drawing.Size(303, 22);
-            this.menuTablesColumns.Text = "Отображение колонок таблиц...";
-            this.menuTablesColumns.Click += new System.EventHandler(this.menuTablesColumns_Click);
             // 
             // Form1
             // 

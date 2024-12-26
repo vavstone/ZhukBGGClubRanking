@@ -8,9 +8,10 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>ZhukBGGClubRanking.WinApp</RootNamespace>
     <AssemblyName>ZhukBGGClubRanking.WinApp</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -85,6 +88,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="ReorderForm.resx">
       <DependentUpon>ReorderForm.cs</DependentUpon>
@@ -92,6 +96,7 @@
     <EmbeddedResource Include="SelectTablesColumns.resx">
       <DependentUpon>SelectTablesColumns.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -108,8 +113,12 @@
       <Name>Oli.Controls</Name>
     </ProjectReference>
     <ProjectReference Include="..\ZhukBGGClubRanking.Core\ZhukBGGClubRanking.Core.csproj">
-      <Project>{c043123f-8c46-4b82-8b18-d9e678e8e624}</Project>
+      <Project>{aba6d626-0948-49bc-8586-ae98abe38ec2}</Project>
       <Name>ZhukBGGClubRanking.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZhukBGGClubRanking.WinApp.Core\ZhukBGGClubRanking.WinApp.Core.csproj">
+      <Project>{dac04874-dba5-47cd-be61-df1fa9c446b4}</Project>
+      <Name>ZhukBGGClubRanking.WinApp.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

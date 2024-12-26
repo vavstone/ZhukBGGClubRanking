@@ -20,7 +20,7 @@ namespace ZhukBGGClubRanking.Core
         [XmlElement("item")]
         public List<ItemElement> Items { get; set; }
 
-        public GamesNamesTranslateFile GamesTranslation { get; set; }
+        public GamesNamesTranslateList GamesTranslation { get; set; }
 
         public BGGCollection()
         {
@@ -119,30 +119,30 @@ namespace ZhukBGGClubRanking.Core
             }
         }
 
-        public static BGGCollection LoadFromFile(GamesNamesTranslateFile gamesTranslation)
+        public static BGGCollection LoadFromFile()
         {
 
-            if (File.Exists(Settings.CommonCollectionFilePath))
+            if (File.Exists(CoreSettings.CommonCollectionFilePath))
             {
                 var serializer = new XmlSerializer(typeof(BGGCollection));
-                using (StreamReader reader = new StreamReader(Settings.CommonCollectionFilePath))
+                using (StreamReader reader = new StreamReader(CoreSettings.CommonCollectionFilePath))
                 {
                     var res = (BGGCollection)serializer.Deserialize(reader);
-                    res.GamesTranslation = gamesTranslation;
-                    res.UpplyTranslation();
                     return res;
                 }
             }
             return null;
         }
 
+
         public ItemElement GetItemByName(string name)
         {
             return Items.FirstOrDefault(c => c.Name.ToUpper() == name.ToUpper());
         }
 
-        public void UpplyTranslation()
+        public void UpplyTranslation(GamesNamesTranslateList gamesTranslation)
         {
+            GamesTranslation = gamesTranslation;
             foreach (var game in GamesTranslation.TranslateList)
             {
                 var bggItem = GetItemByName(game.NameEng);
