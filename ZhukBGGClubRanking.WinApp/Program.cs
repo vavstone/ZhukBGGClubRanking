@@ -16,12 +16,15 @@ namespace ZhukBGGClubRanking.WinApp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-           
-
             AppDomain.CurrentDomain.FirstChanceException += FirstChanceExceptionEventHandler;
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionEventHandler;
 
-            Application.Run(new Form1());
+            LoginForm loginForm = new LoginForm();
+            if (loginForm.ShowDialog() == DialogResult.OK)
+            {
+                Application.Run(new Form1());
+            }
+            //Application.Run(new Form1());
         }
 
 

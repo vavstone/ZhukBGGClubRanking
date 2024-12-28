@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Csv" Version="2.0.93" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>

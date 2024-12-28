@@ -38,6 +38,7 @@
             this.panel8 = new System.Windows.Forms.Panel();
             this.lbltrBarTopX = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -47,12 +48,13 @@
             this.menuSelectTesera = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSelectBGG = new System.Windows.Forms.ToolStripMenuItem();
             this.menuTablesColumns = new System.Windows.Forms.ToolStripMenuItem();
+            this.управлениеРейтингомToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuUploadCSVFile = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panel3 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.button3 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel7.SuspendLayout();
@@ -176,6 +178,16 @@
             this.panel4.Size = new System.Drawing.Size(329, 102);
             this.panel4.TabIndex = 3;
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(6, 9);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(319, 23);
+            this.button3.TabIndex = 3;
+            this.button3.Text = "Загрузить данные";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(3, 38);
@@ -209,6 +221,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.настройкиToolStripMenuItem,
+            this.управлениеРейтингомToolStripMenuItem,
             this.AboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -258,6 +271,21 @@
             this.menuTablesColumns.Size = new System.Drawing.Size(303, 22);
             this.menuTablesColumns.Text = "Отображение колонок таблиц...";
             this.menuTablesColumns.Click += new System.EventHandler(this.menuTablesColumns_Click);
+            // 
+            // управлениеРейтингомToolStripMenuItem
+            // 
+            this.управлениеРейтингомToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuUploadCSVFile});
+            this.управлениеРейтингомToolStripMenuItem.Name = "управлениеРейтингомToolStripMenuItem";
+            this.управлениеРейтингомToolStripMenuItem.Size = new System.Drawing.Size(148, 20);
+            this.управлениеРейтингомToolStripMenuItem.Text = "Управление рейтингом";
+            // 
+            // menuUploadCSVFile
+            // 
+            this.menuUploadCSVFile.Name = "menuUploadCSVFile";
+            this.menuUploadCSVFile.Size = new System.Drawing.Size(242, 22);
+            this.menuUploadCSVFile.Text = "Загрузка файла рейтинга csv...";
+            this.menuUploadCSVFile.Click += new System.EventHandler(this.menuUploadCSVFile_Click);
             // 
             // AboutToolStripMenuItem
             // 
@@ -316,16 +344,6 @@
             this.tabControl1.Size = new System.Drawing.Size(720, 691);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(6, 9);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(319, 23);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "test web api";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // Form1
             // 
@@ -391,6 +409,8 @@
         private System.Windows.Forms.ToolStripMenuItem menuSelectBGG;
         private System.Windows.Forms.ToolStripMenuItem menuTablesColumns;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.ToolStripMenuItem управлениеРейтингомToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuUploadCSVFile;
     }
 }
 

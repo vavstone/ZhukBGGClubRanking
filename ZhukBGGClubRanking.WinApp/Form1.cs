@@ -1,48 +1,100 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ZhukBGGClubRanking.Core;
+using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WinApp.Core;
 
 namespace ZhukBGGClubRanking.WinApp
 {
     public partial class Form1 : Form
     {
-        public GamesNamesTranslateList GamesTranslate { get; set; }
-        public BGGCollection CommonCollection { get; set; }
-        private List<GameRatingListFile> usersRatingListFiles;
-        private GameRatingList currentAvarageRatingList;
+        //public GamesNamesTranslateList GamesTranslate { get; set; }
+        //public BGGCollection CommonCollection { get; set; }
+        //private List<GameRatingListFile> usersRatingListFiles;
+        UsersRating currentAvarageRatingList;
 
-        public UserSettings userSettings { get; set; }
+        UserSettings UserSettings { get; set; }
+
+        AppCache Cache { get; set; }
+
+        User CurrentUser { get; set; }
+
+        private bool adminElementsLoaded = false;
+        
+
 
         public Form1()
         {
             InitializeComponent();
-            userSettings = UserSettings.GetUserSettings();
-            LoadGamesTranslate();
-            LoadCommonCollection();
-            LoadUsersRatings();
+            UserSettings = UserSettings.GetUserSettings();
+            Cache = new AppCache();
+            Cache.AllLoaded += AllLoaded;
+            Cache.LoadAll(UserSettings.Hosting);
+            //LoadUsersRatings();
         }
 
-        public GameRatingList GetRatingInOpenedTab()
+        private void AllLoaded(object sender, EventArgs e)
         {
-            var currentTab = GetCurrentSelectedUser();
-            return usersRatingListFiles.FirstOrDefault(c=>c.RatingList.UserNames.Contains(currentTab)).RatingList;
+            var result = (e as WebResultEventArgs).Result as WebDataAllListstResultForBW;
+            if (!result.Result)
+            {
+                MessageBox.Show("Ошибка получения данных с сервера. " + result.Message);
+            }
+            else
+            {
+                if (CurrentUser == null)
+                    CurrentUser = Cache.Users.FirstOrDefault(c => c.Name.ToLower() == JWTPrm.UserName.ToLower());
+                LoadAdminElements();
+                LoadUsersRatings();
+            }
+        }
+
+        void LoadAdminElements()
+        {
+            if (CurrentUser.Role == "admin" && !adminElementsLoaded)
+            {
+                var adminFunctionsButton = new ToolStripMenuItem("Администрирование");
+                var addNewUserMenu = new ToolStripMenuItem("Добавить нового пользователя");
+                addNewUserMenu.Click += AddNewUserMenu_Click;
+                adminFunctionsButton.DropDownItems.Add(addNewUserMenu);
+                menuStrip1.Items.Add(adminFunctionsButton);
+
+                adminElementsLoaded = true;
+            }
+        }
+
+        private void AddNewUserMenu_Click(object sender, EventArgs e)
+        {
+            var manageUsersForm = new ManageUsersForm();
+            manageUsersForm.Cache = Cache;
+            manageUsersForm.ShowDialog(this);
+            //LoadUsersRatings();
+            Cache.LoadAll(UserSettings.Hosting);
+        }
+
+        public UsersRating GetRatingInOpenedTab()
+        {
+            var currentUser = GetCurrentSelectedUser();
+            return Cache.UsersRating.FirstOrDefault(c=>c.UserId== currentUser.Id);
         }
 
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            SetButton2Text();
             PrepareDataGrid(dataGridView1,false);
             SetTrBarTopXValue();
             SetFormCaption();
             UpdateAvarateRating();
             ClearSelectionInAllGrids();
+            
         }
+
+
 
         void ClearSelectionInAllGrids()
         {
@@ -54,77 +106,59 @@ namespace ZhukBGGClubRanking.WinApp
             }
         }
 
-        void LoadCommonCollection()
-        {
-            CommonCollection = BGGCollection.LoadFromFile();
-            CommonCollection.UpplyTranslation(GamesTranslate);
-        }
+        //void LoadCommonCollection()
+        //{
+        //    CommonCollection = BGGCollection.LoadFromFile();
+        //    CommonCollection.ApplyTranslation(GamesTranslate);
+        //}
 
-        void LoadGamesTranslate()
-        {
-            GamesTranslate = GamesNamesTranslateFile.LoadFromFile().GamesTranslate;
-        }
+        //void LoadGamesTranslate()
+        //{
+        //    GamesTranslate = GamesNamesTranslateFile.LoadFromFile().GamesTranslate;
+        //}
 
         void LoadUsersRatings()
         {
-            usersRatingListFiles = GameRatingListFile.LoadFromFolder(CommonCollection);
+            //usersRatingListFiles = GameRatingListFile.LoadFromFolder(CommonCollection);
+            //Cache.LoadAll(UserSettings.Hosting);
             tabControl1.TabPages.Clear();
             checkedListBox1.Items.Clear();
-            foreach (var item in usersRatingListFiles)
+            foreach (var item in Cache.UsersRating)
             {
-                UpdateGamesCrossRatings(item.RatingList, usersRatingListFiles.Select(c => c.RatingList));
+                //UpdateGamesCrossRatings(item.RatingList, usersRatingListFiles.Select(c => c.RatingList));
             }
-            foreach (var item in usersRatingListFiles)
+            foreach (var item in Cache.UsersRating)
             {
-                checkedListBox1.Items.Add(item.FileNameWithoutExt, true);
-                var tabPage = new TabPage(item.FileNameWithoutExt);
-                tabPage.Name = item.FileNameWithoutExt;
+                var ratingUser = Cache.Users.FirstOrDefault(c => c.Id == item.UserId);
+                checkedListBox1.Items.Add(ratingUser.Name, true);
+                var tabPage = new TabPage(ratingUser.Name);
+                tabPage.Name = ratingUser.Name;
                 tabControl1.TabPages.Add(tabPage);
                 var grid = new DataGridView();
                 grid.Dock = DockStyle.Fill;
                 PrepareDataGrid(grid,true);
-                grid.DataSource = item.RatingList.GameList.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
+                var dataSourceWrapper = new List<GridViewDataSourceWrapper>();
+                foreach (var ritem in item.Rating.RatingItems)
+                {
+                    var dataSourceWrapperItem =
+                        GridViewDataSourceWrapper.CreateFromCoreGame(ritem, Cache.Games, Cache.UsersRating);
+                    dataSourceWrapper.Add(dataSourceWrapperItem);
+                }
+                grid.DataSource = dataSourceWrapper.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
                 tabPage.Controls.Add(grid);
                 grid.ClearSelection();
             }
         }
 
-        private void UpdateGamesCrossRatings(GameRatingList currentList, IEnumerable<GameRatingList> allLists)
-        {
-            foreach (var gameToFill in currentList.GameList)
-            {
-                var currentListUser = currentList.UserNames.FirstOrDefault();
-
-                    foreach (var list in allLists.Where(c=>string.IsNullOrWhiteSpace(currentListUser) || c.UserNames.FirstOrDefault()!= currentListUser))
-                    {
-                        var game = list.GameList.FirstOrDefault(
-                            c => c.GameEng.ToUpper() == gameToFill.GameEng.ToUpper());
-                        if (game != null)
-                        {
-                            gameToFill.UsersRating.UserRating.Add(new UserRating
-                                {UserName = list.UserNames.FirstOrDefault(), Rating = game.Rating});
-                        }
-                    }
-
-                    if (gameToFill.UsersRating.UserRating.Any())
-                    {
-                        var splitter = "; ";
-                        var resultStr = "";
-                        foreach (var item in gameToFill.UsersRating.UserRating.OrderBy(c => c.Rating).ThenBy(c => c.UserName))
-                            resultStr += string.Format("{0} - {1}{2}", item.Rating, item.UserName, splitter);
-                        gameToFill.UserRatingString = resultStr.Substring(0, resultStr.Length - splitter.Length);
-                    }
-                
-            }
-        }
+        
 
         public void CreateGridColumns(DataGridView grid, bool isUserRatingGrid)
         {
             TableSettings settings;
             if (isUserRatingGrid)
-                settings = userSettings.Tables.UserRatingTable;
+                settings = UserSettings.Tables.UserRatingTable;
             else
-                settings = userSettings.Tables.AverageRatingTable;
+                settings = UserSettings.Tables.AverageRatingTable;
 
             grid.Columns.Clear();
 
@@ -176,7 +210,6 @@ namespace ZhukBGGClubRanking.WinApp
 
         public void PrepareDataGrid(DataGridView grid, bool isUserRatingGrid)
         {
-            
 
             grid.AutoGenerateColumns = false;
             grid.AllowUserToAddRows = false;
@@ -205,7 +238,7 @@ namespace ZhukBGGClubRanking.WinApp
             if (e.ColumnIndex == _previousIndex)
                 _sortDirection ^= true; // toggle direction
 
-            grid.DataSource = SortData((List<GameRating>)grid.DataSource, grid.Columns[e.ColumnIndex].Name, _sortDirection);
+            grid.DataSource = SortData((List<GridViewDataSourceWrapper>)grid.DataSource, grid.Columns[e.ColumnIndex].Name, _sortDirection);
 
             _previousIndex = e.ColumnIndex;
             if (grid == dataGridView1)
@@ -214,7 +247,7 @@ namespace ZhukBGGClubRanking.WinApp
             grid.ClearSelection();
         }
 
-        public List<GameRating> SortData(List<GameRating> list, string column, bool ascending)
+        public List<GridViewDataSourceWrapper> SortData(List<GridViewDataSourceWrapper> list, string column, bool ascending)
         {
             if (ascending)
             {
@@ -270,7 +303,7 @@ namespace ZhukBGGClubRanking.WinApp
         private void Grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             var grid = sender as DataGridView;
-            var gameRatingList = grid.DataSource as List<GameRating>;
+            var gameRatingList = grid.DataSource as List<GridViewDataSourceWrapper>;
             if (e.ColumnIndex == 0)
             {
                 if (dataGridView1.Columns[e.ColumnIndex] is DataGridViewLinkColumn && e.RowIndex != -1)
@@ -279,17 +312,17 @@ namespace ZhukBGGClubRanking.WinApp
                     //string cellContent = grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
                     var ratingItem = gameRatingList[e.RowIndex];
                     string url = string.Empty;
-                    var teseraUrl = GetTeseraCardUrl(ratingItem.GameEng);
-                    var bggUrl = string.Empty;
-                    var gameInBGGColl = ratingItem.BGGItem;
-                    if (gameInBGGColl != null)
-                        bggUrl = GetBGGCardUrl(gameInBGGColl.ObjectId);
-                    if (userSettings.TeseraPreferable)
+                    var teseraUrl = GetTeseraCardUrl(ratingItem.TeseraKey);
+                    var bggUrl = GetBGGCardUrl(ratingItem.BGGObjectId);
+                    if (UserSettings.TeseraPreferable)
                         url = teseraUrl;
                     if (string.IsNullOrWhiteSpace(url))
                         url = bggUrl;
-                    ProcessStartInfo sInfo = new ProcessStartInfo(url);
-                    Process.Start(sInfo);
+                    if (!string.IsNullOrWhiteSpace(url))
+                    {
+                        ProcessStartInfo sInfo = new ProcessStartInfo(url);
+                        Process.Start(sInfo);
+                    }
                 }
             }
         }
@@ -304,10 +337,11 @@ namespace ZhukBGGClubRanking.WinApp
             return checkedListBox1.CheckedItems.OfType<string>().ToList();
         }
 
-        List<GameRatingList> GetSelectedUsersRatings()
+        List<UsersRating> GetSelectedUsersRatings()
         {
             var checkedUserNames = GetSelectedUsers();
-            return usersRatingListFiles.Where(c => checkedUserNames.Contains(c.RatingList.UserNames.First())).Select(c => c.RatingList).ToList();
+            var selectedUsers = Cache.Users.Where(c => checkedUserNames.Contains(c.Name)).ToList();
+            return Cache.UsersRating.Where(c =>selectedUsers.Select(c1=>c1.Id).Contains(c.UserId)).ToList();
         }
 
         void UpdateAvarateRating()
@@ -315,25 +349,34 @@ namespace ZhukBGGClubRanking.WinApp
             //var isOnlyGamesInAllRatings = IsOnlyGamesInAllRatings();
             var topValue = GetTopXValue();
             var checkedLists = GetSelectedUsersRatings();
-            currentAvarageRatingList = GameRatingList.CalculateAvarageRating(checkedLists, CommonCollection, topValue);
-            currentAvarageRatingList.SetBGGCollection(CommonCollection);
-            UpdateGamesCrossRatings(currentAvarageRatingList, usersRatingListFiles.Select(c => c.RatingList));
-            Utils.CalcComplianceAverateRatingToSelectedUser_v2(GetCurrentSelectedUser(),currentAvarageRatingList, usersRatingListFiles);
-            dataGridView1.DataSource = currentAvarageRatingList.GameList.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
-            dataGridView1.ClearSelection();
-            UpdateDataGridViewColors();
-            //TODO
-            //AddImagesToDataGrid(dataGridView1);
+            currentAvarageRatingList = UsersRating.CalculateAvarageRating(checkedLists, Cache.Games, topValue);
+            if (currentAvarageRatingList != null)
+            {
+                //currentAvarageRatingList.SetBGGCollection(CommonCollection);
+                currentAvarageRatingList.UpdateGamesCrossRatings(Cache.UsersRating, Cache.Users);
+                Utils.CalcComplianceAverateRatingToSelectedUser_v2(GetCurrentSelectedUser(), currentAvarageRatingList, Cache.UsersRating);
+                dataGridView1.DataSource = currentAvarageRatingList.Rating.RatingItems.OrderBy(c => c.RatingOrder).ThenBy(c => c.GameId).ToList();
+                dataGridView1.ClearSelection();
+                UpdateDataGridViewColors();
+
+                //TODO
+                //AddImagesToDataGrid(dataGridView1);
+            }
+
 
         }
 
         void SetTrBarTopXValue()
         {
             var checkedLists = GetSelectedUsersRatings();
-            var maxCollSize = checkedLists.Select(c => c.GameList.Count).Max();
-            trBarOnlyTop.Maximum = maxCollSize;
-            SetCurrentTbBarToxValue(maxCollSize);
-            SetlblTrBarToxValue();
+            if (checkedLists.Any())
+            {
+                var maxCollSize = checkedLists.Select(c => c.Rating.RatingItems.Count).Max();
+                trBarOnlyTop.Maximum = maxCollSize;
+                SetCurrentTbBarToxValue(maxCollSize);
+                SetlblTrBarToxValue();
+            }
+            
         }
 
         void SetCurrentTbBarToxValue(int val)
@@ -351,114 +394,42 @@ namespace ZhukBGGClubRanking.WinApp
             return trBarOnlyTop.Value;
         }
 
-        //bool IsOnlyGamesInAllRatings()
-        //{
-        //    return cbGamesOnlyInAllRatings.Checked;
-        //}
-
-        //void CalcComplianceAverateRatingToSelectedUser()
-        //{
-        //    var currentSelectedUser = GetCurrentSelectedUser();
-        //    if (!string.IsNullOrWhiteSpace(currentSelectedUser) && currentAvarageRatingList!=null)
-        //    {
-        //        var userRatingFile =
-        //            usersRatingListFiles.FirstOrDefault(c => c.RatingList.UserNames.Contains(currentSelectedUser));
-        //        if (userRatingFile != null)
-        //        {
-        //            foreach (var game in currentAvarageRatingList.GameList.OrderBy(c=>c.Rating))
-        //            {
-        //                var averageRating = game.Rating;
-        //                var userGame =
-        //                    userRatingFile.RatingList.GameList.FirstOrDefault(c => c.Game.ToUpper() == game.Game.ToUpper());
-        //                if (userGame != null)
-        //                {
-        //                    var userRating = userGame.Rating;
-        //                    var maxRatingSize = currentAvarageRatingList.GameList.Select(c => c.Rating).Max();
-        //                    game.CompliancePercent = (int)Utils.GetCompliancePercent(averageRating, userRating, maxRatingSize);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        
-
-        //void AddImagesColumn(DataGridView dataGridView)
-        //{
-        //    var iconColumn = new DataGridViewImageColumn();
-        //    iconColumn.Name = "Pic";
-        //    iconColumn.Width = 120;
-        //    dataGridView.Columns.Add(iconColumn);
-        //}
-
-        //void AddImagesToDataGrid(DataGridView dataGridView)
-        //{
-        //    for (int row = 0; row < dataGridView1.Rows.Count - 1; row++)
-        //    {
-        //        var uri =
-        //            "https://cf.geekdo-images.com/Naw8y8J_s-8cvq1GoTON6w__thumb/img/ieH8A28KJe3truXqQe1nDXSpxUE=/fit-in/200x150/filters:strip_icc()/pic7416519.jpg";
-        //        HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(uri);
-        //        myRequest.Method = "GET";
-        //        HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
-        //        Image img = Image.FromStream(myResponse.GetResponseStream());
-        //        System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(img, new Size(50, 50));
-        //        myResponse.Close();
-        //        ((DataGridViewImageCell)dataGridView1.Rows[row].Cells[2]).Value = bmp;
-        //    }
-        //}
-
-        
-
-        //void AddTestColumn(DataGridView dataGridView)
-        //{
-        //    var col = new DataGridViewTextBoxColumn();
-        //    col.Name = "test";
-        //    col.DataPropertyName = "CompliancePercent";
-        //    col.Width = 50;
-        //    dataGridView.Columns.Add(col);
-        //}
+       
 
         private void button2_Click(object sender, EventArgs e)
         {
             var reorderForm = new ReorderForm();
             reorderForm.RatingList = GetRatingInOpenedTab();
-            var otherCollections = usersRatingListFiles
-                .Where(c => c.RatingList.UserNames.FirstOrDefault() != reorderForm.RatingList.UserNames.FirstOrDefault())
-                .Select(c => c.RatingList).ToList();
-            var newGamesInOthersColl = reorderForm.RatingList.GetGamesNotInCollectionButExistingInOthers(otherCollections);
-            if (newGamesInOthersColl.Count > 0)
+            reorderForm.CurrentUser = CurrentUser;
+            reorderForm.Cache = Cache;
+            var ratingCurrentUser = Cache.UsersRating.FirstOrDefault(c => c.UserId == CurrentUser.Id);
+            var newGames = Cache.Games.Where(c => !ratingCurrentUser.Rating.RatingItems.Any(c1 => c1.GameId == c.Id)).ToList();
+            if (newGames.Count > 0)
             {
-                if (MessageBox.Show(string.Format("В других коллекциях найдены игры ({0} штук), отсуствующие в вашем рейтинге. Добавить их?",newGamesInOthersColl.Count),
+                if (MessageBox.Show(string.Format("В общей коллекции найдены игры ({0} штук), отсуствующие в вашем рейтинге. Добавить их?", newGames.Count),
                         "Подтверждение добавления",
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question,
                         MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                 {
-                    reorderForm.NewGames = newGamesInOthersColl;
+                    reorderForm.NewGames = newGames;
                 }
             }
             reorderForm.ShowDialog(this);
-            LoadUsersRatings();
+            //LoadUsersRatings();
+            Cache.LoadAll(UserSettings.Hosting);
         }
 
-        string GetCurrentSelectedUser()
+        User GetCurrentSelectedUser()
         {
             if (tabControl1.SelectedTab != null)
-                return tabControl1.SelectedTab.Text;
-            return string.Empty;
-        }
-
-        void SetButton2Text()
-        {
-            var currentSelectedUser = GetCurrentSelectedUser();
-            if (!string.IsNullOrEmpty(currentSelectedUser))
-                button2.Text = "Пересмотреть рейтинг " + currentSelectedUser;
+                return Cache.Users.FirstOrDefault(c => c.Name == tabControl1.SelectedTab.Name);
+            return null;
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SetButton2Text();
-            Utils.CalcComplianceAverateRatingToSelectedUser_v2(GetCurrentSelectedUser(), currentAvarageRatingList, usersRatingListFiles);
+            Utils.CalcComplianceAverateRatingToSelectedUser_v2(GetCurrentSelectedUser(), currentAvarageRatingList, Cache.UsersRating);
             UpdateDataGridViewColors();
             //SetCheckBoxSelected(GetCurrentSelectedUser());
             SetFormCaption();
@@ -476,7 +447,7 @@ namespace ZhukBGGClubRanking.WinApp
         {
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
-                var complProc = (dataGridView1.DataSource as List<GameRating>)[row.Index].CompliancePercent;
+                var complProc = (dataGridView1.DataSource as List<GridViewDataSourceWrapper>)[row.Index].CompliancePercent;
                 var colors = Utils.GetGradientColors(Color.White, Color.LimeGreen, 102);
                 var color = colors.ElementAt(complProc);
                 dataGridView1.Rows[row.Index].Cells[0].Style.BackColor = color;
@@ -578,11 +549,10 @@ namespace ZhukBGGClubRanking.WinApp
 
         }
 
-        public string GetTeseraCardUrl(string gameEng)
+        public string GetTeseraCardUrl(string teseraKey)
         {
-            var teseraName = GamesTranslate.GetTeseraName(gameEng);
-            if (!string.IsNullOrEmpty(teseraName))
-                return Settings.TeseraCardPrefixUrl + teseraName;
+            if (!string.IsNullOrEmpty(teseraKey))
+                return Settings.TeseraCardPrefixUrl + teseraKey;
             return null;
         }
 
@@ -596,12 +566,12 @@ namespace ZhukBGGClubRanking.WinApp
             ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
             if (menuItem.CheckState == CheckState.Checked)
             {
-                userSettings.TeseraPreferable = true;
+                UserSettings.TeseraPreferable = true;
                 menuSelectBGG.Checked = false;
             }
             else if (menuItem.CheckState == CheckState.Unchecked)
             {
-                userSettings.TeseraPreferable = false;
+                UserSettings.TeseraPreferable = false;
                 menuSelectBGG.Checked = true;
             }
         }
@@ -611,12 +581,12 @@ namespace ZhukBGGClubRanking.WinApp
             ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
             if (menuItem.CheckState == CheckState.Checked)
             {
-                userSettings.TeseraPreferable = false;
+                UserSettings.TeseraPreferable = false;
                 menuSelectTesera.Checked = false;
             }
             else if (menuItem.CheckState == CheckState.Unchecked)
             {
-                userSettings.TeseraPreferable = true;
+                UserSettings.TeseraPreferable = true;
                 menuSelectTesera.Checked = true;
             }
         }
@@ -624,10 +594,10 @@ namespace ZhukBGGClubRanking.WinApp
         private void menuTablesColumns_Click(object sender, EventArgs e)
         {
             var selectTablesColumnsForm = new SelectTablesColumns();
-            var result = selectTablesColumnsForm.CustomShow(userSettings.Tables);
+            var result = selectTablesColumnsForm.CustomShow(UserSettings.Tables);
             if (result == DialogResult.OK && (selectTablesColumnsForm.UserTableSettingsChanged || selectTablesColumnsForm.AverageTableSettingsChanged))
             {
-                userSettings.Tables = selectTablesColumnsForm.Settings;
+                UserSettings.Tables = selectTablesColumnsForm.Settings;
                 if (selectTablesColumnsForm.UserTableSettingsChanged)
                 {
                     foreach (var tab in tabControl1.TabPages)
@@ -646,18 +616,18 @@ namespace ZhukBGGClubRanking.WinApp
             }
         }
 
-        private async void button3_Click(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e)
         {
-            try
-            {
-                var res = await TestWebApi.Test();
-                MessageBox.Show("пришло!");
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
-            
+            Cache.LoadAll(UserSettings.Hosting);
+        }
+
+        private void menuUploadCSVFile_Click(object sender, EventArgs e)
+        {
+            var loadCSVFileForm = new LoadCSVRatingFileForm();
+            loadCSVFileForm.CurrentUser = CurrentUser;
+            loadCSVFileForm.Cache = Cache;
+            if (loadCSVFileForm.ShowDialog(this) == DialogResult.Yes)
+                Cache.LoadAll(UserSettings.Hosting);
         }
     }
 }

@@ -7,13 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhukBGGClubRanking.WinApp",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oli.Controls", "Oli.Controls\Oli.Controls.csproj", "{3F1A45C7-96CB-4BAD-A931-792D04B96128}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhukBGGClubRanking.WebApi", "ZhukBGGClubRanking.WebApi\ZhukBGGClubRanking.WebApi.csproj", "{D0EC3B38-1751-41E2-8E64-8DE12E61745F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZhukBGGClubRanking.WebApi", "ZhukBGGClubRanking.WebApi\ZhukBGGClubRanking.WebApi.csproj", "{D0EC3B38-1751-41E2-8E64-8DE12E61745F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhukBGGClubRanking.WebApi.Core", "ZhukBGGClubRanking.WebApi.Core\ZhukBGGClubRanking.WebApi.Core.csproj", "{726AD4E6-6C26-4A3A-B9BA-7186EF2632A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZhukBGGClubRanking.WebApi.Core", "ZhukBGGClubRanking.WebApi.Core\ZhukBGGClubRanking.WebApi.Core.csproj", "{726AD4E6-6C26-4A3A-B9BA-7186EF2632A3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhukBGGClubRanking.WinApp.Core", "ZhukBGGClubRanking.WinApp.Core\ZhukBGGClubRanking.WinApp.Core.csproj", "{DAC04874-DBA5-47CD-BE61-DF1FA9C446B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhukBGGClubRanking.Core", "ZhukBGGClubRanking.Core\ZhukBGGClubRanking.Core.csproj", "{ABA6D626-0948-49BC-8586-AE98ABE38EC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZhukBGGClubRanking.Core", "ZhukBGGClubRanking.Core\ZhukBGGClubRanking.Core.csproj", "{ABA6D626-0948-49BC-8586-AE98ABE38EC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebAPI", "TestWebAPI\TestWebAPI.csproj", "{E182BBBE-1DF9-4FC3-A8A0-06296E4F8B42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{ABA6D626-0948-49BC-8586-AE98ABE38EC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABA6D626-0948-49BC-8586-AE98ABE38EC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABA6D626-0948-49BC-8586-AE98ABE38EC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E182BBBE-1DF9-4FC3-A8A0-06296E4F8B42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E182BBBE-1DF9-4FC3-A8A0-06296E4F8B42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E182BBBE-1DF9-4FC3-A8A0-06296E4F8B42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E182BBBE-1DF9-4FC3-A8A0-06296E4F8B42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

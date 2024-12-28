@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using ZhukBGGClubRanking.Core;
 
-namespace ZhukBGGClubRanking.WinApp.Core
+namespace ZhukBGGClubRanking.Core
 {
     public class GamesNamesTranslateFile
     {
@@ -21,7 +21,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
             var result = new GamesNamesTranslateFile();
             var list = new List<GamesNamesTranslate>();
             
-            var csvArray = CsvReader.ReadFromText(System.IO.File.ReadAllText(Settings.GamesNamesTranslateFilePath));
+            var csvArray = CsvReader.ReadFromText(System.IO.File.ReadAllText(CoreSettings.GamesNamesTranslateFilePath));
             foreach (var arItem in csvArray.OrderBy(c => c.Values[0]))
             {
                 var gr = new GamesNamesTranslate();

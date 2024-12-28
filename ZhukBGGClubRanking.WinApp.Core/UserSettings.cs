@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
+using ZhukBGGClubRanking.Core.Model;
 
 namespace ZhukBGGClubRanking.WinApp.Core
 {
@@ -8,6 +9,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
     {
         [XmlAttribute] public bool TeseraPreferable { get; set; } = true;
         [XmlElement] public TablesSettings Tables { get; set; } = new TablesSettings();
+        [XmlElement] public HostingSettings Hosting { get; set; } = new HostingSettings();
 
         public static UserSettings GetUserSettings()
         {
@@ -61,6 +63,13 @@ namespace ZhukBGGClubRanking.WinApp.Core
             if (ShowOwners != other.ShowOwners) return -1;
             return 0;
         }
+    }
+
+    public class HostingSettings
+    {
+        [XmlAttribute] public string Url { get; set; } = "http://localhost:5116"; //"http://zhukbggtest-001-site1.ltempurl.com";
+        [XmlAttribute] public string Login { get; set; } //= "11210871";
+        [XmlAttribute] public string Password { get; set; } //= "60-dayfreetrial";
     }
 
 }

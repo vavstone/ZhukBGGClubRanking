@@ -5,7 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GameRating.cs" />
+    <Compile Remove="GameRatingList.cs" />
+    <Compile Remove="UserRating.cs" />
+    <Compile Remove="UsersRating.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Csv" Version="2.0.93" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

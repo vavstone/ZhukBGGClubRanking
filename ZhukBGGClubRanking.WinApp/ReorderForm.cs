@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using ZhukBGGClubRanking.Core;
+using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WinApp.Core;
 
 namespace ZhukBGGClubRanking.WinApp
@@ -15,15 +16,18 @@ namespace ZhukBGGClubRanking.WinApp
             //dragDropBindingSource.DataSource = dragDropListBox1;
         }
 
-        public GameRatingList RatingList { get; set; }
+        public UsersRating RatingList { get; set; }
 
-        public List<GameRating> NewGames { get; set; }
+        public List<Game> NewGames { get; set; }
+        public AppCache Cache { get; set; }
+
+        public User CurrentUser { get; set; }
 
 
         private void ReorderForm_Load(object sender, EventArgs e)
         {
             LoadList();
-            this.Text = string.Format("Рейтинг {0}", RatingList.UserNames.FirstOrDefault());
+            this.Text = string.Format("Рейтинг {0}", CurrentUser.Name);
             if (NewGames!=null && NewGames.Any())
             {
                 AddNewGames();
@@ -34,30 +38,39 @@ namespace ZhukBGGClubRanking.WinApp
         private void AddNewGames()
         {
             dragDropListBox1.Items.Add(" ");
-            foreach (var game in NewGames.OrderBy(c => c.Game))
+            foreach (var game in NewGames.OrderBy(c => c.Name))
             {
-                dragDropListBox1.Items.Add(game.Game);
+                dragDropListBox1.Items.Add(game.Name);
             }
         }
 
         void LoadList()
         {
             dragDropListBox1.Items.Clear();
-            foreach (var game in RatingList.GameList.OrderBy(c => c.Rating))
+            if (RatingList != null)
             {
-                dragDropListBox1.Items.Add(game.Game);
+                foreach (var ratingItem in RatingList.Rating.RatingItems.OrderBy(c => c.RatingOrder))
+                {
+                    var game = Cache.Games.FirstOrDefault(c => c.Id == ratingItem.GameId);
+                    dragDropListBox1.Items.Add(game.Name);
+                }
             }
         }
 
-        GameRatingList GetUpdatedGameRatingListFromForm()
+        UsersRating GetUpdatedGameRatingListFromForm()
         {
-            var result = new GameRatingList();
-            result.UserNames = RatingList.UserNames;
+            var result = new UsersRating();
+            result.UserId = CurrentUser.Id;
             var counter = 1;
             foreach (var item in dragDropListBox1.Items)
             {
                 if (!string.IsNullOrWhiteSpace(item.ToString()))
-                    result.GameList.Add(new GameRating {GameEng = GameRating.GetGameNameEngFromFormattedName(item.ToString()), Rating = counter++});
+                {
+                    var gameEng = Game.GetGameNameEngFromFormattedName(item.ToString());
+                    var game = Cache.Games.FirstOrDefault(c => c.NameEng == gameEng);
+                    result.Rating.RatingItems.Add(new RatingItem()
+                        {GameId = game.Id, RatingOrder = counter++});
+                }
             }
             result.CalculateWeightByRating();
             return result;
@@ -66,16 +79,20 @@ namespace ZhukBGGClubRanking.WinApp
         void SaveList()
         {
             if (MessageBox.Show(
-                    string.Format("Вы действительно хотите сохранить новый порядок рейтинга {0}?",RatingList.UserNames.FirstOrDefault()),
+                    string.Format("Вы действительно хотите сохранить новый порядок рейтинга?"),
                     "Подтверждение",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question, MessageBoxDefaultButton.Button2 ) == DialogResult.Yes)
             {
                 var updatedList = GetUpdatedGameRatingListFromForm();
-                var ratingListFile = new GameRatingListFile();
-                ratingListFile.RatingList = updatedList;
-                ratingListFile.FileNameWithoutExt = updatedList.UserNames.FirstOrDefault();
-                ratingListFile.SaveToFile();
+                
+                //TODO!!! сохранение рейтинга в БД
+                //var ratingListFile = new GameRatingListFile();
+                //ratingListFile.RatingList = updatedList;
+                //ratingListFile.FileNameWithoutExt = updatedList.UserNames.FirstOrDefault();
+                //ratingListFile.SaveToFile();
+                
+                
                 this.Close();
 
             }

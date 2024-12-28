@@ -4,14 +4,22 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.36" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ZhukBGGClubRanking.WebApi.Core\ZhukBGGClubRanking.WebApi.Core.csproj" />
+    <Folder Include="Data\" />
+    <Folder Include="Membership\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZhukBGGClubRanking.Core\ZhukBGGClubRanking.Core.csproj" />
   </ItemGroup>
 
 </Project>

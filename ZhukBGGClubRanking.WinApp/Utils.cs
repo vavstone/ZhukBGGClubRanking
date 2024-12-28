@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using ZhukBGGClubRanking.Core;
+using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WinApp.Core;
 
 namespace ZhukBGGClubRanking.WinApp
@@ -57,25 +58,24 @@ namespace ZhukBGGClubRanking.WinApp
             return res;
         }
 
-        public static void CalcComplianceAverateRatingToSelectedUser_v2(string currentSelectedUser, GameRatingList currentAvarageRatingList, List<GameRatingListFile> ratingListFiles)
+        public static void CalcComplianceAverateRatingToSelectedUser_v2(User selectedUser, UsersRating currentAvarageRatingList, List<UsersRating> ratingListFiles)
         {
-            
-            if (!string.IsNullOrWhiteSpace(currentSelectedUser) && currentAvarageRatingList != null)
+            if (selectedUser!=null && currentAvarageRatingList != null)
             {
-                var userRatingFile =
-                    ratingListFiles.FirstOrDefault(c => c.RatingList.UserNames.Contains(currentSelectedUser));
-                if (userRatingFile != null)
+                var userRating =
+                    ratingListFiles.FirstOrDefault(c => c.UserId==selectedUser.Id);
+                if (userRating != null)
                 {
-                    foreach (var game in currentAvarageRatingList.GameList)
+                    foreach (var game in currentAvarageRatingList.Rating.RatingItems)
                     {
                         //var averageRating = game.Rating;
                         var userGame =
-                            userRatingFile.RatingList.GameList.FirstOrDefault(c => c.GameEng.ToUpper() == game.GameEng.ToUpper());
+                            userRating.Rating.RatingItems.FirstOrDefault(c => c.GameId == game.GameId);
                         if (userGame != null)
                         {
-                            var userRating = userGame.Rating;
-                            var maxRatingSize = userRatingFile.RatingList.GameList.Select(c => c.Rating).Max();
-                            game.CompliancePercent = (int)Utils.GetCompliancePercent_v2(userRating, maxRatingSize);
+                            var userRat = userGame.RatingOrder;
+                            var maxRatingSize = userRating.Rating.RatingItems.Select(c => c.RatingOrder).Max();
+                            game.CompliancePercent = (int)Utils.GetCompliancePercent_v2(userRat, maxRatingSize);
                         }
                     }
                 }

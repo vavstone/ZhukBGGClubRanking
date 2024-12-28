@@ -58,6 +58,8 @@ namespace ZhukBGGClubRanking.Core
             [XmlElement("comment")]
             public string Comment { get; set; }
 
+            public string TeseraKey { get; set; }
+
             public ItemElement()
             {
                 Stats = new StatsElement();
@@ -117,6 +119,20 @@ namespace ZhukBGGClubRanking.Core
                 [XmlAttribute("lastmodified")]
                 public string LastModifiedString { get; set; } = "";
             }
+
+
+            public Game CreateGame()
+            {
+                var game = new Game();
+                game.NameRus = NameRus;
+                game.NameEng = game.NameBGG = Name;
+                game.BGGObjectId = ObjectId;
+                game.ThumbnailBGG = Thumbnail;
+                game.ImageBGG = Image;
+                game.YearPublished = YearPublished;
+                game.TeseraKey = TeseraKey;
+                return game;
+            }
         }
 
         public static BGGCollection LoadFromFile()
@@ -140,15 +156,20 @@ namespace ZhukBGGClubRanking.Core
             return Items.FirstOrDefault(c => c.Name.ToUpper() == name.ToUpper());
         }
 
-        public void UpplyTranslation(GamesNamesTranslateList gamesTranslation)
+        public void ApplyTranslation(GamesNamesTranslateList gamesTranslation)
         {
             GamesTranslation = gamesTranslation;
             foreach (var game in GamesTranslation.TranslateList)
             {
                 var bggItem = GetItemByName(game.NameEng);
                 if (bggItem != null)
+                {
                     bggItem.NameRus = game.NameRus;
+                    bggItem.TeseraKey = game.TeseraName;
+                }
             }
         }
+
+
     }
 }
