@@ -131,12 +131,23 @@ app.MapPost("/api/createuserbyadmin", [Authorize] (User newUser, HttpContext con
     RequestHandler.CreateNewUser(newUser);
 }).WithName("CreateUserByAdmin");
 
+app.MapPost("/api/initiatedb", /*[Authorize]*/ (HttpContext context) => {
+    //var userIdentity = context.User.Identity;
+    //var activeUser = DBUser.GetUserByName(userIdentity.Name);
+    //if (activeUser == null || !activeUser.IsActive || activeUser.Role != "admin")
+    //{
+    //    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+    //    return;
+    //}
+    RequestHandler.InitiateDB();
+}).WithName("InitiateDB");
 
 
-app.MapPost("/api/updatebggcoll", [Authorize] (HttpContext context) => {
 
-    TaskWorker.LoadBGGCollectionToDB();
-}).WithName("UpdateBGGColl");
+//app.MapPost("/api/updatebggcoll", [Authorize] (HttpContext context) => {
+
+//    TaskWorker.LoadBGGCollectionToDB();
+//}).WithName("UpdateBGGColl");
 
 
 
@@ -145,7 +156,7 @@ app.MapGet("/test/getteststring", () => "test").WithName("GetTestString");
 
 
 
-app.MapGet("/test/getteststringauth", [Authorize] (HttpContext context) => "test").WithName("GetTestStringAuth");
+//app.MapGet("/test/getteststringauth", [Authorize] (HttpContext context) => "test").WithName("GetTestStringAuth");
 
 
 

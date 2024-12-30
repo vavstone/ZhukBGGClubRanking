@@ -29,6 +29,13 @@ namespace ZhukBGGClubRanking.Core
             get { return "https://boardgamegeek.com/boardgame/"; }
         }
 
+        public static string BGGCollectionUrl
+        {
+            get { return "https://boardgamegeek.com/xmlapi2/collection?username=ZhukBGclub"; }
+        }
+
+        
+
         //public static string UrlForGameBGGId(int id)
         //{
         //    return string.Format("https://boardgamegeek.com/boardgame/{0}", id);

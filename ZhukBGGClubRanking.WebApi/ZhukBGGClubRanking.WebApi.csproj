@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="App_Files\InitiateDB\" />
     <Folder Include="Data\" />
     <Folder Include="Membership\" />
   </ItemGroup>

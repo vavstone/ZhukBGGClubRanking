@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Xml.Serialization;
 
 namespace ZhukBGGClubRanking.Core
@@ -59,6 +61,10 @@ namespace ZhukBGGClubRanking.Core
             public string Comment { get; set; }
 
             public string TeseraKey { get; set; }
+
+            public string ParentName { get; set; }
+
+            public ItemElement Parent { get; set; }
 
             public ItemElement()
             {
@@ -150,6 +156,26 @@ namespace ZhukBGGClubRanking.Core
             return null;
         }
 
+        public static void LoadFromUrlToFile()
+        {
+            var url = CoreSettings.BGGCollectionUrl;
+            var fileFullName = CoreSettings.CommonCollectionFilePath;
+            using (WebClient webClient = new WebClient())
+            {
+                if (File.Exists(fileFullName))
+                {
+                    var backFileName = string.Format(@"{0}\{1}_{2}{3}",
+                        Path.GetDirectoryName(fileFullName),
+                        Path.GetFileNameWithoutExtension(fileFullName),
+                        DateTime.Now.ToString("yyyy-MM-dd-HH_mm_ss"),
+                        Path.GetExtension(fileFullName)
+                    );
+                    File.Move(fileFullName, backFileName);
+                }
+                webClient.DownloadFile(url, fileFullName);
+            }
+        }
+
 
         public ItemElement GetItemByName(string name)
         {
@@ -166,6 +192,20 @@ namespace ZhukBGGClubRanking.Core
                 {
                     bggItem.NameRus = game.NameRus;
                     bggItem.TeseraKey = game.TeseraName;
+                    bggItem.ParentName = game.ParentEngName;
+                }
+            }
+        }
+
+        public void SetParents()
+        {
+            foreach (var item in Items)
+            {
+                if (!string.IsNullOrWhiteSpace(item.ParentName))
+                {
+                    var parent = GetItemByName(item.ParentName);
+                    if (parent != null)
+                        item.Parent = parent;
                 }
             }
         }
