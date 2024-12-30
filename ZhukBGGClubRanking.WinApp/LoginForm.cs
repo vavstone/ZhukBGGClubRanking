@@ -75,13 +75,10 @@ namespace ZhukBGGClubRanking.WinApp
                 {
                     HostingSettings = UserSettings.Hosting,
                     Login = tbLogin.Text,
-                    Password = tbPassword.Text.Trim().ToLower()
+                    Password = tbPassword.Text.Trim()
                 };
-            
                 bw.RunWorkerAsync(prm);
             }
-
-            
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
@@ -90,17 +87,5 @@ namespace ZhukBGGClubRanking.WinApp
         }
     }
 
-    public class LoginPrmForBW:WebPrmForBW
-    {
-        internal string Login { get; set; }
-        internal string Password { get; set; }
-    }
-
-    internal class LoginResultForBW
-    {
-        internal bool Result { get; set; }
-        internal string Token { get; set; }
-        internal string UserName { get; set; }
-        internal string Message { get; set; }
-    }
+    
 }

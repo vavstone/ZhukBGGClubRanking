@@ -81,6 +81,8 @@
   <ItemGroup>
     <Compile Include="AppCache.cs" />
     <Compile Include="CSVHelper.cs" />
+    <Compile Include="EventsClasses.cs" />
+    <Compile Include="GridViewDataSourceWrapper.cs" />
     <Compile Include="JWTPrm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />

@@ -192,7 +192,7 @@ namespace ZhukBGGClubRanking.WinApp
             newUser.EMail = tbEmail.Text;
             newUser.CreateTime = DateTime.Now;
             newUser.Role = cbxRole.Text;
-            newUser.TrimAndNamePasswordToLower();
+            newUser.TrimFields();
             string validationErrors;
             var validationResult = newUser.ValidateBeforeCreateOrChange(out validationErrors);
             if (!validationResult)
@@ -241,16 +241,5 @@ namespace ZhukBGGClubRanking.WinApp
         }
     }
 
-    public class CreateUserPrmForBW:WebPrmForBW
-    {
-        internal User NewUser { get; set; }
-    }
 
-    //internal class LoginResultForBW
-    //{
-    //    internal bool Result { get; set; }
-    //    internal string Token { get; set; }
-    //    internal string UserName { get; set; }
-    //    internal string Message { get; set; }
-    //}
 }

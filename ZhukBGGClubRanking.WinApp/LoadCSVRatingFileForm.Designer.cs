@@ -30,21 +30,21 @@
         {
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.btSelectFile = new System.Windows.Forms.Button();
-            this.btLoadToServer = new System.Windows.Forms.Button();
             this.lblInfo = new System.Windows.Forms.Label();
+            this.btLoadToServer = new System.Windows.Forms.Button();
+            this.btSelectFile = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.gridDBData = new System.Windows.Forms.DataGridView();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.gridCSVData = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridDBData)).BeginInit();
+            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridCSVData)).BeginInit();
             this.SuspendLayout();
             // 
@@ -63,24 +63,14 @@
             this.panel1.Size = new System.Drawing.Size(558, 69);
             this.panel1.TabIndex = 0;
             // 
-            // panel2
+            // lblInfo
             // 
-            this.panel2.Controls.Add(this.tabControl1);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(558, 488);
-            this.panel2.TabIndex = 1;
-            // 
-            // btSelectFile
-            // 
-            this.btSelectFile.Location = new System.Drawing.Point(12, 14);
-            this.btSelectFile.Name = "btSelectFile";
-            this.btSelectFile.Size = new System.Drawing.Size(203, 23);
-            this.btSelectFile.TabIndex = 0;
-            this.btSelectFile.Text = "Выбрать файл";
-            this.btSelectFile.UseVisualStyleBackColor = true;
-            this.btSelectFile.Click += new System.EventHandler(this.btSelectFile_Click);
+            this.lblInfo.AutoSize = true;
+            this.lblInfo.Location = new System.Drawing.Point(12, 47);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(92, 13);
+            this.lblInfo.TabIndex = 2;
+            this.lblInfo.Text = "Файл не выбран";
             // 
             // btLoadToServer
             // 
@@ -92,14 +82,24 @@
             this.btLoadToServer.UseVisualStyleBackColor = true;
             this.btLoadToServer.Click += new System.EventHandler(this.btLoadToServer_Click);
             // 
-            // lblInfo
+            // btSelectFile
             // 
-            this.lblInfo.AutoSize = true;
-            this.lblInfo.Location = new System.Drawing.Point(12, 47);
-            this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(92, 13);
-            this.lblInfo.TabIndex = 2;
-            this.lblInfo.Text = "Файл не выбран";
+            this.btSelectFile.Location = new System.Drawing.Point(12, 14);
+            this.btSelectFile.Name = "btSelectFile";
+            this.btSelectFile.Size = new System.Drawing.Size(203, 23);
+            this.btSelectFile.TabIndex = 0;
+            this.btSelectFile.Text = "Выбрать файл";
+            this.btSelectFile.UseVisualStyleBackColor = true;
+            this.btSelectFile.Click += new System.EventHandler(this.btSelectFile_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.tabControl1);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(558, 488);
+            this.panel2.TabIndex = 1;
             // 
             // tabControl1
             // 
@@ -123,6 +123,15 @@
             this.tabPage1.Text = "Текущий рейтинг";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // gridDBData
+            // 
+            this.gridDBData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridDBData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridDBData.Location = new System.Drawing.Point(3, 3);
+            this.gridDBData.Name = "gridDBData";
+            this.gridDBData.Size = new System.Drawing.Size(544, 456);
+            this.gridDBData.TabIndex = 0;
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.gridCSVData);
@@ -133,15 +142,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Данные из csv файл (еще не загружены)";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // gridDBData
-            // 
-            this.gridDBData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gridDBData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridDBData.Location = new System.Drawing.Point(3, 3);
-            this.gridDBData.Name = "gridDBData";
-            this.gridDBData.Size = new System.Drawing.Size(544, 456);
-            this.gridDBData.TabIndex = 0;
             // 
             // gridCSVData
             // 
@@ -162,14 +162,15 @@
             this.Name = "LoadCSVRatingFileForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Загрузка файла рейтинга csv";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LoadCSVRatingFileForm_FormClosing);
             this.Load += new System.EventHandler(this.LoadCSVRatingFileForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridDBData)).EndInit();
+            this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridCSVData)).EndInit();
             this.ResumeLayout(false);
 

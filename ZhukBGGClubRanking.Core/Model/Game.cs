@@ -19,6 +19,8 @@ namespace ZhukBGGClubRanking.Core
         public int ParentId { get; set; }
         public string BGGComments { get; set; } = "";
 
+        public bool IsStandaloneGame { get { return ParentId <= 0; } }
+
         public string Name
         {
             get

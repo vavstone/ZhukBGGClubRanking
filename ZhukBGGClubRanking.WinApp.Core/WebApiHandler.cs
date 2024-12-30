@@ -37,7 +37,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
         public static async Task<HttpResponseMessage> Login(string url, string login, string password, string userName, string userPassword)
         {
             var client = GetClientWithAuth(url, login, password);
-            HttpContent content = JsonContent.Create(new LoginPrm { UserName = userName.Trim().ToLower(), PasswordCache = User.GetMD5Hash(userPassword.Trim().ToLower()) });
+            HttpContent content = JsonContent.Create(new LoginPrm { UserName = userName.Trim(), PasswordCache = User.GetMD5Hash(userPassword.Trim()) });
             return await client.PostAsync("api/login", content);
         }
 
@@ -65,7 +65,14 @@ namespace ZhukBGGClubRanking.WinApp.Core
             HttpContent content = JsonContent.Create(newUser);
             return await client.PostAsync("api/createuserbyadmin", content);
         }
-        
+
+        public static async Task<HttpResponseMessage> SaveUsersRating(string url, string login, string password, string token, List<RatingItem> ratingItems)
+        {
+            var client = GetClientWithAuth(url, login, password, token);
+            HttpContent content = JsonContent.Create(ratingItems);
+            return await client.PostAsync("api/saveusersrating", content);
+        }
+
     }
 }
 

@@ -78,7 +78,7 @@
             this.panel1.Controls.Add(this.panel5);
             this.panel1.Controls.Add(this.panel4);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 714);
+            this.panel1.Location = new System.Drawing.Point(0, 522);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(5, 5, 5, 0);
             this.panel1.Size = new System.Drawing.Size(1418, 107);
@@ -253,7 +253,7 @@
             this.menuSelectTesera.CheckOnClick = true;
             this.menuSelectTesera.CheckState = System.Windows.Forms.CheckState.Checked;
             this.menuSelectTesera.Name = "menuSelectTesera";
-            this.menuSelectTesera.Size = new System.Drawing.Size(205, 22);
+            this.menuSelectTesera.Size = new System.Drawing.Size(207, 22);
             this.menuSelectTesera.Text = "Tesera (русскоязычный)";
             this.menuSelectTesera.Click += new System.EventHandler(this.menuSelectTesera_Click);
             // 
@@ -261,7 +261,7 @@
             // 
             this.menuSelectBGG.CheckOnClick = true;
             this.menuSelectBGG.Name = "menuSelectBGG";
-            this.menuSelectBGG.Size = new System.Drawing.Size(205, 22);
+            this.menuSelectBGG.Size = new System.Drawing.Size(207, 22);
             this.menuSelectBGG.Text = "BGG (англоязычный)";
             this.menuSelectBGG.Click += new System.EventHandler(this.menuSelectBGG_Click);
             // 
@@ -303,7 +303,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(0, 6);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ShowEditingIcon = false;
-            this.dataGridView1.Size = new System.Drawing.Size(694, 681);
+            this.dataGridView1.Size = new System.Drawing.Size(694, 489);
             this.dataGridView1.TabIndex = 0;
             // 
             // panel3
@@ -312,7 +312,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 23);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1418, 691);
+            this.panel3.Size = new System.Drawing.Size(1418, 499);
             this.panel3.TabIndex = 2;
             // 
             // splitContainer1
@@ -329,7 +329,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
             this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(0, 6, 0, 4);
-            this.splitContainer1.Size = new System.Drawing.Size(1418, 691);
+            this.splitContainer1.Size = new System.Drawing.Size(1418, 499);
             this.splitContainer1.SplitterDistance = 720;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -341,7 +341,7 @@
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(720, 691);
+            this.tabControl1.Size = new System.Drawing.Size(720, 499);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -349,7 +349,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1418, 821);
+            this.ClientSize = new System.Drawing.Size(1418, 629);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);

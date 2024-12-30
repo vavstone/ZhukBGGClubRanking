@@ -18,7 +18,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
             foreach (var arItem in csvArray)
             {
                 var game = gamesCollection.FirstOrDefault(c => c.NameEng == arItem[1]);
-                if (game != null)
+                if (game != null && game.IsStandaloneGame)
                 {
                     ratingItems.Add(new RatingItem
                     {

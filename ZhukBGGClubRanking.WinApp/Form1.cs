@@ -51,6 +51,10 @@ namespace ZhukBGGClubRanking.WinApp
                     CurrentUser = Cache.Users.FirstOrDefault(c => c.Name.ToLower() == JWTPrm.UserName.ToLower());
                 LoadAdminElements();
                 LoadUsersRatings();
+                SetTrBarTopXValue();
+                SetFormCaption();
+                UpdateAvarateRating();
+                ClearSelectionInAllGrids();
             }
         }
 
@@ -86,12 +90,7 @@ namespace ZhukBGGClubRanking.WinApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            PrepareDataGrid(dataGridView1,false);
-            SetTrBarTopXValue();
-            SetFormCaption();
-            UpdateAvarateRating();
-            ClearSelectionInAllGrids();
-            
+            PrepareDataGrid(dataGridView1,false); 
         }
 
 
@@ -123,11 +122,11 @@ namespace ZhukBGGClubRanking.WinApp
             //Cache.LoadAll(UserSettings.Hosting);
             tabControl1.TabPages.Clear();
             checkedListBox1.Items.Clear();
-            foreach (var item in Cache.UsersRating)
-            {
+            //foreach (var item in Cache.UsersRating.OrderBy(c => Cache.Users.First(c1 => c1.Id == c.UserId).Name))
+            //{
                 //UpdateGamesCrossRatings(item.RatingList, usersRatingListFiles.Select(c => c.RatingList));
-            }
-            foreach (var item in Cache.UsersRating)
+            //}
+            foreach (var item in Cache.UsersRating.OrderBy(c => Cache.Users.First(c1 => c1.Id == c.UserId).Name))
             {
                 var ratingUser = Cache.Users.FirstOrDefault(c => c.Id == item.UserId);
                 checkedListBox1.Items.Add(ratingUser.Name, true);
@@ -137,18 +136,21 @@ namespace ZhukBGGClubRanking.WinApp
                 var grid = new DataGridView();
                 grid.Dock = DockStyle.Fill;
                 PrepareDataGrid(grid,true);
-                var dataSourceWrapper = new List<GridViewDataSourceWrapper>();
-                foreach (var ritem in item.Rating.RatingItems)
-                {
-                    var dataSourceWrapperItem =
-                        GridViewDataSourceWrapper.CreateFromCoreGame(ritem, Cache.Games, Cache.UsersRating);
-                    dataSourceWrapper.Add(dataSourceWrapperItem);
-                }
-                grid.DataSource = dataSourceWrapper.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
+                //var dataSourceWrapper = new List<GridViewDataSourceWrapper>();
+                //foreach (var ritem in item.Rating.RatingItems)
+                //{
+                //    var dataSourceWrapperItem =
+                //        GridViewDataSourceWrapper.CreateFromCoreGame(ritem, Cache.Games, Cache.UsersRating);
+                //    dataSourceWrapper.Add(dataSourceWrapperItem);
+                //}
+                //grid.DataSource = dataSourceWrapper.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
+                grid.DataSource = DataGridViewHelper.CreateDataSourceWrapper(item.Rating.RatingItems,Cache.Games);
                 tabPage.Controls.Add(grid);
                 grid.ClearSelection();
             }
         }
+
+        
 
         
 
@@ -350,12 +352,14 @@ namespace ZhukBGGClubRanking.WinApp
             var topValue = GetTopXValue();
             var checkedLists = GetSelectedUsersRatings();
             currentAvarageRatingList = UsersRating.CalculateAvarageRating(checkedLists, Cache.Games, topValue);
+            currentAvarageRatingList.UpdateGamesCrossRatings(Cache.UsersRating, Cache.Users);
             if (currentAvarageRatingList != null)
             {
                 //currentAvarageRatingList.SetBGGCollection(CommonCollection);
-                currentAvarageRatingList.UpdateGamesCrossRatings(Cache.UsersRating, Cache.Users);
+                
                 Utils.CalcComplianceAverateRatingToSelectedUser_v2(GetCurrentSelectedUser(), currentAvarageRatingList, Cache.UsersRating);
-                dataGridView1.DataSource = currentAvarageRatingList.Rating.RatingItems.OrderBy(c => c.RatingOrder).ThenBy(c => c.GameId).ToList();
+                //dataGridView1.DataSource = currentAvarageRatingList.Rating.RatingItems.OrderBy(c => c.RatingOrder).ThenBy(c => c.GameId).ToList();
+                dataGridView1.DataSource = DataGridViewHelper.CreateDataSourceWrapper(currentAvarageRatingList.Rating.RatingItems, Cache.Games);
                 dataGridView1.ClearSelection();
                 UpdateDataGridViewColors();
 
@@ -626,6 +630,7 @@ namespace ZhukBGGClubRanking.WinApp
             var loadCSVFileForm = new LoadCSVRatingFileForm();
             loadCSVFileForm.CurrentUser = CurrentUser;
             loadCSVFileForm.Cache = Cache;
+            loadCSVFileForm.UserSettings = UserSettings;
             if (loadCSVFileForm.ShowDialog(this) == DialogResult.Yes)
                 Cache.LoadAll(UserSettings.Hosting);
         }

@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.Core;
+using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WinApp.Core;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Security.Cryptography;
-using System.Security.Policy;
 
 namespace ZhukBGGClubRanking.WinApp
 {
@@ -21,26 +17,139 @@ namespace ZhukBGGClubRanking.WinApp
         public AppCache Cache { get; set; }
         public User CurrentUser { get; set; }
 
+        public UserSettings UserSettings { get; set; }
+
+        public List<RatingItem> LoadedFromCSVRating { get; set; }
+
+        private BackgroundWorker bwUploadCSVFile = new BackgroundWorker();
+
         public LoadCSVRatingFileForm()
         {
             InitializeComponent();
+            bwUploadCSVFile.WorkerSupportsCancellation = true;
+            bwUploadCSVFile.WorkerReportsProgress = true;
+            bwUploadCSVFile.DoWork += BwUploadCSVFile_DoWork;
+            bwUploadCSVFile.RunWorkerCompleted += BwUploadCSVFile_RunWorkerCompleted;
+        }
+
+        private void CacheLoaded(object sender, EventArgs e)
+        {
+            var result = (e as WebResultEventArgs).Result as WebDataAllListstResultForBW;
+            if (!result.Result)
+            {
+                MessageBox.Show("Ошибка получения данных с сервера. " + result.Message);
+            }
+            else
+            {
+                FillDBDataGrid();
+            }
+        }
+
+        private void BwUploadCSVFile_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var options = e.Argument as UploadRatingPrmForBW;
+            var result = new WebDataResultForBW();
+            var reqResult = WebApiHandler.SaveUsersRating(
+                options.HostingSettings.Url,
+                options.HostingSettings.Login,
+                options.HostingSettings.Password,
+                JWTPrm.Token,
+                options.RatingItems);
+
+            if (reqResult.Result.StatusCode.ToString() == "OK")
+            {
+                result.Result = true;
+            }
+            else
+            {
+                result.Result = false;
+                result.Message = reqResult.Result.StatusCode.ToString();
+            }
+            e.Result = result;
+        }
+
+        private void BwUploadCSVFile_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            var result = e.Result as WebDataResultForBW;
+            if (result.Result)
+            {
+                //this.DialogResult = DialogResult.Yes;
+                Cache.LoadAll(UserSettings.Hosting);
+                ClearCSVDataGrig();
+                SetLblInfoTextDefault();
+            }
+            else
+            {
+                MessageBox.Show(result.Message);
+            }
+            LoadedFromCSVRating = null;
+        }
+
+        void ClearCSVDataGrig()
+        {
+            gridCSVData.DataSource = null;
+        }
+
+        void FillDBDataGrid()
+        {
+            var currentRating = Cache.UsersRating.FirstOrDefault(c => c.UserId == CurrentUser.Id);
+            //var dataSourceWrapper = new List<GridViewDataSourceWrapper>();
+            //if (currentRating != null)
+            //{
+            //    foreach (var ritem in currentRating.Rating.RatingItems)
+            //    {
+            //        var dataSourceWrapperItem = GridViewDataSourceWrapper.CreateFromCoreGame(ritem, Cache.Games, Cache.UsersRating);
+            //        dataSourceWrapper.Add(dataSourceWrapperItem);
+            //    }
+            //}
+            //gridDBData.DataSource = dataSourceWrapper.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
+            gridDBData.DataSource = DataGridViewHelper.CreateDataSourceWrapper(currentRating.Rating.RatingItems, Cache.Games);
+            tabControl1.SelectedIndex = 0;
+        }
+
+        void FillCSVDataGrid(List<RatingItem> csvRating)
+        {
+            //var dataSourceWrapper = new List<GridViewDataSourceWrapper>();
+            //foreach (var ritem in csvRating)
+            //{
+            //    var dataSourceWrapperItem = GridViewDataSourceWrapper.CreateFromCoreGame(ritem, Cache.Games, Cache.UsersRating);
+            //    dataSourceWrapper.Add(dataSourceWrapperItem);
+            //}
+            //gridCSVData.DataSource = dataSourceWrapper.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
+            gridDBData.DataSource = DataGridViewHelper.CreateDataSourceWrapper(csvRating, Cache.Games);
+            tabControl1.SelectedIndex = 1;
         }
 
         private void btSelectFile_Click(object sender, EventArgs e)
         {
-            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
+            //openFileDialog1.InitialDirectory = Path.GetDirectoryName(CoreSettings.RootDir);
+            openFileDialog1.AutoUpgradeEnabled = false;
+            openFileDialog1.AddExtension = true;
+            openFileDialog1.Filter = "Файлы csv (*.csv)|*.csv";
+            if (openFileDialog1.ShowDialog(this) == DialogResult.Cancel)
                 return;
             string filename = openFileDialog1.FileName;
+            //DEBUG!!!
+            //var filename = "c:\\TEMP\\2024-12-30\\ZhukBGGClubRanking\\lists\\VAV.csv";
             lblInfo.Text = "Выбран файл " + filename;
-
             var csvRating = CSVHelper.GetRatingItemsFromCSVFile(filename, Cache.Games);
+            LoadedFromCSVRating = csvRating;
+            FillCSVDataGrid(csvRating);
+        }
 
+        void SetLblInfoTextDefault()
+        {
+            lblInfo.Text = "Файл не выбран";
         }
 
         private void btLoadToServer_Click(object sender, EventArgs e)
         {
-            //var res = await TestWebApi.SaveUsersRating(tbUrl.Text, tbLogin.Text, tbPassword.Text, tbLoginResult.Text, ratingItems);
-            this.DialogResult = DialogResult.Yes;
+            if (LoadedFromCSVRating != null)
+                bwUploadCSVFile.RunWorkerAsync(new UploadRatingPrmForBW 
+                { 
+                    RatingItems = LoadedFromCSVRating,
+                    HostingSettings = UserSettings.Hosting
+                });
         }
 
         public void PrepareDataGrid(DataGridView grid)
@@ -95,55 +204,31 @@ namespace ZhukBGGClubRanking.WinApp
         {
             var grid = sender as DataGridView;
             if (e.ColumnIndex == _previousIndex)
-                _sortDirection ^= true; // toggle direction
-
-            grid.DataSource = SortData((List<User>)grid.DataSource, grid.Columns[e.ColumnIndex].Name, _sortDirection);
-
+                _sortDirection ^= true;
+            grid.DataSource = SortData((List<GridViewDataSourceWrapper>)grid.DataSource, grid.Columns[e.ColumnIndex].Name, _sortDirection);
             _previousIndex = e.ColumnIndex;
-
             grid.ClearSelection();
         }
 
-        public List<User> SortData(List<User> list, string column, bool ascending)
+        public List<GridViewDataSourceWrapper> SortData(List<GridViewDataSourceWrapper> list, string column, bool ascending)
         {
             if (ascending)
             {
-                if (column == "Id")
-                    list = list.OrderBy(c => c.Id).ToList();
-                else if (column == "Name")
-                    list = list.OrderBy(c => c.Name).ToList();
-                else if (column == "Password")
-                    list = list.OrderBy(c => c.Password).ToList();
-                else if (column == "EMail")
-                    list = list.OrderBy(c => c.EMail).ToList();
-                else if (column == "FullName")
-                    list = list.OrderBy(c => c.FullName).ToList();
-                else if (column == "IsActive")
-                    list = list.OrderBy(c => c.IsActive).ToList();
-                else if (column == "CreateTime")
-                    list = list.OrderBy(c => c.CreateTime).ToList();
-                else if (column == "Role")
-                    list = list.OrderBy(c => c.Role).ToList();
-
+                if (column == "Game")
+                    list = list.OrderBy(c => c.Game).ToList();
+                else if (column == "Rating")
+                    list = list.OrderBy(c => c.Rating).ToList();
+                else if (column == "BGGComments")
+                    list = list.OrderBy(c => c.BGGComments).ToList();
             }
             else
             {
-                if (column == "Id")
-                    list = list.OrderByDescending(c => c.Id).ToList();
-                else if (column == "Name")
-                    list = list.OrderByDescending(c => c.Name).ToList();
-                else if (column == "Password")
-                    list = list.OrderByDescending(c => c.Password).ToList();
-                else if (column == "EMail")
-                    list = list.OrderByDescending(c => c.EMail).ToList();
-                else if (column == "FullName")
-                    list = list.OrderByDescending(c => c.FullName).ToList();
-                else if (column == "IsActive")
-                    list = list.OrderByDescending(c => c.IsActive).ToList();
-                else if (column == "CreateTime")
-                    list = list.OrderByDescending(c => c.CreateTime).ToList();
-                else if (column == "Role")
-                    list = list.OrderByDescending(c => c.Role).ToList();
+                if (column == "Game")
+                    list = list.OrderByDescending(c => c.Game).ToList();
+                else if (column == "Rating")
+                    list = list.OrderByDescending(c => c.Rating).ToList();
+                else if (column == "BGGComments")
+                    list = list.OrderByDescending(c => c.BGGComments).ToList();
             }
             return list;
         }
@@ -160,18 +245,17 @@ namespace ZhukBGGClubRanking.WinApp
 
         private void LoadCSVRatingFileForm_Load(object sender, EventArgs e)
         {
-            var settings = UserSettings.GetUserSettings();
             PrepareDataGrid(gridDBData);
-            var currentRating = Cache.UsersRating.FirstOrDefault(c => c.UserId == CurrentUser.Id);
-            var dataSourceWrapper = new List<GridViewDataSourceWrapper>();
-            foreach (var ritem in currentRating.Rating.RatingItems)
-            {
-                var dataSourceWrapperItem = GridViewDataSourceWrapper.CreateFromCoreGame(ritem, Cache.Games, Cache.UsersRating);
-                dataSourceWrapper.Add(dataSourceWrapperItem);
-            }
-            
-            gridDBData.DataSource = dataSourceWrapper.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
+            PrepareDataGrid(gridCSVData);
+            FillDBDataGrid();
+            Cache.AllLoaded += CacheLoaded;
+            SetLblInfoTextDefault();
+        }
 
+        private void LoadCSVRatingFileForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Cache.AllLoaded -= CacheLoaded;
         }
     }
+
 }

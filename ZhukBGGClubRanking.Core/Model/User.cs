@@ -54,12 +54,12 @@ namespace ZhukBGGClubRanking.Core
             return sBuilder.ToString();
         }
 
-        public void TrimAndNamePasswordToLower()
-        {
-            TrimFields();
-            Name = Name.ToLower();
-            Password = Name.ToLower();
-        }
+        //public void TrimAndNamePasswordToLower()
+        //{
+        //    TrimFields();
+        //    Name = Name.ToLower();
+        //    Password = Name.ToLower();
+        //}
 
         public void TrimFields()
         {

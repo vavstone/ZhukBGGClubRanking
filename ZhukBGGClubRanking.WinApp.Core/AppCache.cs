@@ -109,6 +109,10 @@ namespace ZhukBGGClubRanking.WinApp.Core
                 result2.Users = usersLoadingResult.Users;
                 result2.UsersRatings = usersRatingsLoadingResult.UsersRatings;
                 result2.Games = gamesLoadingResult.Games;
+                usersRatingsLoadingResult.UsersRatings.ForEach(c=>
+                c.UpdateGamesCrossRatings(
+                    usersRatingsLoadingResult.UsersRatings, 
+                    usersLoadingResult.Users));
                 AllLoaded(this, new WebResultEventArgs { Result = result2 });
             }
         }
@@ -209,38 +213,4 @@ namespace ZhukBGGClubRanking.WinApp.Core
 
     }
 
-    public class WebPrmForBW
-    {
-        public HostingSettings HostingSettings { get; set; } = new HostingSettings();
-    }
-
-    public class WebDataResultForBW
-    {
-        public bool Result { get; set; }
-        public string Message { get; set; }
-    }
-    public class WebDataGamesCollectionResultForBW:WebDataResultForBW
-    {
-        public List<Game> Games { get; set; }
-    }
-    public class WebDataUsersRatingsResultForBW : WebDataResultForBW
-    {
-        public List<UsersRating> UsersRatings { get; set; }
-    }
-    public class WebDataUsersResultForBW : WebDataResultForBW
-    {
-        public List<User> Users { get; set; }
-    }
-
-    public class WebDataAllListstResultForBW : WebDataResultForBW
-    {
-        public List<User> Users { get; set; }
-        public List<UsersRating> UsersRatings { get; set; }
-        public List<Game> Games { get; set; }
-    }
-
-    public class WebResultEventArgs : EventArgs
-    {
-        public WebDataResultForBW Result { get; set; }
-    }
 }
