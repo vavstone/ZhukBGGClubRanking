@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
 
 namespace ZhukBGGClubRanking.Core
@@ -39,6 +38,29 @@ namespace ZhukBGGClubRanking.Core
                 }
             }
             return ratingItems;
+        }
+
+        public static void SaveRatingToCSVFile(UsersRating rating, List<Game> games, List<User> users)
+        {
+            var user = users.FirstOrDefault(c => c.Id == rating.UserId);
+            var folderPath = string.Format(@"{0}\{1}\lists",
+                        CoreSettings.ExportFilesDir,
+                        DateTime.Now.ToString("yyyy-MM-dd-HH_mm_ss")
+                    );
+            var csvFileFullName = Path.Combine(folderPath, user.Name + ".csv");
+            if (File.Exists(csvFileFullName))
+                File.Delete(csvFileFullName);
+            if (!Directory.Exists(Path.GetDirectoryName(csvFileFullName)))
+                Directory.CreateDirectory(Path.GetDirectoryName(csvFileFullName));
+            var header = new[] { "Rank", "Item" };
+            var data = new List<string[]>();
+            foreach (var ratingItem in rating.Rating.RatingItems.OrderBy(c=>c.RatingOrder))
+            {
+                var game = games.Where(c=>c.Id==ratingItem.GameId).FirstOrDefault();
+                var arData = new[] { ratingItem.RatingOrder.ToString(), game.NameEng };
+                data.Add(arData);
+            }
+            File.WriteAllText(csvFileFullName, CsvWriter.WriteToText(header, data, ',', false));
         }
 
         public static List<UsersRating> GetUsersRatingsFromListsFolder(List<User> users, List<Game> gamesCollection)

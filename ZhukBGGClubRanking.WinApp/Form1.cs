@@ -13,20 +13,11 @@ namespace ZhukBGGClubRanking.WinApp
 {
     public partial class Form1 : Form
     {
-        //public GamesNamesTranslateList GamesTranslate { get; set; }
-        //public BGGCollection CommonCollection { get; set; }
-        //private List<GameRatingListFile> usersRatingListFiles;
         UsersRating currentAvarageRatingList;
-
         UserSettings UserSettings { get; set; }
-
         AppCache Cache { get; set; }
-
         User CurrentUser { get; set; }
-
         private bool adminElementsLoaded = false;
-        
-
 
         public Form1()
         {
@@ -35,7 +26,6 @@ namespace ZhukBGGClubRanking.WinApp
             Cache = new AppCache();
             Cache.AllLoaded += AllLoaded;
             Cache.LoadAll(UserSettings.Hosting);
-            //LoadUsersRatings();
         }
 
         private void AllLoaded(object sender, EventArgs e)
@@ -55,6 +45,7 @@ namespace ZhukBGGClubRanking.WinApp
                 SetFormCaption();
                 UpdateAvarateRating();
                 ClearSelectionInAllGrids();
+                SetTabPageCurrentUser();
             }
         }
 
@@ -67,7 +58,6 @@ namespace ZhukBGGClubRanking.WinApp
                 addNewUserMenu.Click += AddNewUserMenu_Click;
                 adminFunctionsButton.DropDownItems.Add(addNewUserMenu);
                 menuStrip1.Items.Add(adminFunctionsButton);
-
                 adminElementsLoaded = true;
             }
         }
@@ -260,7 +250,7 @@ namespace ZhukBGGClubRanking.WinApp
                 else if (column == "BGGComments")
                     list = list.OrderBy(c => c.BGGComments).ToList();
                 else if (column == "UserRatingString")
-                    list = list.OrderBy(c => c.UsersRating).ToList();
+                    list = list.OrderBy(c => c.RatingItem).ToList();
 
             }
             else
@@ -272,11 +262,10 @@ namespace ZhukBGGClubRanking.WinApp
                 else if (column == "BGGComments")
                     list = list.OrderByDescending(c => c.BGGComments).ToList();
                 else if (column == "UserRatingString")
-                    list = list.OrderByDescending(c => c.UsersRating).ToList();
+                    list = list.OrderByDescending(c => c.RatingItem).ToList();
             }
             return list;
         }
-
 
 
         private void DataGridView_MouseEnter(object sender, EventArgs e)
@@ -403,11 +392,14 @@ namespace ZhukBGGClubRanking.WinApp
         private void button2_Click(object sender, EventArgs e)
         {
             var reorderForm = new ReorderForm();
-            reorderForm.RatingList = GetRatingInOpenedTab();
+            var ratingCurrentUser = Cache.UsersRating.FirstOrDefault(c => c.UserId == CurrentUser.Id);
+            reorderForm.RatingList = ratingCurrentUser;
             reorderForm.CurrentUser = CurrentUser;
             reorderForm.Cache = Cache;
-            var ratingCurrentUser = Cache.UsersRating.FirstOrDefault(c => c.UserId == CurrentUser.Id);
-            var newGames = Cache.Games.Where(c => !ratingCurrentUser.Rating.RatingItems.Any(c1 => c1.GameId == c.Id)).ToList();
+            reorderForm.Settings = UserSettings.Hosting;
+
+
+            var newGames = Cache.Games.Where(c => c.IsStandaloneGame && !ratingCurrentUser.Rating.RatingItems.Any(c1 => c1.GameId == c.Id)).ToList();
             if (newGames.Count > 0)
             {
                 if (MessageBox.Show(string.Format("В общей коллекции найдены игры ({0} штук), отсуствующие в вашем рейтинге. Добавить их?", newGames.Count),
@@ -419,9 +411,10 @@ namespace ZhukBGGClubRanking.WinApp
                     reorderForm.NewGames = newGames;
                 }
             }
-            reorderForm.ShowDialog(this);
-            //LoadUsersRatings();
-            Cache.LoadAll(UserSettings.Hosting);
+            if (reorderForm.ShowDialog(this) == DialogResult.OK)
+            {
+                Cache.LoadAll(UserSettings.Hosting);
+            }
         }
 
         User GetCurrentSelectedUser()
@@ -444,7 +437,8 @@ namespace ZhukBGGClubRanking.WinApp
         {
             var appName = "ZhukBGGClubRanking";
             var selectedUser = GetCurrentSelectedUser();
-            this.Text = string.Format("{0}. Рейтинг участника {1}", appName, selectedUser);
+            if (selectedUser!=null)
+                this.Text = string.Format("{0}. Рейтинг участника {1}", appName, selectedUser.Name);
         }
 
         void UpdateDataGridViewColors()
@@ -633,6 +627,13 @@ namespace ZhukBGGClubRanking.WinApp
             loadCSVFileForm.UserSettings = UserSettings;
             if (loadCSVFileForm.ShowDialog(this) == DialogResult.Yes)
                 Cache.LoadAll(UserSettings.Hosting);
+        }
+
+        void SetTabPageCurrentUser()
+        {
+            var currentUserPage = tabControl1.TabPages.OfType<TabPage>().FirstOrDefault(tp => tp.Text == CurrentUser.Name);
+            if (currentUserPage!=null)
+                tabControl1.SelectedTab = currentUserPage;
         }
     }
 }

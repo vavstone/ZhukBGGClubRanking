@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using ZhukBGGClubRanking.Core;
@@ -12,17 +13,58 @@ namespace ZhukBGGClubRanking.WinApp
     {
         public ReorderForm()
         {
-            InitializeComponent(); 
-            //dragDropBindingSource.DataSource = dragDropListBox1;
+            InitializeComponent();
+            bwSaveRating.WorkerSupportsCancellation = true;
+            bwSaveRating.WorkerReportsProgress = true;
+            bwSaveRating.DoWork += BwSaveRating_DoWork;
+            bwSaveRating.RunWorkerCompleted += BwSaveRating_RunWorkerCompleted;
         }
 
         public UsersRating RatingList { get; set; }
-
         public List<Game> NewGames { get; set; }
         public AppCache Cache { get; set; }
-
         public User CurrentUser { get; set; }
+        private BackgroundWorker bwSaveRating = new BackgroundWorker();
+        public HostingSettings Settings { get; set; }
 
+       
+
+        private void BwSaveRating_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var options = e.Argument as UploadRatingPrmForBW;
+            var result = new WebDataResultForBW();
+            var reqResult = WebApiHandler.SaveUsersRating(
+                options.HostingSettings.Url,
+                options.HostingSettings.Login,
+                options.HostingSettings.Password,
+                JWTPrm.Token,
+                options.RatingItems);
+
+            if (reqResult.Result.StatusCode.ToString() == "OK")
+            {
+                result.Result = true;
+            }
+            else
+            {
+                result.Result = false;
+                result.Message = reqResult.Result.StatusCode.ToString();
+            }
+            e.Result = result;
+        }
+
+        private void BwSaveRating_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            var result = e.Result as WebDataResultForBW;
+            if (result.Result)
+            {
+                this.DialogResult = DialogResult.OK;
+                //this.Close();
+            }
+            else
+            {
+                MessageBox.Show(result.Message);
+            }
+        }
 
         private void ReorderForm_Load(object sender, EventArgs e)
         {
@@ -85,15 +127,17 @@ namespace ZhukBGGClubRanking.WinApp
                     MessageBoxIcon.Question, MessageBoxDefaultButton.Button2 ) == DialogResult.Yes)
             {
                 var updatedList = GetUpdatedGameRatingListFromForm();
-                
-                //TODO!!! сохранение рейтинга в БД
+
                 //var ratingListFile = new GameRatingListFile();
                 //ratingListFile.RatingList = updatedList;
                 //ratingListFile.FileNameWithoutExt = updatedList.UserNames.FirstOrDefault();
                 //ratingListFile.SaveToFile();
+                bwSaveRating.RunWorkerAsync(new UploadRatingPrmForBW
+                {
+                    RatingItems = updatedList.Rating.RatingItems,
+                    HostingSettings = Settings
+                });
                 
-                
-                this.Close();
 
             }
         }

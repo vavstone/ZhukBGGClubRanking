@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ZhukBGGClubRanking.Core;
-using ZhukBGGClubRanking.Core.Code;
 using ZhukBGGClubRanking.WinApp.Core;
 
 namespace ZhukBGGClubRanking.WinApp
@@ -116,11 +114,8 @@ namespace ZhukBGGClubRanking.WinApp
             var grid = sender as DataGridView;
             if (e.ColumnIndex == _previousIndex)
                 _sortDirection ^= true; // toggle direction
-
             grid.DataSource = SortData((List<User>)grid.DataSource, grid.Columns[e.ColumnIndex].Name, _sortDirection);
-
             _previousIndex = e.ColumnIndex;
-
             grid.ClearSelection();
         }
 
@@ -216,14 +211,11 @@ namespace ZhukBGGClubRanking.WinApp
             }
         }
 
-        
-
         public void CreateGridColumns(DataGridView grid)
         {
             //grid.Columns.Clear();
             AddTextColumn(grid, "Id", "Id",50);
             AddTextColumn(grid, "Name", "Name", 150);
-            //AddTextColumn(grid, "Password", "Password", 100);
             AddTextColumn(grid, "EMail", "EMail", 200);
             AddTextColumn(grid, "FullName", "FullName", 100);
             AddTextColumn(grid, "IsActive", "IsActive", 50);

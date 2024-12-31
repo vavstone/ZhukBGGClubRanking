@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Xml.Serialization;
 using ZhukBGGClubRanking.Core.Model;
-using static ZhukBGGClubRanking.Core.BGGCollection;
 
 namespace ZhukBGGClubRanking.Core
 {

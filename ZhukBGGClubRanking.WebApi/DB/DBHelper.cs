@@ -1,8 +1,6 @@
-﻿using System.Configuration;
-using System.Data.Common;
+﻿using Microsoft.Data.Sqlite;
 using System.Data;
-using Microsoft.Data.Sqlite;
-using ZhukBGGClubRanking.Core;
+using System.Data.Common;
 
 namespace ZhukBGGClubRanking.WebApi.Core
 {

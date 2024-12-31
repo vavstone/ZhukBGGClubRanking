@@ -9,20 +9,20 @@ namespace ZhukBGGClubRanking.WinApp.Core
             get { return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location); }
         }
 
-        public static string ListsDir
-        {
-            get { return Path.Combine(RootDir, "lists"); }
-        }
+        //public static string ListsDir
+        //{
+        //    get { return Path.Combine(RootDir, "lists"); }
+        //}
 
         //public static string CommonCollectionFilePath
         //{
         //    get { return Path.Combine(RootDir, "club_collection", "collection.xml"); }
         //}
 
-        public static string GamesNamesTranslateFilePath
-        {
-            get { return Path.Combine(RootDir, "translate", "collection.csv"); }
-        }
+        //public static string GamesNamesTranslateFilePath
+        //{
+        //    get { return Path.Combine(RootDir, "translate", "collection.csv"); }
+        //}
 
         public static string BGGCardPrefixUrl
         {

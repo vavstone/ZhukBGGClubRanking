@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Security.Permissions;
 using System.Text;
-using System.Xml.Serialization;
-using ZhukBGGClubRanking.Core.Model;
 
 namespace ZhukBGGClubRanking.Core
 {
@@ -41,9 +36,6 @@ namespace ZhukBGGClubRanking.Core
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Длина роли должна быть в диапазоне от {2}-{1} символов")]
         public string Role { get; set; }
 
-        //private static string NOT_EMPTY = "Поле {0} не может быть пустым";
-        //private static string NOT_FITTING_SIZE = "Поле {0} должно быть от {1} до {2} символов";
-
         public static string GetMD5Hash(string value)
         {
             MD5 md5Hasher = MD5.Create();
@@ -55,13 +47,6 @@ namespace ZhukBGGClubRanking.Core
             }
             return sBuilder.ToString();
         }
-
-        //public void TrimAndNamePasswordToLower()
-        //{
-        //    TrimFields();
-        //    Name = Name.ToLower();
-        //    Password = Name.ToLower();
-        //}
 
         public void TrimFields()
         {

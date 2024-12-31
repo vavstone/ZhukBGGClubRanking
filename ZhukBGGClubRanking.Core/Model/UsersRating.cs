@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ZhukBGGClubRanking.Core.Model
 {
-    public class UsersRating : IComparable<UsersRating>
+    public class UsersRating //: IComparable<UsersRating>
     {
         public int Id { get; set; }
         public DateTime CreateTime { get; set; }
@@ -13,23 +12,23 @@ namespace ZhukBGGClubRanking.Core.Model
         public int UserId { get; set; }
         public RatingCollection Rating { get; set; } = new RatingCollection();
 
-        public int CompareTo(UsersRating other)
-        {
-            var currentRatings = Rating.RatingItems.OrderBy(c => c.RatingOrder).ToList();
-            var otherRatings = other.Rating.RatingItems.OrderBy(c => c.RatingOrder).ToList();
-            if (!currentRatings.Any() && otherRatings.Any()) return -1;
-            if (!otherRatings.Any() && currentRatings.Any()) return 1;
-            if (!currentRatings.Any() && !otherRatings.Any()) return 0;
-            for (int i = 0; i < currentRatings.Count; i++)
-            {
+        //public int CompareTo(UsersRating other)
+        //{
+        //    var currentRatings = Rating.RatingItems.OrderBy(c => c.RatingOrder).ToList();
+        //    var otherRatings = other.Rating.RatingItems.OrderBy(c => c.RatingOrder).ToList();
+        //    if (!currentRatings.Any() && otherRatings.Any()) return -1;
+        //    if (!otherRatings.Any() && currentRatings.Any()) return 1;
+        //    if (!currentRatings.Any() && !otherRatings.Any()) return 0;
+        //    for (int i = 0; i < currentRatings.Count; i++)
+        //    {
 
-                if (otherRatings.Count - 1 < i) return 1;
-                if (currentRatings[i].RatingOrder < otherRatings[i].RatingOrder) return 1;
-                if (otherRatings[i].RatingOrder < currentRatings[i].RatingOrder) return -1;
-            }
+        //        if (otherRatings.Count - 1 < i) return 1;
+        //        if (currentRatings[i].RatingOrder < otherRatings[i].RatingOrder) return 1;
+        //        if (otherRatings[i].RatingOrder < currentRatings[i].RatingOrder) return -1;
+        //    }
 
-            return 0;
-        }
+        //    return 0;
+        //}
 
         public void CalculateWeightByRating(int maxUsersCollectionSize = 0)
         {

@@ -16,13 +16,9 @@ namespace ZhukBGGClubRanking.WinApp
     {
         public AppCache Cache { get; set; }
         public User CurrentUser { get; set; }
-
         public UserSettings UserSettings { get; set; }
-
         public List<RatingItem> LoadedFromCSVRating { get; set; }
-
         private BackgroundWorker bwUploadCSVFile = new BackgroundWorker();
-
         public LoadCSVRatingFileForm()
         {
             InitializeComponent();
@@ -73,7 +69,6 @@ namespace ZhukBGGClubRanking.WinApp
             var result = e.Result as WebDataResultForBW;
             if (result.Result)
             {
-                //this.DialogResult = DialogResult.Yes;
                 Cache.LoadAll(UserSettings.Hosting);
                 ClearCSVDataGrig();
                 SetLblInfoTextDefault();
@@ -93,44 +88,24 @@ namespace ZhukBGGClubRanking.WinApp
         void FillDBDataGrid()
         {
             var currentRating = Cache.UsersRating.FirstOrDefault(c => c.UserId == CurrentUser.Id);
-            //var dataSourceWrapper = new List<GridViewDataSourceWrapper>();
-            //if (currentRating != null)
-            //{
-            //    foreach (var ritem in currentRating.Rating.RatingItems)
-            //    {
-            //        var dataSourceWrapperItem = GridViewDataSourceWrapper.CreateFromCoreGame(ritem, Cache.Games, Cache.UsersRating);
-            //        dataSourceWrapper.Add(dataSourceWrapperItem);
-            //    }
-            //}
-            //gridDBData.DataSource = dataSourceWrapper.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
             gridDBData.DataSource = DataGridViewHelper.CreateDataSourceWrapper(currentRating.Rating.RatingItems, Cache.Games);
             tabControl1.SelectedIndex = 0;
         }
 
         void FillCSVDataGrid(List<RatingItem> csvRating)
         {
-            //var dataSourceWrapper = new List<GridViewDataSourceWrapper>();
-            //foreach (var ritem in csvRating)
-            //{
-            //    var dataSourceWrapperItem = GridViewDataSourceWrapper.CreateFromCoreGame(ritem, Cache.Games, Cache.UsersRating);
-            //    dataSourceWrapper.Add(dataSourceWrapperItem);
-            //}
-            //gridCSVData.DataSource = dataSourceWrapper.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
-            gridDBData.DataSource = DataGridViewHelper.CreateDataSourceWrapper(csvRating, Cache.Games);
+            gridCSVData.DataSource = DataGridViewHelper.CreateDataSourceWrapper(csvRating, Cache.Games);
             tabControl1.SelectedIndex = 1;
         }
 
         private void btSelectFile_Click(object sender, EventArgs e)
         {
-            //openFileDialog1.InitialDirectory = Path.GetDirectoryName(CoreSettings.RootDir);
             openFileDialog1.AutoUpgradeEnabled = false;
             openFileDialog1.AddExtension = true;
             openFileDialog1.Filter = "Файлы csv (*.csv)|*.csv";
             if (openFileDialog1.ShowDialog(this) == DialogResult.Cancel)
                 return;
             string filename = openFileDialog1.FileName;
-            //DEBUG!!!
-            //var filename = "c:\\TEMP\\2024-12-30\\ZhukBGGClubRanking\\lists\\VAV.csv";
             lblInfo.Text = "Выбран файл " + filename;
             var csvRating = UserRatingFile.GetRatingItemsFromCSVFile(filename, Cache.Games);
             LoadedFromCSVRating = csvRating;

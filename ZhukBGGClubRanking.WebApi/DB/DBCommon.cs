@@ -1,8 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using ZhukBGGClubRanking.Core.Model;
+﻿using System.Data.Common;
 using ZhukBGGClubRanking.WebApi.Core;
 
 namespace ZhukBGGClubRanking.WebApi.DB

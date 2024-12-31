@@ -8,25 +8,18 @@ namespace ZhukBGGClubRanking.WinApp
 {
     public class GridViewDataSourceWrapper
     {
-
-        public string Game { get; set; }
-        public string GameEng { get; set; }
-        public string GameRus { get; set; }
-        public string ParentGameEng { get; set; }
-        public int Rating { get; set; }
+        public Game GameItem { get; set; }
+        public RatingItem RatingItem { get; set; }
+        public string Game { get { return GameItem.Name; } }
+        public string GameEng { get { return GameItem.NameEng; } }
+        //public string GameRus { get { return GameItem.NameRus; } }
+        public int Rating { get { return RatingItem.RatingOrder; } }
         public int Weight { get; set; }
-        public int CompliancePercent { get; set; }
-        //public BGGCollection.ItemElement BGGItem { get; set; }
-        public UsersRating UsersRating { get; set; }
-        public string TeseraKey { get; set; }
-        public int BGGObjectId { get; set; }
-
-        public GridViewDataSourceWrapper()
-        {
-            UsersRating = new UsersRating();
-        }
-
-        public string BGGComments { get; set; }
+        public int CompliancePercent { get { return RatingItem.CompliancePercent; } }
+        public string TeseraKey { get { return GameItem.TeseraKey; } }
+        public int BGGObjectId { get { return GameItem.BGGObjectId; } }
+        public string UserRatingString { get { return RatingItem.UserRatingString; } }
+        public string BGGComments { get { return GameItem.OwnersString; } }
 
         public static string GetGameNameEngFromFormattedName(string formattedName)
         {
@@ -38,33 +31,15 @@ namespace ZhukBGGClubRanking.WinApp
             {
                 return formattedName.Substring(indexOfStartQuot + 1, indexOfEndQuot - indexOfStartQuot - 1);
             }
-
             return formattedName;
         }
-
-        public string UserRatingString { get; set; }
-
 
         public static GridViewDataSourceWrapper CreateFromCoreGame(RatingItem ratingItem, List<Game> gamesCollection/*, List<UsersRating> ratings*/)
         {
             var game = gamesCollection.FirstOrDefault(c => c.Id == ratingItem.GameId);
             var res = new GridViewDataSourceWrapper();
-            res.Game = game.Name;
-            res.GameEng = game.NameEng;
-            res.GameRus = game.NameRus;
-            res.BGGObjectId = game.BGGObjectId;
-            res.BGGComments = game.OwnersString;
-            //res.ParentGameEng = gamesCollection
-            res.Rating = ratingItem.RatingOrder;
-            res.TeseraKey = game.TeseraKey;
-            res.CompliancePercent = ratingItem.CompliancePercent;
-            //foreach (var rating in ratings)
-            //{
-            //    var allRatingItems = rating.Rating.RatingItems.Where(c => c.GameId == game.Id).OrderBy(c => c.RatingOrder)
-            //        .ToList();
-            //    res.UsersRating.Rating.RatingItems = allRatingItems;
-            //}
-            res.UserRatingString = ratingItem.UserRatingString;
+            res.GameItem = game;
+            res.RatingItem = ratingItem;
             return res;
         }
     }

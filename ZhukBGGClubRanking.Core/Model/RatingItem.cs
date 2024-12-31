@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ZhukBGGClubRanking.Core.Model
 {
-    public class RatingItem
+    public class RatingItem : IComparable<RatingItem>
     {
         public int Id { get; set; }
         //public int UsersRatingId { get; set; }
@@ -13,6 +12,7 @@ namespace ZhukBGGClubRanking.Core.Model
         public int RatingOrder { get; set; }
         public int CompliancePercent { get; set; }
         public int Weight { get; set; }
+        public List<RatingShortInfo> RatingsByOthersUsers { get; set; } = new List<RatingShortInfo>();
 
         public string UserRatingString
         {
@@ -31,6 +31,23 @@ namespace ZhukBGGClubRanking.Core.Model
             }
         }
 
-        public List<RatingShortInfo> RatingsByOthersUsers { get; set; } = new List<RatingShortInfo>();
+        public int CompareTo(RatingItem other)
+        {
+            var currentRatings = RatingsByOthersUsers.OrderBy(c => c.RatingOrder).ToList();
+            var otherRatings = other.RatingsByOthersUsers.OrderBy(c => c.RatingOrder).ToList();
+            if (!currentRatings.Any() && otherRatings.Any()) return -1;
+            if (!otherRatings.Any() && currentRatings.Any()) return 1;
+            if (!currentRatings.Any() && !otherRatings.Any()) return 0;
+            for (int i = 0; i < currentRatings.Count; i++)
+            {
+
+                if (otherRatings.Count - 1 < i) return 1;
+                if (currentRatings[i].RatingOrder < otherRatings[i].RatingOrder) return 1;
+                if (otherRatings[i].RatingOrder < currentRatings[i].RatingOrder) return -1;
+            }
+            return 0;
+        }
+
+
     }
 }

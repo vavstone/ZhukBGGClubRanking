@@ -32,7 +32,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Csv, Version=2.0.93.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Csv.2.0.93\lib\net40\Csv.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dll\Csv.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -80,7 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCache.cs" />
-    <Compile Include="CSVHelper.cs" />
     <Compile Include="EventsClasses.cs" />
     <Compile Include="GridViewDataSourceWrapper.cs" />
     <Compile Include="JWTPrm.cs" />

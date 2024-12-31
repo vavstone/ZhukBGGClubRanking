@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using ZhukBGGClubRanking.Core.Model;
+﻿using System.Data;
 using ZhukBGGClubRanking.WebApi;
 using ZhukBGGClubRanking.WebApi.Core;
 

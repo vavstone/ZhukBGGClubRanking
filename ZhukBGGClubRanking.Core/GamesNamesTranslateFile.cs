@@ -1,9 +1,6 @@
 ﻿using Csv;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using ZhukBGGClubRanking.Core;
 
 namespace ZhukBGGClubRanking.Core
 {

@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using ZhukBGGClubRanking.Core;
+﻿using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WebApi.DB;
 
@@ -37,6 +36,17 @@ namespace ZhukBGGClubRanking.WebApi
             DBUser.CreateNewUser(newUser);
         }
 
+        public static void SaveRatingsToCSVFiles()
+        {
+            var ratings = DBUsersRating.GetUsersActualRatings();
+            var users = DBUser.GetUsers();
+            var games = DBGame.GetGamesCollection(users);
+            foreach (var rating in ratings)
+            {
+                UserRatingFile.SaveRatingToCSVFile(rating, games, users);
+            } 
+        }
+
         public static void InitiateDB(User currentUser)
         {
             //1. получаем актуальную версию collection.xml с сайта BGG и обновляем collection.xml в club_collection\collection.xml
@@ -70,7 +80,6 @@ namespace ZhukBGGClubRanking.WebApi
             if (translateFile != null)
             {
                 bggColl.ApplyTranslation(translateFile.GamesTranslate);
-                //bggColl.SetParents();
             }
 
             //7. созданием игры в БД с использованием инфо пользователей из БД
@@ -80,23 +89,15 @@ namespace ZhukBGGClubRanking.WebApi
                 var game = bggGame.CreateGame(users, currentUser);
                 games.Add(game);
             }
-
-
-
             foreach (var game in games)
             {
-                
                 DBGame.SaveGame(game, false);
             }
-
-            
             foreach (var game in games)
             {
                 game.SetParents(games);
-                //TODO!!! setParents
                 DBGame.UpdateParent(game);
             }
-
 
             //8. создаем рейтинги (rating_items, users_ratings) из файлов в lists\
             var ratings = UserRatingFile.GetUsersRatingsFromListsFolder(users, games);

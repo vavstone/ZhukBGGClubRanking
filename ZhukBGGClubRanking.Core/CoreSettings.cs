@@ -8,7 +8,6 @@ namespace ZhukBGGClubRanking.Core
         {
             get { return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location); }
         }
-
         public static string AppFilesDir
         {
             get { return Path.Combine(RootDir, "App_Files"); }
@@ -25,27 +24,15 @@ namespace ZhukBGGClubRanking.Core
         {
             get { return Path.Combine(InitiateFilesDir, "club_collection", "collection.xml"); }
         }
-
         public static string InitiateGamesNamesTranslateFilePath
         {
             get { return Path.Combine(InitiateFilesDir, "translate", "collection.csv"); }
         }
-
-
-        //public static string ListsDir
-        //{
-        //    get { return Path.Combine(RootDir, "lists"); }
-        //}
-
-        //public static string CommonCollectionFilePath
-        //{
-        //    get { return Path.Combine(RootDir, "club_collection", "collection.xml"); }
-        //}
-
-        //public static string GamesNamesTranslateFilePath
-        //{
-        //    get { return Path.Combine(RootDir, "translate", "collection.csv"); }
-        //}
+        public static string ExportFilesDir
+        {
+            get { return Path.Combine(AppFilesDir, "Export"); }
+        }
+        
 
         public static string BGGCardPrefixUrl
         {
