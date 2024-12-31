@@ -102,7 +102,7 @@ namespace ZhukBGGClubRanking.Core
                     using (var cmd = con.CreateCommand())
                     {
 
-                        var currentTime = DateTime.Now;
+                        //var currentTime = DateTime.Now;
                         //1. найти актуальную запись (если такая есть) в users
                         cmd.CommandText = "select id from users where upper(name)=@name and upper(@email)=@email";
                         cmd.CreateParameter(DbType.String, "name", newUser.Name.ToUpper());
@@ -120,11 +120,12 @@ namespace ZhukBGGClubRanking.Core
                         cmd.Parameters.Clear();
                         cmd.CreateParameter(DbType.String, "name", newUser.Name);
                         cmd.CreateParameter(DbType.String, "password", newUser.Password);
-                        cmd.CreateParameter(DbType.String, "email", newUser.EMail.ToLower());
+                        cmd.CreateParameter(DbType.String, "email", newUser.EMail);
                         cmd.CreateParameter(DbType.String, "full_name", newUser.FullName);
-                        cmd.CreateParameter(DbType.String, "is_active", newUser.IsActive);
-                        cmd.CreateParameter(DbType.String, "create_time", newUser.CreateTime);
+                        cmd.CreateParameter(DbType.Boolean, "is_active", newUser.IsActive);
+                        cmd.CreateParameter(DbType.DateTime, "create_time", newUser.CreateTime);
                         cmd.CreateParameter(DbType.String, "role", newUser.Role);
+                        cmd.CreateParameter(DbType.Int32, "create_user_id", newUser.CreateUserId);
                         cmd.ExecuteNonQuery();
                     }
 

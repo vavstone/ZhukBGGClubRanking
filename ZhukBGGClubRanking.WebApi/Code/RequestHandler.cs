@@ -1,5 +1,7 @@
-﻿using ZhukBGGClubRanking.Core;
+﻿using System.Data.Common;
+using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
+using ZhukBGGClubRanking.WebApi.DB;
 
 namespace ZhukBGGClubRanking.WebApi
 {
@@ -10,9 +12,9 @@ namespace ZhukBGGClubRanking.WebApi
             return BGGCollection.LoadFromFile();
         }
 
-        public static List<Game> GetGamesCollection()
+        public static List<Game> GetGamesCollection(List<User> users)
         {
-            return DBGame.GetGamesCollection();
+            return DBGame.GetGamesCollection(users);
         }
 
         public static List<UsersRating> GetUsersActualRatings()
@@ -35,37 +37,74 @@ namespace ZhukBGGClubRanking.WebApi
             DBUser.CreateNewUser(newUser);
         }
 
-        public static void InitiateDB()
+        public static void InitiateDB(User currentUser)
         {
             //1. получаем актуальную версию collection.xml с сайта BGG и обновляем collection.xml в club_collection\collection.xml
             BGGCollection.LoadFromUrlToFile();
 
-
-            //2. очищаем таблицы БД: rating_items_history, rating_items, users_ratings, games, users (кроме записи 1 - admin), ...
-            //TODO!!!
-
-            //3. создаем пользователей в users по названиям файлов в lists\
-            //TODO!!!
-
-            //4. создаем игры в games из club_collection\collection.xml (с использованием информации из translate\collection.csv)
-            //TODO!!!
+            //2. читаем translate\collection.csv
             var translateFile = GamesNamesTranslateFile.LoadFromFile();
+
+            //3. очищаем таблицы БД
+            DBCommon.ClearDB();
+
+            //4. создаем пользователей в users по названиям файлов в lists\
+            foreach (var userName in UserRatingFile.GetFilesNamesWithoutExt())
+            {
+                var user = new User();
+                user.Name = user.FullName = user.Password = userName;
+                user.EMail = string.Format("{0}@yandex.ru", userName);
+                user.IsActive = true;
+                user.CreateTime = DateTime.Now;
+                user.Role = Role.UserRole;
+                user.CreateUserId = currentUser.Id;
+                user.HashPassword();
+                DBUser.CreateNewUser(user);
+            }
+
+            //5. получаем созданных пользователей
+            var users = DBUser.GetUsers();
+
+            //6. читаем игры в games из club_collection\collection.xml (с использованием информации из translate\collection.csv)
             var bggColl = BGGCollection.LoadFromFile();
             if (translateFile != null)
             {
                 bggColl.ApplyTranslation(translateFile.GamesTranslate);
-                bggColl.SetParents();
+                //bggColl.SetParents();
             }
+
+            //7. созданием игры в БД с использованием инфо пользователей из БД
+            List<Game> games = new List<Game>();
             foreach (var bggGame in bggColl.Items)
             {
-                var game = bggGame.CreateGame();
-                DBGame.SaveGame(game);
+                var game = bggGame.CreateGame(users, currentUser);
+                games.Add(game);
             }
 
-            //5. создаем рейтинги (rating_items, users_ratings) из файлов в lists\
-            //TODO!!!
+
+
+            foreach (var game in games)
+            {
+                
+                DBGame.SaveGame(game, false);
+            }
+
+            
+            foreach (var game in games)
+            {
+                game.SetParents(games);
+                //TODO!!! setParents
+                DBGame.UpdateParent(game);
+            }
+
+
+            //8. создаем рейтинги (rating_items, users_ratings) из файлов в lists\
+            var ratings = UserRatingFile.GetUsersRatingsFromListsFolder(users, games);
+            foreach (var userRating in ratings)
+            {
+                userRating.ReCalculateRatingAfterRemoveItems();
+                DBUsersRating.SaveRating(userRating);
+            }
         }
-
-
     }
 }

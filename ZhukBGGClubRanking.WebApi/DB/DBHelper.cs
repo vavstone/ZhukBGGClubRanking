@@ -22,7 +22,7 @@ namespace ZhukBGGClubRanking.WebApi.Core
 
         public static void CreateParameter(this DbCommand command, DbType type, string name, object value)
         {
-            if (value == null && command.CommandType == CommandType.Text)
+            if (value == null && (command.CommandType == CommandType.Text))
             {
                 command.CommandText = command.CommandText.Replace("@" + name, "null");
                 return;

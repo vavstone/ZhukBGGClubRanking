@@ -107,7 +107,7 @@ namespace ZhukBGGClubRanking.Core.Model
                         {
                             var gameInOtherRatings =
                                 selectedRatings.Select(c => c.Rating.RatingItems)
-                                    .All(c => c.Any(c1 => c1.Id == rating.Id));
+                                    .All(c => c.Any(c1 => c1.GameId == rating.GameId));
                             if (gameInOtherRatings)
                                 newRating.Add(rating);
                         }

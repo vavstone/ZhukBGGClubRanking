@@ -60,7 +60,7 @@ namespace ZhukBGGClubRanking.WinApp
 
         void LoadAdminElements()
         {
-            if (CurrentUser.Role == "admin" && !adminElementsLoaded)
+            if (CurrentUser.Role == Role.AdminRole && !adminElementsLoaded)
             {
                 var adminFunctionsButton = new ToolStripMenuItem("Администрирование");
                 var addNewUserMenu = new ToolStripMenuItem("Добавить нового пользователя");

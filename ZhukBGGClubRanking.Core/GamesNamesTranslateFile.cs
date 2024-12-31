@@ -21,7 +21,7 @@ namespace ZhukBGGClubRanking.Core
             var result = new GamesNamesTranslateFile();
             var list = new List<GamesNamesTranslate>();
             
-            var csvArray = CsvReader.ReadFromText(System.IO.File.ReadAllText(CoreSettings.GamesNamesTranslateFilePath));
+            var csvArray = CsvReader.ReadFromText(System.IO.File.ReadAllText(CoreSettings.InitiateGamesNamesTranslateFilePath));
             foreach (var arItem in csvArray.OrderBy(c => c.Values[0]))
             {
                 var gr = new GamesNamesTranslate();

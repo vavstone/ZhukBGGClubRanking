@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Xml.Serialization;
+using ZhukBGGClubRanking.Core.Model;
 
 namespace ZhukBGGClubRanking.Core
 {
@@ -66,6 +67,20 @@ namespace ZhukBGGClubRanking.Core
 
             public ItemElement Parent { get; set; }
 
+            public List<string> OwnersList
+            {
+                get
+                {
+                    var res = new List<string>();
+                    if (!string.IsNullOrWhiteSpace(Comment))
+                    {
+                        var ar = Comment.Split('+');
+                        res = ar.Select(c=>c.Trim()).ToList();
+                    }
+                    return res;
+                }
+            }
+
             public ItemElement()
             {
                 Stats = new StatsElement();
@@ -127,8 +142,9 @@ namespace ZhukBGGClubRanking.Core
             }
 
 
-            public Game CreateGame()
+            public Game CreateGame(List<User> users, User currentUser)
             {
+                var currentTime = DateTime.Now;
                 var game = new Game();
                 game.NameRus = NameRus;
                 game.NameEng = game.NameBGG = Name;
@@ -137,6 +153,22 @@ namespace ZhukBGGClubRanking.Core
                 game.ImageBGG = Image;
                 game.YearPublished = YearPublished;
                 game.TeseraKey = TeseraKey;
+                game.CreateTime = currentTime;
+                game.CreateUserId = currentUser.Id;
+                game.IsActual = true;
+                game.ParentEngName = ParentName;
+                foreach(var owner in OwnersList)
+                {
+                    var user = users.FirstOrDefault(c => c.Name.ToUpper() == owner.ToUpper());
+                    if (user!=null)
+                    {
+                        var gameOwner = new GameOwner();
+                        gameOwner.UserId = user.Id;
+                        gameOwner.UserName = user.Name;
+                        gameOwner.CreateTime = currentTime;
+                        game.Owners.Add(gameOwner);
+                    }
+                }
                 return game;
             }
         }
@@ -144,10 +176,10 @@ namespace ZhukBGGClubRanking.Core
         public static BGGCollection LoadFromFile()
         {
 
-            if (File.Exists(CoreSettings.CommonCollectionFilePath))
+            if (File.Exists(CoreSettings.InitiateCommonCollectionFilePath))
             {
                 var serializer = new XmlSerializer(typeof(BGGCollection));
-                using (StreamReader reader = new StreamReader(CoreSettings.CommonCollectionFilePath))
+                using (StreamReader reader = new StreamReader(CoreSettings.InitiateCommonCollectionFilePath))
                 {
                     var res = (BGGCollection)serializer.Deserialize(reader);
                     return res;
@@ -159,7 +191,7 @@ namespace ZhukBGGClubRanking.Core
         public static void LoadFromUrlToFile()
         {
             var url = CoreSettings.BGGCollectionUrl;
-            var fileFullName = CoreSettings.CommonCollectionFilePath;
+            var fileFullName = CoreSettings.InitiateCommonCollectionFilePath;
             using (WebClient webClient = new WebClient())
             {
                 if (File.Exists(fileFullName))
@@ -197,18 +229,20 @@ namespace ZhukBGGClubRanking.Core
             }
         }
 
-        public void SetParents()
-        {
-            foreach (var item in Items)
-            {
-                if (!string.IsNullOrWhiteSpace(item.ParentName))
-                {
-                    var parent = GetItemByName(item.ParentName);
-                    if (parent != null)
-                        item.Parent = parent;
-                }
-            }
-        }
+        //public void SetParents()
+        //{
+        //    foreach (var item in Items)
+        //    {
+        //        if (!string.IsNullOrWhiteSpace(item.ParentName))
+        //        {
+        //            var parent = GetItemByName(item.ParentName);
+        //            if (parent != null)
+        //                item.Parent = parent;
+        //        }
+        //    }
+        //}
+
+        
 
 
     }

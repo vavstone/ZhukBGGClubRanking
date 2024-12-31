@@ -101,7 +101,8 @@ app.MapGet("/api/getusers", [Authorize] (HttpContext context) =>
 
 app.MapGet("/api/getgamescollection", [Authorize] (HttpContext context) =>
 {
-    var coll = RequestHandler.GetGamesCollection();
+    var users = DBUser.GetUsers();
+    var coll = RequestHandler.GetGamesCollection(users);
     return coll;
 }).WithName("GetGamesCollection");
 
@@ -123,7 +124,7 @@ app.MapPost("/api/saveusersrating", [Authorize] (List<RatingItem> rating, HttpCo
 app.MapPost("/api/createuserbyadmin", [Authorize] (User newUser, HttpContext context) => {
     var userIdentity = context.User.Identity;
     var activeUser = DBUser.GetUserByName(userIdentity.Name);
-    if (activeUser == null || !activeUser.IsActive || activeUser.Role != "admin")
+    if (activeUser == null || !activeUser.IsActive || activeUser.Role != Role.AdminRole)
     {
         context.Response.StatusCode = StatusCodes.Status403Forbidden;
         return;
@@ -139,7 +140,8 @@ app.MapPost("/api/initiatedb", /*[Authorize]*/ (HttpContext context) => {
     //    context.Response.StatusCode = StatusCodes.Status403Forbidden;
     //    return;
     //}
-    RequestHandler.InitiateDB();
+    var currentUser = new User { Id = 1 };
+    RequestHandler.InitiateDB(currentUser);
 }).WithName("InitiateDB");
 
 

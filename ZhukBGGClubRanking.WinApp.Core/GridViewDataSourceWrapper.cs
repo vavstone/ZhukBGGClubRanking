@@ -53,10 +53,11 @@ namespace ZhukBGGClubRanking.WinApp
             res.GameEng = game.NameEng;
             res.GameRus = game.NameRus;
             res.BGGObjectId = game.BGGObjectId;
-            res.BGGComments = game.BGGComments;
+            res.BGGComments = game.OwnersString;
             //res.ParentGameEng = gamesCollection
             res.Rating = ratingItem.RatingOrder;
             res.TeseraKey = game.TeseraKey;
+            res.CompliancePercent = ratingItem.CompliancePercent;
             //foreach (var rating in ratings)
             //{
             //    var allRatingItems = rating.Rating.RatingItems.Where(c => c.GameId == game.Id).OrderBy(c => c.RatingOrder)

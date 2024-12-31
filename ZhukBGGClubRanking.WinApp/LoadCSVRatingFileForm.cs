@@ -132,7 +132,7 @@ namespace ZhukBGGClubRanking.WinApp
             //DEBUG!!!
             //var filename = "c:\\TEMP\\2024-12-30\\ZhukBGGClubRanking\\lists\\VAV.csv";
             lblInfo.Text = "Выбран файл " + filename;
-            var csvRating = CSVHelper.GetRatingItemsFromCSVFile(filename, Cache.Games);
+            var csvRating = UserRatingFile.GetRatingItemsFromCSVFile(filename, Cache.Games);
             LoadedFromCSVRating = csvRating;
             FillCSVDataGrid(csvRating);
         }
