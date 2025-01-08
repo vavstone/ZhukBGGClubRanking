@@ -54,12 +54,22 @@ namespace ZhukBGGClubRanking.WinApp
             if (CurrentUser.Role == Role.AdminRole && !adminElementsLoaded)
             {
                 var adminFunctionsButton = new ToolStripMenuItem("Администрирование");
-                var addNewUserMenu = new ToolStripMenuItem("Добавить нового пользователя");
+                var addNewUserMenu = new ToolStripMenuItem("Управление пользователями");
+                var updateFromTeseraAndBGGMenu = new ToolStripMenuItem("Обновление данных с tesera и bgg");
                 addNewUserMenu.Click += AddNewUserMenu_Click;
+                updateFromTeseraAndBGGMenu.Click += UpdateFromTeseraAndBGGMenu_Click;
                 adminFunctionsButton.DropDownItems.Add(addNewUserMenu);
+                adminFunctionsButton.DropDownItems.Add(updateFromTeseraAndBGGMenu);
                 menuStrip1.Items.Add(adminFunctionsButton);
                 adminElementsLoaded = true;
             }
+        }
+
+        private void UpdateFromTeseraAndBGGMenu_Click(object sender, EventArgs e)
+        {
+            var updateFromTeseraAndBGGForm = new UpdateFromTeseraAndBGGForm();
+            updateFromTeseraAndBGGForm.Settings = UserSettings.Hosting;
+            updateFromTeseraAndBGGForm.ShowDialog(this);
         }
 
         private void AddNewUserMenu_Click(object sender, EventArgs e)

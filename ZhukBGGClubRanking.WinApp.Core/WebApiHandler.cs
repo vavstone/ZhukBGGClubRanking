@@ -17,7 +17,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
 {
     public static class WebApiHandler
     {
-        static HttpClient GetClientWithAuth(string url, string login, string password, string token=null)
+        public static HttpClient GetClientWithAuth(string url, string login, string password, string token=null, int timeOutInSeconds = 0)
         {
             NetworkCredential credentials = new NetworkCredential(login, password);
             HttpClientHandler handler = new HttpClientHandler();
@@ -26,6 +26,8 @@ namespace ZhukBGGClubRanking.WinApp.Core
                 handler.Credentials = credentials;
             }
             var client = new HttpClient(handler);
+            if (timeOutInSeconds > 0)
+                client.Timeout = TimeSpan.FromSeconds(timeOutInSeconds);
             client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -73,6 +75,42 @@ namespace ZhukBGGClubRanking.WinApp.Core
             return await client.PostAsync("api/saveusersrating", content);
         }
 
+        public static async Task<HttpResponseMessage> ClearTeseraRawTable(string url, string login, string password, string token)
+        {
+            var client = GetClientWithAuth(url, login, password, token);
+            return await client.PostAsync("api/clearteserarawtable",null);
+        }
+
+        public static async Task<HttpResponseMessage> ClearBGGRawTable(string url, string login, string password, string token)
+        {
+            var client = GetClientWithAuth(url, login, password, token);
+            return await client.PostAsync("api/clearbggrawtable", null);
+        }
+
+        public static async Task<HttpResponseMessage> ClearBGGTeseraRawTable(string url, string login, string password, string token)
+        {
+            var client = GetClientWithAuth(url, login, password, token);
+            return await client.PostAsync("api/clearbggteserarawtable", null);
+        }
+
+        public static async Task<HttpResponseMessage> SaveTeseraGamesRawInfo(string url, string login, string password, string token/*, List<TeseraRawGame> teseraGames*/)
+        {
+            var client = GetClientWithAuth(url, login, password, token,5000);
+            return await client.PostAsync("api/saveteseragamesrawinfo", null);
+        }
+
+        public static async Task<HttpResponseMessage> SaveBGGAndTeseraGamesRawInfo(string url, string login, string password, string token)
+        {
+            var client = GetClientWithAuth(url, login, password, token, 1000);
+            //HttpContent content = JsonContent.Create(teseraGames);
+            return await client.PostAsync("api/savebggandteseragamesrawinfo", null);
+        }
+
+        public static async Task<HttpResponseMessage> GetSimpleWebResponse(string apiUrl, string addUrl)
+        {
+            var client = GetClientWithAuth(apiUrl, null, null);
+            return await client.GetAsync(addUrl);
+        }
     }
 }
 

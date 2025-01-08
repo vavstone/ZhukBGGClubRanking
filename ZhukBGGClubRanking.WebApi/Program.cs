@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WebApi;
+using ZhukBGGClubRanking.WebApi.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,7 +79,7 @@ app.MapPost("/api/login", (LoginPrm login) =>
         issuer: AuthOptions.ISSUER,
         audience: AuthOptions.AUDIENCE,
         claims: claims,
-        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(5)),//нужно вычитать 5 минут (значение по умолчанию)
+        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(60)),//нужно вычитать 5 минут (значение по умолчанию)
         signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
     var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
@@ -122,13 +123,8 @@ app.MapPost("/api/saveusersrating", [Authorize] (List<RatingItem> rating, HttpCo
 }).WithName("SaveUsersRating");
 
 app.MapPost("/api/createuserbyadmin", [Authorize] (User newUser, HttpContext context) => {
-    var userIdentity = context.User.Identity;
-    var activeUser = DBUser.GetUserByName(userIdentity.Name);
-    if (activeUser == null || !activeUser.IsActive || activeUser.Role != Role.AdminRole)
-    {
-        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+    if (!AuthUtils.IsUserAdmin(context))
         return;
-    }
     RequestHandler.CreateNewUser(newUser);
 }).WithName("CreateUserByAdmin");
 
@@ -156,6 +152,42 @@ app.MapPost("/api/saveratingstoCSVfiles", /*[Authorize]*/ (HttpContext context) 
 }).WithName("SaveRatingsToCSVFiles");
 
 
+app.MapPost("/api/clearteserarawtable", [Authorize] (HttpContext context) => {
+    if (!AuthUtils.IsUserAdmin(context))
+        return;
+    RequestHandler.ClearTeseraRawTable();
+}).WithName("ClearTeseraRawTable");
+
+app.MapPost("/api/clearbggrawtable", [Authorize] (HttpContext context) => {
+    if (!AuthUtils.IsUserAdmin(context))
+        return;
+    RequestHandler.ClearBGGRawTable();
+}).WithName("ClearBGGRawTable");
+
+app.MapPost("/api/clearbggteserarawtable", [Authorize] (HttpContext context) => {
+    if (!AuthUtils.IsUserAdmin(context))
+        return;
+    RequestHandler.ClearBGGTeseraRawTable();
+}).WithName("ClearBGGTeseraRawTable");
+
+//app.MapPost("/api/saveteseragamesrawinfo", [Authorize] (List<TeseraRawGame> teseraGames, HttpContext context) => {
+//    if (!AuthUtils.IsUserAdmin(context))
+//        return;
+//    RequestHandler.SaveTeseraRawInfoGames(teseraGames);
+//}).WithName("SaveTeseraGamesRawInfo");
+
+app.MapPost("/api/saveteseragamesrawinfo", [Authorize] (HttpContext context) => {
+    if (!AuthUtils.IsUserAdmin(context))
+        return;
+    var teseraGames = TeseraRawGameParseWrapper.LoadGamesFromJsonFiles();
+    RequestHandler.SaveTeseraRawInfoGames(teseraGames);
+}).WithName("SaveTeseraGamesRawInfo");
+
+app.MapPost("/api/savebggandteseragamesrawinfo", [Authorize] (HttpContext context) => {
+    if (!AuthUtils.IsUserAdmin(context))
+        return;
+    RequestHandler.SaveBGGAndTeseraRawGames();
+}).WithName("SaveBGGAndTeseraGamesRawInfo");
 
 //app.MapPost("/api/updatebggcoll", [Authorize] (HttpContext context) => {
 

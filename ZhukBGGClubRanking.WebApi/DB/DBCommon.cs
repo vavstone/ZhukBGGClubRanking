@@ -55,5 +55,89 @@ namespace ZhukBGGClubRanking.WebApi.DB
                 throw;
             }
         }
+
+        public static void ClearTeseraRawTable()
+        {
+            try
+            {
+                using (var con = DBHelper.CreateConnection())
+                {
+                    con.Open();
+                    using (var cmd = con.CreateCommand())
+                    {
+                        try
+                        {
+                            ClearTable(cmd, "tesera_raw_info", 0);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.WriteError(ex);
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteError(ex);
+                throw;
+            }
+        }
+
+        public static void ClearBGGRawTable()
+        {
+            try
+            {
+                using (var con = DBHelper.CreateConnection())
+                {
+                    con.Open();
+                    using (var cmd = con.CreateCommand())
+                    {
+                        try
+                        {
+                            ClearTable(cmd, "bgg_raw_info", 0);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.WriteError(ex);
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteError(ex);
+                throw;
+            }
+        }
+
+        public static void ClearBGGTeseraRawTable()
+        {
+            try
+            {
+                using (var con = DBHelper.CreateConnection())
+                {
+                    con.Open();
+                    using (var cmd = con.CreateCommand())
+                    {
+                        try
+                        {
+                            ClearTable(cmd, "bgg_tesera_raw_info", 0);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.WriteError(ex);
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteError(ex);
+                throw;
+            }
+        }
     }
 }

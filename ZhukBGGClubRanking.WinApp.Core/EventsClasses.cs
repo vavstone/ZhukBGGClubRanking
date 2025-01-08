@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
 
 namespace ZhukBGGClubRanking.WinApp.Core
 {
 
+    
     public class WebPrmForBW
     {
         public HostingSettings HostingSettings { get; set; } = new HostingSettings();
@@ -63,5 +65,46 @@ namespace ZhukBGGClubRanking.WinApp.Core
     public class UploadRatingPrmForBW : WebPrmForBW
     {
         public List<RatingItem> RatingItems { get; set; }
+    }
+
+
+    public class WebPrmGetTeseraGames: DoWorkEventArgs
+    {
+        public WebPrmGetTeseraGames(List<TeseraRawGame> argument) : base(argument)
+        {
+            games = argument;
+        }
+
+        public List<TeseraRawGame> games = new List<TeseraRawGame>();
+
+        public string Url { get; set; }
+        public int Offset { get; set; }
+        public int Limit { get; set; }
+        public int PortionsToGet { get; set; }
+    }
+
+
+
+    public class WebDataTeseraGamesProgressChangedEventArgs : ProgressChangedEventArgs
+    {
+        public WebDataTeseraGamesProgressChangedEventArgs(int progressPercentage, TeseraRawInfoData teseraRawInfoData) : 
+            base(progressPercentage, teseraRawInfoData)
+        {
+            PortionOfGames = teseraRawInfoData.GamesPortion;
+            RawJson = teseraRawInfoData.RawJson;
+        }
+
+        public List<TeseraRawGame> PortionOfGames { get; set; }
+        public string RawJson { get; set; }
+    }
+
+    public class WebDataTeseraGamesResult : WebDataResultForBW
+    {
+        public List<TeseraRawGame> Games { get; set; }
+    }
+
+    public class WebDataTeseraGamesResultEventArgs : WebDataResultForBW
+    {
+        public List<TeseraRawGame> Games { get; set; }
     }
 }

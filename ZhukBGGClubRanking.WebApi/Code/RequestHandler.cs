@@ -1,5 +1,6 @@
 ﻿using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
+using ZhukBGGClubRanking.WebApi.Core;
 using ZhukBGGClubRanking.WebApi.DB;
 
 namespace ZhukBGGClubRanking.WebApi
@@ -24,6 +25,12 @@ namespace ZhukBGGClubRanking.WebApi
         public static void SaveUsersRating(UsersRating rating)
         {
             DBUsersRating.SaveRating(rating);
+        }
+
+        public static void SaveTeseraRawInfoGames(List<TeseraRawGame> teseraGames)
+        {
+            foreach (var item in teseraGames)
+                DBTeseraRawGame.SaveTeseraRawGame(item);
         }
 
         public static List<User> GetUsers()
@@ -106,6 +113,30 @@ namespace ZhukBGGClubRanking.WebApi
                 userRating.ReCalculateRatingAfterRemoveItems();
                 DBUsersRating.SaveRating(userRating);
             }
+        }
+
+        public static void ClearTeseraRawTable()
+        {
+            DBCommon.ClearTeseraRawTable();
+        }
+        public static void ClearBGGRawTable()
+        {
+            DBCommon.ClearBGGRawTable();
+        }
+        public static void ClearBGGTeseraRawTable()
+        {
+            DBCommon.ClearBGGTeseraRawTable();
+        }
+
+
+        public static void SaveBGGAndTeseraRawGames()
+        {
+            var bggGames = DBBGGRawGame.GetGames();
+            var teseraGames = DBTeseraRawGame.GetGames();
+            var games = TeseraBGGRawGame.GetMergedTeseraBGGInfoList(bggGames, teseraGames);
+            TeseraBGGRawGame.SetParentsAndIsAddition(games);
+            DBTeseraBGGRawGame.SaveGames(games);
+
         }
     }
 }

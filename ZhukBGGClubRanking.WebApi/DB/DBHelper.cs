@@ -20,15 +20,18 @@ namespace ZhukBGGClubRanking.WebApi.Core
 
         public static void CreateParameter(this DbCommand command, DbType type, string name, object value)
         {
-            if (value == null && (command.CommandType == CommandType.Text))
-            {
-                command.CommandText = command.CommandText.Replace("@" + name, "null");
-                return;
-            }
+            //if (value == null && (command.CommandType == CommandType.Text))
+            //{
+            //    command.CommandText = command.CommandText.Replace("@" + name, "null");
+            //    return;
+            //}
             var prm = command.CreateParameter();
-            prm.DbType = type;
             prm.ParameterName = name;
-            prm.Value = value;
+            prm.DbType = type;
+            if (value == null)
+                prm.Value = DBNull.Value;
+            else
+                prm.Value = value;
             command.Parameters.Add(prm);
         }
 

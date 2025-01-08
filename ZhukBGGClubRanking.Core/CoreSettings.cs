@@ -32,7 +32,10 @@ namespace ZhukBGGClubRanking.Core
         {
             get { return Path.Combine(AppFilesDir, "Export"); }
         }
-        
+        public static string OuterRawInfoFilesDir
+        {
+            get { return Path.Combine(AppFilesDir, "OuterRawInfo"); }
+        }
 
         public static string BGGCardPrefixUrl
         {
