@@ -77,15 +77,15 @@ namespace ZhukBGGClubRanking.Core.Model
                 if (TeseraInfo != null && BGGInfo != null)
                 {
                     if (TeseraInfo.Title.ToUpper() == BGGInfo.Name.ToUpper())
-                        return String.Format("{0}{1}", BGGInfo.Name, BGGInfo.YearPublished == null ? "" : " " + BGGInfo.YearPublished.Value);
+                        return String.Format("{0}{1}", BGGInfo.Name, BGGInfo.YearPublished == null || BGGInfo.YearPublished.Value == 0 ? "" : " " + BGGInfo.YearPublished.Value);
                     return String.Format("{0} <{1}>{2}", TeseraInfo.Title, BGGInfo.Name,
-                        BGGInfo.YearPublished == null ? "" : " " + BGGInfo.YearPublished.Value);
+                        BGGInfo.YearPublished == null || BGGInfo.YearPublished.Value==0 ? "" : " " + BGGInfo.YearPublished.Value);
                 }
 
                 if (TeseraInfo != null)
-                    return String.Format("{0}{1}", TeseraInfo.Title, TeseraInfo.Year == null ? "" : " " + TeseraInfo.Year.Value);
+                    return String.Format("{0}{1}", TeseraInfo.Title, TeseraInfo.Year == null || TeseraInfo.Year.Value == 0 ? "" : " " + TeseraInfo.Year.Value);
                 if (BGGInfo != null)
-                    return String.Format("{0}{1}", BGGInfo.Name, BGGInfo.YearPublished == null ? "" : " " + BGGInfo.YearPublished.Value);
+                    return String.Format("{0}{1}", BGGInfo.Name, BGGInfo.YearPublished == null || BGGInfo.YearPublished.Value == 0 ? "" : " " + BGGInfo.YearPublished.Value);
                 return "";
             }
         }

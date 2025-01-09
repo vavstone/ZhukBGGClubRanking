@@ -9,6 +9,26 @@ namespace ZhukBGGClubRanking.WinApp.Core
             get { return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location); }
         }
 
+        public static string CacheDir
+        {
+            get { return Path.Combine(RootDir, "cache"); }
+        }
+
+        public static string CacheImagesDir
+        {
+            get { return Path.Combine(CacheDir, "img"); }
+        }
+
+        public static string CacheImagesTeseraPicDir
+        {
+            get { return Path.Combine(CacheImagesDir, "tesera_pic"); }
+        }
+
+        public static string CacheImagesBGGPicDir
+        {
+            get { return Path.Combine(CacheImagesDir, "bgg_pic"); }
+        }
+
         //public static string ListsDir
         //{
         //    get { return Path.Combine(RootDir, "lists"); }

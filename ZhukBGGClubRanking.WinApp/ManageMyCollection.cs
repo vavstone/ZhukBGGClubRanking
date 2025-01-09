@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BoardGamer.BoardGameGeek.BoardGameGeekXmlApi2;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -65,7 +67,7 @@ namespace ZhukBGGClubRanking.WinApp
             var gamesList = grid.DataSource as List<Game>;
             if (e.ColumnIndex == 0)
             {
-                if (dgvMyCollection.Columns[e.ColumnIndex] is DataGridViewLinkColumn && e.RowIndex != -1)
+                if (dgvMyCollection.Columns[e.ColumnIndex] is DataGridViewLinkColumn && e.RowIndex >= 0)
                 {
 
                     var game = gamesList[e.RowIndex];
@@ -89,7 +91,25 @@ namespace ZhukBGGClubRanking.WinApp
         {
             CreateGridColumns();
             dgvMyCollection.CellContentClick += Grid_CellContentClick;
+            dgvMyCollection.CellClick += DgvMyCollection_CellClick;
             //grid.ColumnHeaderMouseClick += Grid_ColumnHeaderMouseClick;
+        }
+
+        private void DgvMyCollection_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var grid = sender as DataGridView;
+            var gamesList = grid.DataSource as List<Game>;
+            if (e.ColumnIndex == 2 && e.RowIndex >= 0)
+            {
+                var game = gamesList[e.RowIndex];
+                var message = string.Format("Вы действительно хотите удалить игру {0} из своей коллекции?",
+                    game);
+                if (MessageBox.Show(message, "Подтверждение удаления", MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                {
+                    MessageBox.Show("Здесь произойдут действия по удалению игры");
+                }
+            }
         }
 
         public void AddTextColumn(DataGridView grid, string caption, string dataPropertyName, int width)
@@ -113,11 +133,21 @@ namespace ZhukBGGClubRanking.WinApp
             col.LinkColor = DefaultForeColor;
             grid.Columns.Add(col);
         }
+        public void AddActionColumn(DataGridView grid, string caption, string buttonText, int width)
+        {
+            var col = new DataGridViewButtonColumn();
+            col.Width = width;
+            col.HeaderText = caption;
+            col.Text = buttonText;
+            col.UseColumnTextForButtonValue = true;
+            grid.Columns.Add(col);
+        }
 
         public void CreateGridColumns()
         {
-            AddLinkColumn(dgvMyCollection, "Название", "Name", 400);
-            AddTextColumn(dgvMyCollection, "Владеют", "OwnersString", 200);
+            AddLinkColumn(dgvMyCollection, "Название", "Name", 600);
+            AddTextColumn(dgvMyCollection, "Владеют", "OwnersString", 334);
+            AddActionColumn(dgvMyCollection, "Действия", "Удалить игру", 100);
         }
 
         #endregion
@@ -184,7 +214,7 @@ namespace ZhukBGGClubRanking.WinApp
         private void cbSelectRawGame_SelectedIndexChanged(object sender, EventArgs e)
         {
             cbxSearchNeedUpdate = false;
-            UpdateNewGameInfoBlock();
+            
         }
 
         //Update data only when the user (not program) change something
@@ -213,26 +243,30 @@ namespace ZhukBGGClubRanking.WinApp
         #endregion
 
 
-        void UpdateNewGameInfoBlock()
+        async void UpdateNewGameInfoBlock()
         {
+            picBoxGame.Image = null;
+            lblShortDesctiption.Text = "Краткое описание:";
+            lblIsStandalone.Text = "Является самостоятельной игрой (не дополнением):";
             var selectedGame = cbSelectRawGame.SelectedItem as TeseraBGGRawGame;
             if (selectedGame != null)
             {
+                
                 lblNewGameFullName.Text = selectedGame.ToString();
                 lblNewGameFullName.Tag = selectedGame;
-                var picUrl = "";
-                if (selectedGame.TeseraInfo != null && !string.IsNullOrWhiteSpace(selectedGame.TeseraInfo.PhotoUrl))
-                    picUrl = selectedGame.TeseraInfo.PhotoUrl;
-                if (!string.IsNullOrWhiteSpace(picUrl))
+                lblIsStandalone.Text += selectedGame.IsAddition ? " НЕТ" : " ДА";
+                if (selectedGame.TeseraInfo != null)
                 {
-                    //picUrl = "http://www.gravatar.com/avatar/6810d91caff032b202c50701dd3af745?d=identicon&r=PG";
-                    //picBoxGame.ImageLocation = picUrl;
-                    var request = WebRequest.Create(picUrl);
-                    using (var response = request.GetResponse())
-                    using (var stream = response.GetResponseStream())
-                    {
-                        picBoxGame.Image = Bitmap.FromStream(stream,false,false);
-                    }
+                    lblShortDesctiption.Text = selectedGame.TeseraInfo.DescriptionShort;
+                }
+                if (selectedGame.BGGInfo != null)
+                {
+                    var bgg = new BoardGameGeekXmlApi2Client(new HttpClient());
+                    var request = new ThingRequest(new[] { selectedGame.BGGInfo.Id });
+                    var response = await bgg.GetThingAsync(request);
+                    var item = response.Result.FirstOrDefault();
+                    if (item != null)
+                        picBoxGame.ImageLocation = item.Image;
                 }
             }
         }
@@ -255,6 +289,54 @@ namespace ZhukBGGClubRanking.WinApp
             {
                 ProcessStartInfo sInfo = new ProcessStartInfo(url);
                 Process.Start(sInfo);
+            }
+        }
+
+        private void lblShortDesctiption_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbSelectRawGame_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            UpdateNewGameInfoBlock();
+        }
+
+        private void btAddGame_Click(object sender, EventArgs e)
+        {
+            var selectedGame = cbSelectRawGame.SelectedItem as TeseraBGGRawGame;
+            if (selectedGame != null)
+            {
+                var gameIsAlreadyInMyCollection = false;
+                if (selectedGame.BGGInfo != null)
+                {
+                    gameIsAlreadyInMyCollection = Cache.Games
+                        .Any(c => c.BGGObjectId == selectedGame.BGGInfo.Id && c.Owners.Any(c1 => c1.UserId == CurrentUser.Id));
+                }
+                //TODO получать tesera_id
+                if (!gameIsAlreadyInMyCollection && selectedGame.TeseraInfo!=null)
+                {
+                    gameIsAlreadyInMyCollection = Cache.Games
+                        .Any(c => c.TeseraKey == selectedGame.TeseraInfo.Alias && c.Owners.Any(c1 => c1.UserId == CurrentUser.Id));
+                }
+                if (gameIsAlreadyInMyCollection)
+                {
+                    MessageBox.Show("Игра уже присутствует в вашей коллекции");
+                }
+                else
+                {
+                    var message = string.Format("Вы действительно хотите добавить игру {0} в свою коллекцию?",
+                        selectedGame);
+                    if (MessageBox.Show(message, "Подтверждение удаления", MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                    {
+                        MessageBox.Show("Здесь произойдут действия по добавлению игры");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выберите игру для добавления из выпадающего списка выше");
             }
         }
     }

@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label1.Text" xml:space="preserve">
+    <value>* Источником сведений о всех играх в списке выше являются сайты BGG и Tesera. Для того, чтобы добавить игру в свою коллекцию в данной форме, необходимо выбрать какой-то вариант из выпадающего списка (варианты появляются после ввода по крайней мере 3-х символов)</value>
+  </data>
 </root>

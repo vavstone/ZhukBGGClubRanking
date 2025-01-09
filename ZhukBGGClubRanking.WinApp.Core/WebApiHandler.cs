@@ -117,6 +117,12 @@ namespace ZhukBGGClubRanking.WinApp.Core
             var client = GetClientWithAuth(apiUrl, null, null);
             return await client.GetAsync(addUrl);
         }
+
+        public static async Task<HttpResponseMessage> GetGameImage(string url, string login, string password, string token, int bggId)
+        {
+            var client = GetClientWithAuth(url, login, password, token);
+            return await client.GetAsync("api/getgameimage?bggid" + bggId);
+        }
     }
 }
 

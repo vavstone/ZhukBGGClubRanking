@@ -141,7 +141,7 @@ namespace ZhukBGGClubRanking.WebApi.DB
                     con.Open();
                     using (var cmd = con.CreateCommand())
                     {
-                        cmd.CommandText = "select id, id_bgg, name_bgg, yearpublished_bgg, id_tesera, title_tesera, tesera_id_tesera, alias_tesera, photo_url_tesera, year_tesera, is_addition, parent_id from bgg_tesera_raw_info";
+                        cmd.CommandText = "select id, id_bgg, name_bgg, yearpublished_bgg, id_tesera, title_tesera, tesera_id_tesera, alias_tesera, year_tesera, description_short_tesera, is_addition, parent_id from bgg_tesera_raw_info";
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -164,8 +164,9 @@ namespace ZhukBGGClubRanking.WebApi.DB
                                     item.TeseraInfo.Title = reader.GetFieldValueNullSafe<string>("title_tesera");
                                     item.TeseraInfo.TeseraId = reader.GetFieldValueNullSafe<int?>("tesera_id_tesera");
                                     item.TeseraInfo.Alias = reader.GetFieldValueNullSafe<string>("alias_tesera");
-                                    item.TeseraInfo.PhotoUrl = reader.GetFieldValueNullSafe<string>("photo_url_tesera");
+                                    //item.TeseraInfo.PhotoUrl = reader.GetFieldValueNullSafe<string>("photo_url_tesera");
                                     item.TeseraInfo.Year = reader.GetFieldValueNullSafe<int?>("year_tesera");
+                                    item.TeseraInfo.DescriptionShort = reader.GetFieldValueNullSafe<string>("description_short_tesera");
                                 }
                                 item.IsAddition = reader.GetFieldValueNullSafe<bool>("is_addition");
                                 item.ParentId = reader.GetFieldValueNullSafe<int>("parent_id");
