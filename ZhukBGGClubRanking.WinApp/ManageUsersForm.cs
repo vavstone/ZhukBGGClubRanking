@@ -231,6 +231,11 @@ namespace ZhukBGGClubRanking.WinApp
             Cache.UsersLoaded += UsersLoaded;
             Cache.LoadUsers(UserSettings.Hosting);
         }
+
+        private void ManageUsersForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Cache.UsersLoaded -= UsersLoaded;
+        }
     }
 
 

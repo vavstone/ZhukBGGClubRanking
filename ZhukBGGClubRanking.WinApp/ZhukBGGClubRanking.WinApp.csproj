@@ -79,6 +79,12 @@
     <Compile Include="LoadCSVRatingFileForm.Designer.cs">
       <DependentUpon>LoadCSVRatingFileForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ManageMyCollection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManageMyCollection.Designer.cs">
+      <DependentUpon>ManageMyCollection.cs</DependentUpon>
+    </Compile>
     <Compile Include="ManageUsersForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +126,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LoadCSVRatingFileForm.resx">
       <DependentUpon>LoadCSVRatingFileForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManageMyCollection.resx">
+      <DependentUpon>ManageMyCollection.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ManageUsersForm.resx">
       <DependentUpon>ManageUsersForm.cs</DependentUpon>

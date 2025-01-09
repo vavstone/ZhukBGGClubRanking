@@ -50,10 +50,11 @@
             this.управлениеРейтингомToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuUploadCSVFile = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridView1 = new DataGridViewCustom();
             this.panel3 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.menuManageMyCollection = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel7.SuspendLayout();
@@ -241,7 +242,7 @@
             this.menuSelectTesera.CheckOnClick = true;
             this.menuSelectTesera.CheckState = System.Windows.Forms.CheckState.Checked;
             this.menuSelectTesera.Name = "menuSelectTesera";
-            this.menuSelectTesera.Size = new System.Drawing.Size(207, 22);
+            this.menuSelectTesera.Size = new System.Drawing.Size(205, 22);
             this.menuSelectTesera.Text = "Tesera (русскоязычный)";
             this.menuSelectTesera.Click += new System.EventHandler(this.menuSelectTesera_Click);
             // 
@@ -249,7 +250,7 @@
             // 
             this.menuSelectBGG.CheckOnClick = true;
             this.menuSelectBGG.Name = "menuSelectBGG";
-            this.menuSelectBGG.Size = new System.Drawing.Size(207, 22);
+            this.menuSelectBGG.Size = new System.Drawing.Size(205, 22);
             this.menuSelectBGG.Text = "BGG (англоязычный)";
             this.menuSelectBGG.Click += new System.EventHandler(this.menuSelectBGG_Click);
             // 
@@ -263,15 +264,16 @@
             // управлениеРейтингомToolStripMenuItem
             // 
             this.управлениеРейтингомToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuUploadCSVFile});
+            this.menuUploadCSVFile,
+            this.menuManageMyCollection});
             this.управлениеРейтингомToolStripMenuItem.Name = "управлениеРейтингомToolStripMenuItem";
-            this.управлениеРейтингомToolStripMenuItem.Size = new System.Drawing.Size(148, 20);
-            this.управлениеРейтингомToolStripMenuItem.Text = "Управление рейтингом";
+            this.управлениеРейтингомToolStripMenuItem.Size = new System.Drawing.Size(85, 20);
+            this.управлениеРейтингомToolStripMenuItem.Text = "Управление";
             // 
             // menuUploadCSVFile
             // 
             this.menuUploadCSVFile.Name = "menuUploadCSVFile";
-            this.menuUploadCSVFile.Size = new System.Drawing.Size(242, 22);
+            this.menuUploadCSVFile.Size = new System.Drawing.Size(267, 22);
             this.menuUploadCSVFile.Text = "Загрузка файла рейтинга csv...";
             this.menuUploadCSVFile.Click += new System.EventHandler(this.menuUploadCSVFile_Click);
             // 
@@ -333,6 +335,13 @@
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
+            // menuManageMyCollection
+            // 
+            this.menuManageMyCollection.Name = "menuManageMyCollection";
+            this.menuManageMyCollection.Size = new System.Drawing.Size(267, 22);
+            this.menuManageMyCollection.Text = "Редактирование моей коллекции...";
+            this.menuManageMyCollection.Click += new System.EventHandler(this.menuManageMyCollection_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -375,7 +384,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private DataGridViewCustom dataGridView1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.Button button1;
@@ -398,6 +407,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuTablesColumns;
         private System.Windows.Forms.ToolStripMenuItem управлениеРейтингомToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menuUploadCSVFile;
+        private System.Windows.Forms.ToolStripMenuItem menuManageMyCollection;
     }
 }
 

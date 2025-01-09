@@ -10,6 +10,7 @@ using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WebApi;
 using ZhukBGGClubRanking.WebApi.Core;
+using ZhukBGGClubRanking.WebApi.DB;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -112,6 +113,12 @@ app.MapGet("/api/getusersactualratings", [Authorize] (HttpContext context) =>
     var coll = RequestHandler.GetUsersActualRatings();
     return coll;
 }).WithName("GetUsersActualRatings");
+
+app.MapGet("/api/getrawgames", [Authorize] (HttpContext context) =>
+{
+    var games = RequestHandler.GetRawGamesShortInfo();
+    return games;
+}).WithName("GetRawGames"); 
 
 
 app.MapPost("/api/saveusersrating", [Authorize] (List<RatingItem> rating, HttpContext context) => {

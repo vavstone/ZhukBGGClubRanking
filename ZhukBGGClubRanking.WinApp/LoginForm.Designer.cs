@@ -40,10 +40,9 @@
             // 
             // btSubmit
             // 
-            this.btSubmit.Location = new System.Drawing.Point(264, 175);
-            this.btSubmit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btSubmit.Location = new System.Drawing.Point(198, 142);
             this.btSubmit.Name = "btSubmit";
-            this.btSubmit.Size = new System.Drawing.Size(115, 28);
+            this.btSubmit.Size = new System.Drawing.Size(86, 23);
             this.btSubmit.TabIndex = 0;
             this.btSubmit.Text = "Подтвердить";
             this.btSubmit.UseVisualStyleBackColor = true;
@@ -56,11 +55,9 @@
             this.groupBox1.Controls.Add(this.tbLogin);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(16, 15);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox1.Size = new System.Drawing.Size(363, 153);
+            this.groupBox1.Size = new System.Drawing.Size(272, 124);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Параметры входа";
@@ -69,61 +66,55 @@
             // 
             this.lblError.AutoSize = true;
             this.lblError.ForeColor = System.Drawing.Color.Red;
-            this.lblError.Location = new System.Drawing.Point(24, 121);
-            this.lblError.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblError.Location = new System.Drawing.Point(18, 98);
             this.lblError.Name = "lblError";
-            this.lblError.Size = new System.Drawing.Size(0, 16);
+            this.lblError.Size = new System.Drawing.Size(0, 13);
             this.lblError.TabIndex = 4;
             // 
             // tbPassword
             // 
-            this.tbPassword.Location = new System.Drawing.Point(105, 78);
-            this.tbPassword.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbPassword.Location = new System.Drawing.Point(79, 63);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
-            this.tbPassword.Size = new System.Drawing.Size(212, 22);
+            this.tbPassword.Size = new System.Drawing.Size(160, 20);
             this.tbPassword.TabIndex = 3;
-            this.tbPassword.Text = "marsohod";
+            this.tbPassword.Text = "VAV";
             // 
             // tbLogin
             // 
-            this.tbLogin.Location = new System.Drawing.Point(105, 38);
-            this.tbLogin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbLogin.Location = new System.Drawing.Point(79, 31);
             this.tbLogin.Name = "tbLogin";
-            this.tbLogin.Size = new System.Drawing.Size(212, 22);
+            this.tbLogin.Size = new System.Drawing.Size(160, 20);
             this.tbLogin.TabIndex = 2;
-            this.tbLogin.Text = "admin";
+            this.tbLogin.Text = "VAV";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 78);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(15, 63);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 16);
+            this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "Пароль";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(20, 38);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(15, 31);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 16);
+            this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Логин";
             // 
             // LoginForm
             // 
             this.AcceptButton = this.btSubmit;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(401, 212);
+            this.ClientSize = new System.Drawing.Size(301, 172);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btSubmit);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "LoginForm";

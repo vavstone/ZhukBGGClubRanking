@@ -88,7 +88,10 @@ namespace ZhukBGGClubRanking.WinApp
         void FillDBDataGrid()
         {
             var currentRating = Cache.UsersRating.FirstOrDefault(c => c.UserId == CurrentUser.Id);
-            gridDBData.DataSource = DataGridViewHelper.CreateDataSourceWrapper(currentRating.Rating.RatingItems, Cache.Games);
+            var ratingItems = new List<RatingItem>();
+            if (currentRating != null)
+                ratingItems = currentRating.Rating.RatingItems;
+            gridDBData.DataSource = DataGridViewHelper.CreateDataSourceWrapper(ratingItems, Cache.Games);
             tabControl1.SelectedIndex = 0;
         }
 

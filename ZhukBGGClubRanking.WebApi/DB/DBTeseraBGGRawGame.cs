@@ -1,7 +1,9 @@
 ﻿using System.Data;
 using System.Data.Common;
 using System.Transactions;
+using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
+using ZhukBGGClubRanking.WebApi.Code;
 using ZhukBGGClubRanking.WebApi.Core;
 
 namespace ZhukBGGClubRanking.WebApi.DB
@@ -127,6 +129,59 @@ namespace ZhukBGGClubRanking.WebApi.DB
                     }
                 }
             }
+        }
+
+        public static List<TeseraBGGRawGame> GetGamesShortInfo()
+        {
+            var result = new List<TeseraBGGRawGame>();
+            try
+            {
+                using (var con = DBHelper.CreateConnection())
+                {
+                    con.Open();
+                    using (var cmd = con.CreateCommand())
+                    {
+                        cmd.CommandText = "select id, id_bgg, name_bgg, yearpublished_bgg, id_tesera, title_tesera, tesera_id_tesera, alias_tesera, photo_url_tesera, year_tesera, is_addition, parent_id from bgg_tesera_raw_info";
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var item = new TeseraBGGRawGame();
+                                item.Id = reader.GetFieldValue<int>("id");
+                                var id_bgg = reader.GetFieldValueNullSafe<int?>("id_bgg");
+                                if (id_bgg != null)
+                                {
+                                    item.BGGInfo = new BGGRawGame();
+                                    item.BGGInfo.Id = id_bgg.Value;
+                                    item.BGGInfo.Name = reader.GetFieldValueNullSafe<string>("name_bgg");
+                                    item.BGGInfo.YearPublished = reader.GetFieldValueNullSafe<int?>("yearpublished_bgg");
+                                }
+                                var id_tesera = reader.GetFieldValueNullSafe<int?>("id_tesera");
+                                if (id_tesera != null)
+                                {
+                                    item.TeseraInfo = new TeseraRawGame();
+                                    item.TeseraInfo.Id = id_tesera.Value;
+                                    item.TeseraInfo.Title = reader.GetFieldValueNullSafe<string>("title_tesera");
+                                    item.TeseraInfo.TeseraId = reader.GetFieldValueNullSafe<int?>("tesera_id_tesera");
+                                    item.TeseraInfo.Alias = reader.GetFieldValueNullSafe<string>("alias_tesera");
+                                    item.TeseraInfo.PhotoUrl = reader.GetFieldValueNullSafe<string>("photo_url_tesera");
+                                    item.TeseraInfo.Year = reader.GetFieldValueNullSafe<int?>("year_tesera");
+                                }
+                                item.IsAddition = reader.GetFieldValueNullSafe<bool>("is_addition");
+                                item.ParentId = reader.GetFieldValueNullSafe<int>("parent_id");
+                                result.Add(item);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteError(ex);
+                throw;
+            }
+
+            return result;
         }
     }
 }

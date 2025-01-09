@@ -16,20 +16,24 @@ namespace ZhukBGGClubRanking.WinApp.Core
         public List<Game> Games { get; set; } = new List<Game>();
         public List<UsersRating> UsersRating { get; set; } = new List<UsersRating>();
         public List<User> Users { get; set; } = new List<User>();
+        public List<TeseraBGGRawGame> RawGames = new List<TeseraBGGRawGame>();
 
         public EventHandler GamesLoaded { get; set; }
         public EventHandler UsersLoaded { get; set; }
         public EventHandler UsersRatingLoaded { get; set; }
+        public EventHandler RawGamesLoaded { get; set; }
 
         public EventHandler AllLoaded { get; set; }
 
         private BackgroundWorker bwGamesCollection = new BackgroundWorker();
         private BackgroundWorker bwUsersRatings = new BackgroundWorker();
         private BackgroundWorker bwUsers = new BackgroundWorker();
+        private BackgroundWorker bwRawGames = new BackgroundWorker();
 
         private WebDataGamesCollectionResultForBW gamesLoadingResult;
         private WebDataUsersResultForBW usersLoadingResult;
         private WebDataUsersRatingsResultForBW usersRatingsLoadingResult;
+        private WebDataRawGamesResultForBW rawGamesLoadingResult;
 
         public AppCache()
         {
@@ -47,6 +51,11 @@ namespace ZhukBGGClubRanking.WinApp.Core
             bwUsers.WorkerReportsProgress = true;
             bwUsers.DoWork += BwUsers_DoWork;
             bwUsers.RunWorkerCompleted += BwUsers_RunWorkerCompleted;
+
+            bwRawGames.WorkerSupportsCancellation = true;
+            bwRawGames.WorkerReportsProgress = true;
+            bwRawGames.DoWork += BwRawGames_DoWork;
+            bwRawGames.RunWorkerCompleted += BwRawGames_RunWorkerCompleted;
         }
 
         private async void BwUsers_DoWork(object sender, DoWorkEventArgs e)
@@ -85,37 +94,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
             FireAllLoaded();
         }
 
-        void FireAllLoaded()
-        {
-            if (AllLoaded != null && usersLoadingResult!=null && gamesLoadingResult != null && usersRatingsLoadingResult != null)
-            {
-                var result2 = new WebDataAllListstResultForBW();
-                result2.Result = true;
-                if (!usersLoadingResult.Result)
-                {
-                    result2.Result = false;
-                    result2.Message = usersLoadingResult.Message;
-                }
-                else if (!gamesLoadingResult.Result)
-                {
-                    result2.Result = false;
-                    result2.Message = gamesLoadingResult.Message;
-                }
-                else if (!usersRatingsLoadingResult.Result)
-                {
-                    result2.Result = false;
-                    result2.Message = usersRatingsLoadingResult.Message;
-                }
-                result2.Users = usersLoadingResult.Users;
-                result2.UsersRatings = usersRatingsLoadingResult.UsersRatings;
-                result2.Games = gamesLoadingResult.Games;
-                usersRatingsLoadingResult.UsersRatings.ForEach(c=>
-                c.UpdateGamesCrossRatings(
-                    usersRatingsLoadingResult.UsersRatings, 
-                    usersLoadingResult.Users));
-                AllLoaded(this, new WebResultEventArgs { Result = result2 });
-            }
-        }
+        
         
         private async void BwUsersRatings_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -155,6 +134,42 @@ namespace ZhukBGGClubRanking.WinApp.Core
 
         
 
+        private async void BwRawGames_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var result = new WebDataRawGamesResultForBW();
+            var options = e.Argument as WebPrmForBW;
+            var reqResult = WebApiHandler.GetRawGames(
+                options.HostingSettings.Url,
+                options.HostingSettings.Login,
+                options.HostingSettings.Password,
+                JWTPrm.Token);
+
+            if (reqResult.Result.StatusCode.ToString() == "OK")
+            {
+                result.Result = true;
+                result.Games = await reqResult.Result.Content.ReadAsAsync<List<TeseraBGGRawGame>>();
+            }
+            else
+            {
+                result.Result = false;
+                result.Message = reqResult.Result.StatusCode.ToString();
+            }
+            e.Result = result;
+        }
+
+        private void BwRawGames_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            var result = e.Result as WebDataRawGamesResultForBW;
+            if (result.Result)
+            {
+                RawGames = result.Games;
+            }
+            rawGamesLoadingResult = result;
+            if (RawGamesLoaded != null)
+                RawGamesLoaded(this, new WebResultEventArgs { Result = result });
+            //FireAllLoaded();
+        }
+
         private async void BwGamesCollection_DoWork(object sender, DoWorkEventArgs e)
         {
             var result = new WebDataGamesCollectionResultForBW();
@@ -191,6 +206,38 @@ namespace ZhukBGGClubRanking.WinApp.Core
             FireAllLoaded();
         }
 
+        void FireAllLoaded()
+        {
+            if (AllLoaded != null && usersLoadingResult != null && gamesLoadingResult != null && usersRatingsLoadingResult != null)
+            {
+                var result2 = new WebDataAllListstResultForBW();
+                result2.Result = true;
+                if (!usersLoadingResult.Result)
+                {
+                    result2.Result = false;
+                    result2.Message = usersLoadingResult.Message;
+                }
+                else if (!gamesLoadingResult.Result)
+                {
+                    result2.Result = false;
+                    result2.Message = gamesLoadingResult.Message;
+                }
+                else if (!usersRatingsLoadingResult.Result)
+                {
+                    result2.Result = false;
+                    result2.Message = usersRatingsLoadingResult.Message;
+                }
+                result2.Users = usersLoadingResult.Users;
+                result2.UsersRatings = usersRatingsLoadingResult.UsersRatings;
+                result2.Games = gamesLoadingResult.Games;
+                usersRatingsLoadingResult.UsersRatings.ForEach(c =>
+                    c.UpdateGamesCrossRatings(
+                        usersRatingsLoadingResult.UsersRatings,
+                        usersLoadingResult.Users));
+                AllLoaded(this, new WebResultEventArgs { Result = result2 });
+            }
+        }
+
         public async void LoadAll(HostingSettings hostingSettings)
         {
             usersLoadingResult = null;
@@ -209,6 +256,15 @@ namespace ZhukBGGClubRanking.WinApp.Core
             gamesLoadingResult = null;
             var prm = new WebPrmForBW { HostingSettings = hostingSettings };
             if (!bwUsers.IsBusy) bwUsers.RunWorkerAsync(prm);
+        }
+
+        public async void LoadRawGames(HostingSettings hostingSettings)
+        {
+            //usersLoadingResult = null;
+            //usersRatingsLoadingResult = null;
+            //gamesLoadingResult = null;
+            var prm = new WebPrmForBW { HostingSettings = hostingSettings };
+            if (!bwRawGames.IsBusy) bwRawGames.RunWorkerAsync(prm);
         }
 
     }

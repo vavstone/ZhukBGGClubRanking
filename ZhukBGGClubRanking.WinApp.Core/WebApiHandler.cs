@@ -61,6 +61,12 @@ namespace ZhukBGGClubRanking.WinApp.Core
             return await client.GetAsync("api/getusers");
         }
 
+        public static async Task<HttpResponseMessage> GetRawGames(string url, string login, string password, string token)
+        {
+            var client = GetClientWithAuth(url, login, password, token);
+            return await client.GetAsync("api/getrawgames");
+        }
+
         public static async Task<HttpResponseMessage> CreateUserByAdmin(string url, string login, string password, string token, User newUser)
         {
             var client = GetClientWithAuth(url, login, password, token);

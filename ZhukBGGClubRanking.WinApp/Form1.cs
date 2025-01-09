@@ -26,6 +26,8 @@ namespace ZhukBGGClubRanking.WinApp
             Cache = new AppCache();
             Cache.AllLoaded += AllLoaded;
             Cache.LoadAll(UserSettings.Hosting);
+            Cache.LoadRawGames(UserSettings.Hosting);
+            //Cache.RawGamesLoaded += (o, e) => { MessageBox.Show("Raw"); };
         }
 
         private void AllLoaded(object sender, EventArgs e)
@@ -78,7 +80,7 @@ namespace ZhukBGGClubRanking.WinApp
             manageUsersForm.Cache = Cache;
             manageUsersForm.ShowDialog(this);
             //LoadUsersRatings();
-            Cache.LoadAll(UserSettings.Hosting);
+            //Cache.LoadAll(UserSettings.Hosting);
         }
 
         public UsersRating GetRatingInOpenedTab()
@@ -133,17 +135,9 @@ namespace ZhukBGGClubRanking.WinApp
                 var tabPage = new TabPage(ratingUser.Name);
                 tabPage.Name = ratingUser.Name;
                 tabControl1.TabPages.Add(tabPage);
-                var grid = new DataGridView();
+                var grid = new DataGridViewCustom();
                 grid.Dock = DockStyle.Fill;
                 PrepareDataGrid(grid,true);
-                //var dataSourceWrapper = new List<GridViewDataSourceWrapper>();
-                //foreach (var ritem in item.Rating.RatingItems)
-                //{
-                //    var dataSourceWrapperItem =
-                //        GridViewDataSourceWrapper.CreateFromCoreGame(ritem, Cache.Games, Cache.UsersRating);
-                //    dataSourceWrapper.Add(dataSourceWrapperItem);
-                //}
-                //grid.DataSource = dataSourceWrapper.OrderBy(c => c.Rating).ThenBy(c => c.Game).ToList();
                 grid.DataSource = DataGridViewHelper.CreateDataSourceWrapper(item.Rating.RatingItems,Cache.Games);
                 tabPage.Controls.Add(grid);
                 grid.ClearSelection();
@@ -210,25 +204,10 @@ namespace ZhukBGGClubRanking.WinApp
             //AddTestColumn(grid);
         }
 
-        public void PrepareDataGrid(DataGridView grid, bool isUserRatingGrid)
+        public void PrepareDataGrid(DataGridViewCustom grid, bool isUserRatingGrid)
         {
-
-            grid.AutoGenerateColumns = false;
-            grid.AllowUserToAddRows = false;
-            grid.AllowUserToDeleteRows = false;
-            grid.ShowEditingIcon = false;
-            grid.RowHeadersVisible = false;
-
             CreateGridColumns(grid,isUserRatingGrid);
-            
             grid.CellContentClick += Grid_CellContentClick;
-
-            grid.RowsDefaultCellStyle.SelectionBackColor = Color.LightGray;
-            grid.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
-
-            grid.MouseWheel += DataGridView_MouseWheel;
-            grid.MouseEnter += DataGridView_MouseEnter;
-
             grid.ColumnHeaderMouseClick += Grid_ColumnHeaderMouseClick;
         }
 
@@ -239,13 +218,10 @@ namespace ZhukBGGClubRanking.WinApp
             var grid = sender as DataGridView;
             if (e.ColumnIndex == _previousIndex)
                 _sortDirection ^= true; // toggle direction
-
             grid.DataSource = SortData((List<GridViewDataSourceWrapper>)grid.DataSource, grid.Columns[e.ColumnIndex].Name, _sortDirection);
-
             _previousIndex = e.ColumnIndex;
             if (grid == dataGridView1)
                 UpdateDataGridViewColors();
-
             grid.ClearSelection();
         }
 
@@ -277,30 +253,6 @@ namespace ZhukBGGClubRanking.WinApp
             return list;
         }
 
-
-        private void DataGridView_MouseEnter(object sender, EventArgs e)
-        {
-            var grid = sender as DataGridView;
-            grid.Focus();
-        }
-
-        void DataGridView_MouseWheel(object sender, MouseEventArgs e)
-        {
-            var grid = sender as DataGridView;
-            int currentIndex = grid.FirstDisplayedScrollingRowIndex;
-            int scrollLines = SystemInformation.MouseWheelScrollLines;
-
-            if (e.Delta > 0)
-            {
-                grid.FirstDisplayedScrollingRowIndex = Math.Max(0, currentIndex - scrollLines);
-            }
-            else if (e.Delta < 0)
-            {
-                if (grid.Rows.Count > (currentIndex + scrollLines))
-                    grid.FirstDisplayedScrollingRowIndex = currentIndex + scrollLines;
-            }
-        }
-
         private void Grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             var grid = sender as DataGridView;
@@ -313,8 +265,8 @@ namespace ZhukBGGClubRanking.WinApp
                     //string cellContent = grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
                     var ratingItem = gameRatingList[e.RowIndex];
                     string url = string.Empty;
-                    var teseraUrl = GetTeseraCardUrl(ratingItem.TeseraKey);
-                    var bggUrl = GetBGGCardUrl(ratingItem.BGGObjectId);
+                    var teseraUrl = Utils.GetTeseraCardUrl(ratingItem.TeseraKey);
+                    var bggUrl = Utils.GetBGGCardUrl(ratingItem.BGGObjectId);
                     if (UserSettings.TeseraPreferable)
                         url = teseraUrl;
                     if (string.IsNullOrWhiteSpace(url))
@@ -397,8 +349,6 @@ namespace ZhukBGGClubRanking.WinApp
             return trBarOnlyTop.Value;
         }
 
-       
-
         private void button2_Click(object sender, EventArgs e)
         {
             var reorderForm = new ReorderForm();
@@ -409,7 +359,7 @@ namespace ZhukBGGClubRanking.WinApp
             reorderForm.Settings = UserSettings.Hosting;
 
 
-            var newGames = Cache.Games.Where(c => c.IsStandaloneGame && !ratingCurrentUser.Rating.RatingItems.Any(c1 => c1.GameId == c.Id)).ToList();
+            var newGames = Cache.Games.Where(c => c.IsStandaloneGame && (ratingCurrentUser==null || !ratingCurrentUser.Rating.RatingItems.Any(c1 => c1.GameId == c.Id))).ToList();
             if (newGames.Count > 0)
             {
                 if (MessageBox.Show(string.Format("В общей коллекции найдены игры ({0} штук), отсуствующие в вашем рейтинге. Добавить их?", newGames.Count),
@@ -557,17 +507,7 @@ namespace ZhukBGGClubRanking.WinApp
 
         }
 
-        public string GetTeseraCardUrl(string teseraKey)
-        {
-            if (!string.IsNullOrEmpty(teseraKey))
-                return Settings.TeseraCardPrefixUrl + teseraKey;
-            return null;
-        }
-
-        public string GetBGGCardUrl(int bggObjectId)
-        {
-            return Settings.BGGCardPrefixUrl + bggObjectId;
-        }
+        
 
         private void menuSelectTesera_Click(object sender, EventArgs e)
         {
@@ -624,11 +564,6 @@ namespace ZhukBGGClubRanking.WinApp
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Cache.LoadAll(UserSettings.Hosting);
-        }
-
         private void menuUploadCSVFile_Click(object sender, EventArgs e)
         {
             var loadCSVFileForm = new LoadCSVRatingFileForm();
@@ -644,6 +579,15 @@ namespace ZhukBGGClubRanking.WinApp
             var currentUserPage = tabControl1.TabPages.OfType<TabPage>().FirstOrDefault(tp => tp.Text == CurrentUser.Name);
             if (currentUserPage!=null)
                 tabControl1.SelectedTab = currentUserPage;
+        }
+
+        private void menuManageMyCollection_Click(object sender, EventArgs e)
+        {
+            var manageMyCollection = new ManageMyCollection();
+            manageMyCollection.Cache = Cache;
+            manageMyCollection.CurrentUser = CurrentUser;
+            manageMyCollection.UserSettings = UserSettings;
+            manageMyCollection.ShowDialog(this);
         }
     }
 }

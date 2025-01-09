@@ -17,6 +17,12 @@ namespace ZhukBGGClubRanking.WebApi
             return DBGame.GetGamesCollection(users);
         }
 
+        public static List<TeseraBGGRawGame> GetRawGamesShortInfo()
+        {
+            return DBTeseraBGGRawGame.GetGamesShortInfo();
+        }
+        
+
         public static List<UsersRating> GetUsersActualRatings()
         {
             return DBUsersRating.GetUsersActualRatings();

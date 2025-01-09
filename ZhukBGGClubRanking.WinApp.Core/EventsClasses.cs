@@ -30,6 +30,11 @@ namespace ZhukBGGClubRanking.WinApp.Core
     {
         public List<User> Users { get; set; }
     }
+    public class WebDataRawGamesResultForBW : WebDataResultForBW
+    {
+        public List<TeseraBGGRawGame> Games { get; set; }
+    }
+    
 
     public class WebDataAllListstResultForBW : WebDataResultForBW
     {

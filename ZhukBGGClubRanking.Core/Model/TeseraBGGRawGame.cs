@@ -64,5 +64,38 @@ namespace ZhukBGGClubRanking.Core.Model
                 //TODO реализовать определение на основании вспомогательной таблицы база-дополнения
             }
         }
+
+        public override string ToString()
+        {
+            return FullName;
+        }
+
+        public string FullName
+        {
+            get
+            {
+                if (TeseraInfo != null && BGGInfo != null)
+                {
+                    if (TeseraInfo.Title.ToUpper() == BGGInfo.Name.ToUpper())
+                        return String.Format("{0}{1}", BGGInfo.Name, BGGInfo.YearPublished == null ? "" : " " + BGGInfo.YearPublished.Value);
+                    return String.Format("{0} <{1}>{2}", TeseraInfo.Title, BGGInfo.Name,
+                        BGGInfo.YearPublished == null ? "" : " " + BGGInfo.YearPublished.Value);
+                }
+
+                if (TeseraInfo != null)
+                    return String.Format("{0}{1}", TeseraInfo.Title, TeseraInfo.Year == null ? "" : " " + TeseraInfo.Year.Value);
+                if (BGGInfo != null)
+                    return String.Format("{0}{1}", BGGInfo.Name, BGGInfo.YearPublished == null ? "" : " " + BGGInfo.YearPublished.Value);
+                return "";
+            }
+        }
+
+        public static List<TeseraBGGRawGame> FilterRawGames(IEnumerable<TeseraBGGRawGame> sourceList, string searchMask, int minSearchMaskLength)
+        {
+            if (minSearchMaskLength==0 || searchMask.Length<minSearchMaskLength)
+                return new List<TeseraBGGRawGame>();
+            return sourceList.Where(c => c.FullName.ToUpper().Contains(searchMask.ToUpper())).OrderBy(c=>c.FullName).ToList();
+        }
+
     }
 }

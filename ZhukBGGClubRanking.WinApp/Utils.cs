@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
+using ZhukBGGClubRanking.WinApp.Core;
 
 namespace ZhukBGGClubRanking.WinApp
 {
@@ -79,6 +80,18 @@ namespace ZhukBGGClubRanking.WinApp
                     }
                 }
             }
+        }
+
+        public static string GetTeseraCardUrl(string teseraKey)
+        {
+            if (!string.IsNullOrEmpty(teseraKey))
+                return Settings.TeseraCardPrefixUrl + teseraKey;
+            return null;
+        }
+
+        public static string GetBGGCardUrl(int bggObjectId)
+        {
+            return Settings.BGGCardPrefixUrl + bggObjectId;
         }
     }
 }
