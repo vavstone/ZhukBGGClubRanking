@@ -1,4 +1,6 @@
-﻿using ZhukBGGClubRanking.Core;
+﻿using System.Net;
+using ZhukBGGClubRanking.Core;
+using ZhukBGGClubRanking.Core.Code;
 using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WebApi.Core;
 using ZhukBGGClubRanking.WebApi.DB;
@@ -143,6 +145,40 @@ namespace ZhukBGGClubRanking.WebApi
             TeseraBGGRawGame.SetParentsAndIsAddition(games);
             DBTeseraBGGRawGame.SaveGames(games);
 
+        }
+
+        internal static string GetGameImagePathByBGGId(int bggid)
+        {
+            var pathToBGGThumbnails = "e:\\tmp\\2\\";
+            foreach (var file in Directory.GetFiles(pathToBGGThumbnails))
+            {
+                var fileNameWithoutExt = Path.GetFileNameWithoutExtension(file);
+                if (fileNameWithoutExt == bggid.ToString())
+                    return file;
+            }
+            var bggItem = BGGHelper.GetGame(bggid);
+            if (bggItem != null)
+            {
+
+                var tmpFileName = bggid.ToString();
+                var tmpFileFullName = Path.Combine(pathToBGGThumbnails, tmpFileName);
+                using (var client = new WebClient())
+                {
+                    var imgUrl = WebApppSettings.GetFromBGGLargeImagesForThumbnails ? bggItem.Image : bggItem.Thumbnail;
+                    client.DownloadFile(imgUrl, tmpFileFullName);
+                    if (!String.IsNullOrEmpty(client.ResponseHeaders["Content-Type"]))
+                    {
+                        var fileName = tmpFileName +
+                                       Utils.GetFileExtensionByContentType(client.ResponseHeaders["Content-Type"]);
+                        var newFileFullName = Path.Combine(pathToBGGThumbnails, fileName);
+                        File.Move(tmpFileFullName, newFileFullName);
+                        return newFileFullName;
+                    }
+                    return tmpFileFullName;
+                }
+            }
+
+            return string.Empty;
         }
     }
 }

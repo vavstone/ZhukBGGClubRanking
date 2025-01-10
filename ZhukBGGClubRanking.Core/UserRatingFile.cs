@@ -13,7 +13,7 @@ namespace ZhukBGGClubRanking.Core
         public static List<string> GetFilesNamesWithoutExt()
         {
             var result = new List<string>();
-            var path = CoreSettings.InitiateUserRatingFilesDir;
+            var path = CoreConstants.InitiateUserRatingFilesDir;
             foreach(var file in Directory.GetFiles(path))
             {
                 result.Add(Path.GetFileNameWithoutExtension(file));
@@ -44,7 +44,7 @@ namespace ZhukBGGClubRanking.Core
         {
             var user = users.FirstOrDefault(c => c.Id == rating.UserId);
             var folderPath = string.Format(@"{0}\{1}\lists",
-                        CoreSettings.ExportFilesDir,
+                        CoreConstants.ExportFilesDir,
                         DateTime.Now.ToString("yyyy-MM-dd-HH_mm_ss")
                     );
             var csvFileFullName = Path.Combine(folderPath, user.Name + ".csv");
@@ -66,7 +66,7 @@ namespace ZhukBGGClubRanking.Core
         public static List<UsersRating> GetUsersRatingsFromListsFolder(List<User> users, List<Game> gamesCollection)
         {
             var list = new List<UsersRating>();
-            foreach (var csvFile in Directory.GetFiles(CoreSettings.InitiateUserRatingFilesDir))
+            foreach (var csvFile in Directory.GetFiles(CoreConstants.InitiateUserRatingFilesDir))
             {
                 var fileNameWithoutExt = Path.GetFileNameWithoutExtension(csvFile);
                 var user = users.FirstOrDefault(c => c.Name.ToUpper() == fileNameWithoutExt.ToUpper());

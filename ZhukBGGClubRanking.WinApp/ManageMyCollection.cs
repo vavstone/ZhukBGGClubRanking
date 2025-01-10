@@ -1,20 +1,13 @@
-﻿using BoardGamer.BoardGameGeek.BoardGameGeekXmlApi2;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WinApp.Core;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ZhukBGGClubRanking.WinApp
 {
@@ -261,12 +254,28 @@ namespace ZhukBGGClubRanking.WinApp
                 }
                 if (selectedGame.BGGInfo != null)
                 {
-                    var bgg = new BoardGameGeekXmlApi2Client(new HttpClient());
-                    var request = new ThingRequest(new[] { selectedGame.BGGInfo.Id });
-                    var response = await bgg.GetThingAsync(request);
-                    var item = response.Result.FirstOrDefault();
-                    if (item != null)
-                        picBoxGame.ImageLocation = item.Image;
+                    //var bgg = new BoardGameGeekXmlApi2Client(new HttpClient());
+                    //var request = new ThingRequest(new[] { selectedGame.BGGInfo.Id });
+                    //var response = await bgg.GetThingAsync(request);
+                    //var item = response.Result.FirstOrDefault();
+                    //if (item != null)
+                    //    picBoxGame.ImageLocation = item.Image;
+
+                    var reqResult = await WebApiHandler.GetGameImage(
+                        UserSettings.Hosting.Url,
+                        UserSettings.Hosting.Login,
+                        UserSettings.Hosting.Password,
+                        JWTPrm.Token,
+                        selectedGame.BGGInfo.Id);
+                    if (reqResult.StatusCode.ToString() == "OK")
+                    {
+                        var imgBytes = await reqResult.Content.ReadAsByteArrayAsync();
+                        picBoxGame.Image = Utils.ByteToImage(imgBytes);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ошибка получения изображения" + reqResult);
+                    }
                 }
             }
         }

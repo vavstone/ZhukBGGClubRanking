@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Xml.Serialization;
 using ZhukBGGClubRanking.Core.Model;
 
@@ -13,14 +14,35 @@ namespace ZhukBGGClubRanking.WinApp.Core
 
         public static UserSettings GetUserSettings()
         {
-            return new UserSettings();
+            if (!File.Exists(Constants.UserSettingsFileFullName))
+            {
+                var settings = new UserSettings();
+                settings.SaveUserSettings();
+                return settings;
+            }
+            var serializer = new XmlSerializer(typeof(UserSettings));
+            using (var reader = new StreamReader(Constants.UserSettingsFileFullName))
+            {
+                var userSettings = (UserSettings) serializer.Deserialize(reader);
+                return userSettings;
+            }
         }
+
+        public void SaveUserSettings()
+        {
+            var serializer = new XmlSerializer(typeof(UserSettings));
+            using (FileStream fs = new FileStream(Constants.UserSettingsFileFullName, FileMode.Create))
+            {
+                serializer.Serialize(fs, this);
+            }
+        }
+
     }
 
     public class TablesSettings:IComparable<TablesSettings>
     {
-        [XmlAttribute] public TableSettings UserRatingTable { get; set; } = new TableSettings();
-        [XmlAttribute] public TableSettings AverageRatingTable { get; set; } = new TableSettings();
+        [XmlElement] public TableSettings UserRatingTable { get; set; } = new TableSettings();
+        [XmlElement] public TableSettings AverageRatingTable { get; set; } = new TableSettings();
 
         public TablesSettings CreateCopy()
         {
@@ -71,5 +93,4 @@ namespace ZhukBGGClubRanking.WinApp.Core
         [XmlAttribute] public string Login { get; set; } //= "11210871";
         [XmlAttribute] public string Password { get; set; } //= "60-dayfreetrial";
     }
-
 }

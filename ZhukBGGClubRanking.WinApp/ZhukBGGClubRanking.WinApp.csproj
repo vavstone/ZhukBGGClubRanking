@@ -35,9 +35,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BoardGamer.BoardGameGeek, Version=0.8.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BoardGamer.BoardGameGeek.0.8.1\lib\netstandard2.0\BoardGamer.BoardGameGeek.dll</HintPath>
-    </Reference>
     <Reference Include="Csv">
       <HintPath>..\dll\Csv.dll</HintPath>
     </Reference>

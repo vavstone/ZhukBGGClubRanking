@@ -11,13 +11,14 @@ using ZhukBGGClubRanking.Core;
 using System.Net;
 using System.Net.Http.Json;
 using System.Security;
+using System.Threading;
 using ZhukBGGClubRanking.Core.Model;
 
 namespace ZhukBGGClubRanking.WinApp.Core
 {
     public static class WebApiHandler
     {
-        public static HttpClient GetClientWithAuth(string url, string login, string password, string token=null, int timeOutInSeconds = 0)
+        public static HttpClient GetClientWithAuth(string url, string login, string password, string token=null, int timeOutInSeconds = 0, string mediaType= "application/json")
         {
             NetworkCredential credentials = new NetworkCredential(login, password);
             HttpClientHandler handler = new HttpClientHandler();
@@ -30,7 +31,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
                 client.Timeout = TimeSpan.FromSeconds(timeOutInSeconds);
             client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
             if (token != null)
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             return client;
@@ -40,8 +41,17 @@ namespace ZhukBGGClubRanking.WinApp.Core
         {
             var client = GetClientWithAuth(url, login, password);
             HttpContent content = JsonContent.Create(new LoginPrm { UserName = userName.Trim(), PasswordCache = User.GetMD5Hash(userPassword.Trim()) });
-            return await client.PostAsync("api/login", content);
+            try
+            {
+                return await client.PostAsync("api/login", content);
+            }
+            catch (Exception e)
+            {
+                return new HttpResponseMessage(HttpStatusCode.Moved);
+            }
+            
         }
+
 
         public static async Task<HttpResponseMessage> GetGames(string url, string login, string password, string token)
         {
@@ -120,8 +130,8 @@ namespace ZhukBGGClubRanking.WinApp.Core
 
         public static async Task<HttpResponseMessage> GetGameImage(string url, string login, string password, string token, int bggId)
         {
-            var client = GetClientWithAuth(url, login, password, token);
-            return await client.GetAsync("api/getgameimage?bggid" + bggId);
+            var client = GetClientWithAuth(url, login, password, token, 10, "application/octet-stream");
+            return await client.GetAsync("api/getgameimagebybggid?bggid=" + bggId);
         }
     }
 }

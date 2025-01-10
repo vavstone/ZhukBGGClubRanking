@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.panel7 = new System.Windows.Forms.Panel();
@@ -49,12 +50,12 @@
             this.menuTablesColumns = new System.Windows.Forms.ToolStripMenuItem();
             this.управлениеРейтингомToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuUploadCSVFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuManageMyCollection = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridView1 = new DataGridViewCustom();
+            this.dataGridView1 = new ZhukBGGClubRanking.WinApp.DataGridViewCustom();
             this.panel3 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.menuManageMyCollection = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel7.SuspendLayout();
@@ -277,6 +278,13 @@
             this.menuUploadCSVFile.Text = "Загрузка файла рейтинга csv...";
             this.menuUploadCSVFile.Click += new System.EventHandler(this.menuUploadCSVFile_Click);
             // 
+            // menuManageMyCollection
+            // 
+            this.menuManageMyCollection.Name = "menuManageMyCollection";
+            this.menuManageMyCollection.Size = new System.Drawing.Size(267, 22);
+            this.menuManageMyCollection.Text = "Редактирование моей коллекции...";
+            this.menuManageMyCollection.Click += new System.EventHandler(this.menuManageMyCollection_Click);
+            // 
             // AboutToolStripMenuItem
             // 
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
@@ -292,6 +300,10 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 6);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersVisible = false;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
+            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.ShowEditingIcon = false;
             this.dataGridView1.Size = new System.Drawing.Size(694, 489);
             this.dataGridView1.TabIndex = 0;
@@ -335,13 +347,6 @@
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
-            // menuManageMyCollection
-            // 
-            this.menuManageMyCollection.Name = "menuManageMyCollection";
-            this.menuManageMyCollection.Size = new System.Drawing.Size(267, 22);
-            this.menuManageMyCollection.Text = "Редактирование моей коллекции...";
-            this.menuManageMyCollection.Click += new System.EventHandler(this.menuManageMyCollection_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -354,6 +359,7 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ZhukBGGClubRanking";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel5.ResumeLayout(false);

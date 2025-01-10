@@ -2,7 +2,7 @@
 
 namespace ZhukBGGClubRanking.Core
 {
-    public static class CoreSettings
+    public static class CoreConstants
     {
         public static string RootDir
         {
@@ -58,5 +58,7 @@ namespace ZhukBGGClubRanking.Core
         {
             get { return "https://tesera.ru/game/"; }
         }
+
+        public const string CommonUserErrorMessage = "Произошла ошибка. Обратитесь к администратору системы.";
     }
 }

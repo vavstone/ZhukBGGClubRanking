@@ -84,7 +84,9 @@
     <Compile Include="AsyncRequestsWrappers\SaveAsyncRequestToDBAPIWrapper.cs" />
     <Compile Include="AsyncRequestsWrappers\SimpleAsyncRequestToAPIWrapper.cs" />
     <Compile Include="AsyncRequestsWrappers\TeseraRawInfoWrapper.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="EventsClasses.cs" />
+    <Compile Include="ExceptionHandler.cs" />
     <Compile Include="GridViewDataSourceWrapper.cs" />
     <Compile Include="JWTPrm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

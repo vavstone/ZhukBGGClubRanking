@@ -589,5 +589,10 @@ namespace ZhukBGGClubRanking.WinApp
             manageMyCollection.UserSettings = UserSettings;
             manageMyCollection.ShowDialog(this);
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            UserSettings.SaveUserSettings();
+        }
     }
 }

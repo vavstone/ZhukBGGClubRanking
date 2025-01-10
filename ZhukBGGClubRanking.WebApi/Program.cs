@@ -80,7 +80,7 @@ app.MapPost("/api/login", (LoginPrm login) =>
         issuer: AuthOptions.ISSUER,
         audience: AuthOptions.AUDIENCE,
         claims: claims,
-        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(60)),//нужно вычитать 5 минут (значение по умолчанию)
+        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(600)),//нужно вычитать 5 минут (значение по умолчанию)
         signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
     var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
@@ -135,26 +135,16 @@ app.MapPost("/api/createuserbyadmin", [Authorize] (User newUser, HttpContext con
     RequestHandler.CreateNewUser(newUser);
 }).WithName("CreateUserByAdmin");
 
-app.MapPost("/api/initiatedb", /*[Authorize]*/ (HttpContext context) => {
-    //var userIdentity = context.User.Identity;
-    //var activeUser = DBUser.GetUserByName(userIdentity.Name);
-    //if (activeUser == null || !activeUser.IsActive || activeUser.Role != "admin")
-    //{
-    //    context.Response.StatusCode = StatusCodes.Status403Forbidden;
-    //    return;
-    //}
+app.MapPost("/api/initiatedb", [Authorize] (HttpContext context) => {
+    if (!AuthUtils.IsUserAdmin(context))
+        return;
     var currentUser = new User { Id = 1 };
     RequestHandler.InitiateDB(currentUser);
 }).WithName("InitiateDB");
 
-app.MapPost("/api/saveratingstoCSVfiles", /*[Authorize]*/ (HttpContext context) => {
-    //var userIdentity = context.User.Identity;
-    //var activeUser = DBUser.GetUserByName(userIdentity.Name);
-    //if (activeUser == null || !activeUser.IsActive || activeUser.Role != "admin")
-    //{
-    //    context.Response.StatusCode = StatusCodes.Status403Forbidden;
-    //    return;
-    //}
+app.MapPost("/api/saveratingstoCSVfiles", [Authorize] (HttpContext context) => {
+    if (!AuthUtils.IsUserAdmin(context))
+        return;
     RequestHandler.SaveRatingsToCSVFiles();
 }).WithName("SaveRatingsToCSVFiles");
 
@@ -201,6 +191,12 @@ app.MapPost("/api/savebggandteseragamesrawinfo", [Authorize] (HttpContext contex
 //    TaskWorker.LoadBGGCollectionToDB();
 //}).WithName("UpdateBGGColl");
 
+app.MapGet("/api/getgameimagebybggid", [Authorize] (HttpContext context, int bggid) =>
+{
+    var path = RequestHandler.GetGameImagePathByBGGId(bggid);
+    var mimeType = Utils.GetContentTypeByFileExtension(Path.GetExtension(path));
+    return Results.File(path, contentType: mimeType);
+}).WithName("GetGameImageByBGGId");
 
 
 

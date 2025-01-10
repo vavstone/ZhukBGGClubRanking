@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net;
+using System.Net.Http;
 using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
 
@@ -56,10 +58,10 @@ namespace ZhukBGGClubRanking.WinApp.Core
 
     public class LoginResultForBW
     {
-        public bool Result { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
         public string Token { get; set; }
         public string UserName { get; set; }
-        public string Message { get; set; }
+        //public string Message { get; set; }
     }
 
     public class CreateUserPrmForBW : WebPrmForBW

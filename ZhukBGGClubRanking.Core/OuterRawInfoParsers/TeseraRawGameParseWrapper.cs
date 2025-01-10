@@ -12,7 +12,7 @@ namespace ZhukBGGClubRanking.Core
         public static List<TeseraRawGame> LoadGamesFromJsonFiles()
         {
             var res = new List<TeseraRawGame>();
-            var pathToFiles = Path.Combine(CoreSettings.OuterRawInfoFilesDir, DateTime.Now.ToString("yyyy-MM-dd"),"Tesera");
+            var pathToFiles = Path.Combine(CoreConstants.OuterRawInfoFilesDir, DateTime.Now.ToString("yyyy-MM-dd"),"Tesera");
             if (Directory.Exists(pathToFiles))
             {
                 foreach (var file in Directory.GetFiles(pathToFiles))

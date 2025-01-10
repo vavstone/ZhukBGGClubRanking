@@ -58,7 +58,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
             bwRawGames.RunWorkerCompleted += BwRawGames_RunWorkerCompleted;
         }
 
-        private async void BwUsers_DoWork(object sender, DoWorkEventArgs e)
+        private void BwUsers_DoWork(object sender, DoWorkEventArgs e)
         {
             var result = new WebDataUsersResultForBW();
             var options = e.Argument as WebPrmForBW;
@@ -71,7 +71,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
             if (reqResult.Result.StatusCode.ToString() == "OK")
             {
                 result.Result = true;
-                result.Users = await reqResult.Result.Content.ReadAsAsync<List<User>>();
+                result.Users = reqResult.Result.Content.ReadAsAsync<List<User>>().Result;
             }
             else
             {
@@ -96,7 +96,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
 
         
         
-        private async void BwUsersRatings_DoWork(object sender, DoWorkEventArgs e)
+        private void BwUsersRatings_DoWork(object sender, DoWorkEventArgs e)
         {
             var result = new WebDataUsersRatingsResultForBW();
             var options = e.Argument as WebPrmForBW;
@@ -109,7 +109,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
             if (reqResult.Result.StatusCode.ToString() == "OK")
             {
                 result.Result = true;
-                result.UsersRatings = await reqResult.Result.Content.ReadAsAsync<List<UsersRating>>();
+                result.UsersRatings = reqResult.Result.Content.ReadAsAsync<List<UsersRating>>().Result;
             }
             else
             {
@@ -134,7 +134,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
 
         
 
-        private async void BwRawGames_DoWork(object sender, DoWorkEventArgs e)
+        private void BwRawGames_DoWork(object sender, DoWorkEventArgs e)
         {
             var result = new WebDataRawGamesResultForBW();
             var options = e.Argument as WebPrmForBW;
@@ -147,7 +147,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
             if (reqResult.Result.StatusCode.ToString() == "OK")
             {
                 result.Result = true;
-                result.Games = await reqResult.Result.Content.ReadAsAsync<List<TeseraBGGRawGame>>();
+                result.Games = reqResult.Result.Content.ReadAsAsync<List<TeseraBGGRawGame>>().Result;
             }
             else
             {
@@ -170,7 +170,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
             //FireAllLoaded();
         }
 
-        private async void BwGamesCollection_DoWork(object sender, DoWorkEventArgs e)
+        private void BwGamesCollection_DoWork(object sender, DoWorkEventArgs e)
         {
             var result = new WebDataGamesCollectionResultForBW();
             var options = e.Argument as WebPrmForBW;
@@ -183,7 +183,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
             if (reqResult.Result.StatusCode.ToString() == "OK")
             {
                 result.Result = true;
-                result.Games = await reqResult.Result.Content.ReadAsAsync<List<Game>>();
+                result.Games = reqResult.Result.Content.ReadAsAsync<List<Game>>().Result;
             }
             else
             {
@@ -238,7 +238,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
             }
         }
 
-        public async void LoadAll(HostingSettings hostingSettings)
+        public void LoadAll(HostingSettings hostingSettings)
         {
             usersLoadingResult = null;
             usersRatingsLoadingResult = null;
@@ -249,7 +249,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
             if (!bwUsers.IsBusy) bwUsers.RunWorkerAsync(prm);
         }
 
-        public async void LoadUsers(HostingSettings hostingSettings)
+        public void LoadUsers(HostingSettings hostingSettings)
         {
             usersLoadingResult = null;
             usersRatingsLoadingResult = null;
@@ -258,7 +258,7 @@ namespace ZhukBGGClubRanking.WinApp.Core
             if (!bwUsers.IsBusy) bwUsers.RunWorkerAsync(prm);
         }
 
-        public async void LoadRawGames(HostingSettings hostingSettings)
+        public void LoadRawGames(HostingSettings hostingSettings)
         {
             //usersLoadingResult = null;
             //usersRatingsLoadingResult = null;

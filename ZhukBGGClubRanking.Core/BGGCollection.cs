@@ -176,10 +176,10 @@ namespace ZhukBGGClubRanking.Core
         public static BGGCollection LoadFromFile()
         {
 
-            if (File.Exists(CoreSettings.InitiateCommonCollectionFilePath))
+            if (File.Exists(CoreConstants.InitiateCommonCollectionFilePath))
             {
                 var serializer = new XmlSerializer(typeof(BGGCollection));
-                using (StreamReader reader = new StreamReader(CoreSettings.InitiateCommonCollectionFilePath))
+                using (StreamReader reader = new StreamReader(CoreConstants.InitiateCommonCollectionFilePath))
                 {
                     var res = (BGGCollection)serializer.Deserialize(reader);
                     return res;
@@ -190,8 +190,8 @@ namespace ZhukBGGClubRanking.Core
 
         public static void LoadFromUrlToFile()
         {
-            var url = CoreSettings.BGGCollectionUrl;
-            var fileFullName = CoreSettings.InitiateCommonCollectionFilePath;
+            var url = CoreConstants.BGGCollectionUrl;
+            var fileFullName = CoreConstants.InitiateCommonCollectionFilePath;
             using (WebClient webClient = new WebClient())
             {
                 if (File.Exists(fileFullName))

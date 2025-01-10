@@ -37,11 +37,12 @@ namespace ZhukBGGClubRanking.WebApi.Core
 
         public static string GetConnectionString()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
-            Configuration = builder.Build();
-            return Configuration["ConnectionStrings:ConnectionString"];
+            //var builder = new ConfigurationBuilder()
+            //    .SetBasePath(Directory.GetCurrentDirectory())
+            //    .AddJsonFile("appsettings.json");
+            //Configuration = builder.Build();
+            //return Configuration["ConnectionStrings:ConnectionString"];
+            return WebApppSettings.ConnectionString;
         }
         //public static string GetFactoryName()
         //{
