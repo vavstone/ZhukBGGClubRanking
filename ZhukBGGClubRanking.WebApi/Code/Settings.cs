@@ -2,7 +2,7 @@
 
 namespace ZhukBGGClubRanking.WebApi
 {
-    public static class WebApppSettings
+    public static class WebAppSettings
     {
         private static IConfigurationRoot Configuration;
         static IConfigurationRoot Config

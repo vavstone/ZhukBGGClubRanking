@@ -164,7 +164,7 @@ namespace ZhukBGGClubRanking.WebApi
                 var tmpFileFullName = Path.Combine(pathToBGGThumbnails, tmpFileName);
                 using (var client = new WebClient())
                 {
-                    var imgUrl = WebApppSettings.GetFromBGGLargeImagesForThumbnails ? bggItem.Image : bggItem.Thumbnail;
+                    var imgUrl = WebAppSettings.GetFromBGGLargeImagesForThumbnails ? bggItem.Image : bggItem.Thumbnail;
                     client.DownloadFile(imgUrl, tmpFileFullName);
                     if (!String.IsNullOrEmpty(client.ResponseHeaders["Content-Type"]))
                     {

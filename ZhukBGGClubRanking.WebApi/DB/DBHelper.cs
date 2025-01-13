@@ -42,7 +42,7 @@ namespace ZhukBGGClubRanking.WebApi.Core
             //    .AddJsonFile("appsettings.json");
             //Configuration = builder.Build();
             //return Configuration["ConnectionStrings:ConnectionString"];
-            return WebApppSettings.ConnectionString;
+            return WebAppSettings.ConnectionString;
         }
         //public static string GetFactoryName()
         //{

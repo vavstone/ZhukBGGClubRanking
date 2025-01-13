@@ -1,16 +1,12 @@
-using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
 using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WebApi;
-using ZhukBGGClubRanking.WebApi.Core;
-using ZhukBGGClubRanking.WebApi.DB;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,8 +46,12 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+
+
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -80,7 +80,7 @@ app.MapPost("/api/login", (LoginPrm login) =>
         issuer: AuthOptions.ISSUER,
         audience: AuthOptions.AUDIENCE,
         claims: claims,
-        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(600)),//нужно вычитать 5 минут (значение по умолчанию)
+        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(WebAppSettings.TokenLifeTimeInMinutes)),//нужно вычитать 5 минут (значение по умолчанию)
         signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
     var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
