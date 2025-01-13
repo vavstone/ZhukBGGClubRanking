@@ -89,12 +89,12 @@ namespace ZhukBGGClubRanking.WinApp.Core
 
     public class HostingSettings
     {
-        //[XmlAttribute] public string Url { get; set; } = "http://localhost:5116";
-        //[XmlAttribute] public string Login { get; set; }
-        //[XmlAttribute] public string Password { get; set; } 
+        [XmlAttribute] public string Url { get; set; } = "http://localhost:5116";
+        [XmlAttribute] public string Login { get; set; }
+        [XmlAttribute] public string Password { get; set; }
 
-        [XmlAttribute] public string Url { get; set; } = "http://zhukbggtest-001-site1.ltempurl.com";
-        [XmlAttribute] public string Login { get; set; } = "11210871";
-        [XmlAttribute] public string Password { get; set; } = "60-dayfreetrial";
+        //[XmlAttribute] public string Url { get; set; } = "http://zhukbggtest-001-site1.ltempurl.com";
+        //[XmlAttribute] public string Login { get; set; } = "11210871";
+        //[XmlAttribute] public string Password { get; set; } = "60-dayfreetrial";
     }
 }
