@@ -1,7 +1,5 @@
 ﻿using System.Data;
 using System.Data.Common;
-using System.Transactions;
-using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WebApi.Code;
 using ZhukBGGClubRanking.WebApi.Core;

@@ -6,7 +6,7 @@ namespace ZhukBGGClubRanking.WebApi.Core
 {
     public static class DBHelper
     {
-        public static IConfigurationRoot Configuration;
+        //public static IConfigurationRoot Configuration;
 
 
         //private static readonly string FactoryName = GetFactoryName();

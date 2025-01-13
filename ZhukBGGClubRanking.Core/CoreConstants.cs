@@ -36,6 +36,22 @@ namespace ZhukBGGClubRanking.Core
         {
             get { return Path.Combine(AppFilesDir, "OuterRawInfo"); }
         }
+        public static string ImgCacheFilesDir
+        {
+            get { return Path.Combine(AppFilesDir, "ImgCache"); }
+        }
+        public static string ImgCacheBGGFilesDir
+        {
+            get { return Path.Combine(ImgCacheFilesDir, "BGG"); }
+        }
+        public static string ImgCacheBGGLargeFilesDir
+        {
+            get { return Path.Combine(ImgCacheBGGFilesDir, "large"); }
+        }
+        public static string ImgCacheBGGSmallFilesDir
+        {
+            get { return Path.Combine(ImgCacheBGGFilesDir, "small"); }
+        }
 
         public static string BGGCardPrefixUrl
         {

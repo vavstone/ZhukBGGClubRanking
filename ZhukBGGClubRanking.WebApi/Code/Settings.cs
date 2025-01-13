@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace ZhukBGGClubRanking.WebApi
+﻿namespace ZhukBGGClubRanking.WebApi
 {
     public static class WebAppSettings
     {

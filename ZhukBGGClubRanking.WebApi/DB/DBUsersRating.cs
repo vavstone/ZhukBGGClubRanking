@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using Microsoft.AspNetCore.Identity;
+﻿using System.Data;
 using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WebApi;
 using ZhukBGGClubRanking.WebApi.Core;

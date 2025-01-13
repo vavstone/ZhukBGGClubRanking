@@ -1,6 +1,4 @@
-﻿using Microsoft.Win32.SafeHandles;
-
-namespace ZhukBGGClubRanking.WebApi
+﻿namespace ZhukBGGClubRanking.WebApi
 {
     public static class Utils
     {

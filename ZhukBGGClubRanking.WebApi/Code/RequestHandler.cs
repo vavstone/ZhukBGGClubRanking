@@ -9,10 +9,10 @@ namespace ZhukBGGClubRanking.WebApi
 {
     public static class RequestHandler
     {
-        public static BGGCollection GetBggCollection()
-        {
-            return BGGCollection.LoadFromFile();
-        }
+        //public static BGGCollection GetBggCollection()
+        //{
+        //    return BGGCollection.LoadFromFile();
+        //}
 
         public static List<Game> GetGamesCollection(List<User> users)
         {
@@ -149,8 +149,19 @@ namespace ZhukBGGClubRanking.WebApi
 
         internal static string GetGameImagePathByBGGId(int bggid)
         {
-            var pathToBGGThumbnails = "e:\\tmp\\2\\";
-            foreach (var file in Directory.GetFiles(pathToBGGThumbnails))
+            var pathToBGGsmallImages = CoreConstants.ImgCacheBGGSmallFilesDir;
+            var pathToBGGlargeImages = CoreConstants.ImgCacheBGGLargeFilesDir;
+            if (!Directory.Exists(pathToBGGsmallImages))
+                Directory.CreateDirectory(pathToBGGsmallImages);
+            if (!Directory.Exists(pathToBGGlargeImages))
+                Directory.CreateDirectory(pathToBGGlargeImages);
+            foreach (var file in Directory.GetFiles(pathToBGGlargeImages))
+            {
+                var fileNameWithoutExt = Path.GetFileNameWithoutExtension(file);
+                if (fileNameWithoutExt == bggid.ToString())
+                    return file;
+            }
+            foreach (var file in Directory.GetFiles(pathToBGGsmallImages))
             {
                 var fileNameWithoutExt = Path.GetFileNameWithoutExtension(file);
                 if (fileNameWithoutExt == bggid.ToString())
@@ -159,9 +170,9 @@ namespace ZhukBGGClubRanking.WebApi
             var bggItem = BGGHelper.GetGame(bggid);
             if (bggItem != null)
             {
-
+                var pathToNewImage = WebAppSettings.GetFromBGGLargeImagesForThumbnails ? pathToBGGlargeImages : pathToBGGsmallImages;
                 var tmpFileName = bggid.ToString();
-                var tmpFileFullName = Path.Combine(pathToBGGThumbnails, tmpFileName);
+                var tmpFileFullName = Path.Combine(pathToNewImage, tmpFileName);
                 using (var client = new WebClient())
                 {
                     var imgUrl = WebAppSettings.GetFromBGGLargeImagesForThumbnails ? bggItem.Image : bggItem.Thumbnail;
@@ -170,7 +181,7 @@ namespace ZhukBGGClubRanking.WebApi
                     {
                         var fileName = tmpFileName +
                                        Utils.GetFileExtensionByContentType(client.ResponseHeaders["Content-Type"]);
-                        var newFileFullName = Path.Combine(pathToBGGThumbnails, fileName);
+                        var newFileFullName = Path.Combine(pathToNewImage, fileName);
                         File.Move(tmpFileFullName, newFileFullName);
                         return newFileFullName;
                     }

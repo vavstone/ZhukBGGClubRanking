@@ -1,71 +1,51 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WebApi;
+using ZhukBGGClubRanking.WebApi.Code;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            // указывает, будет ли валидироваться издатель при валидации токена
-            ValidateIssuer = true,
-            // строка, представляющая издателя
-            ValidIssuer =  AuthOptions.ISSUER,
-            // будет ли валидироваться потребитель токена
-            ValidateAudience = true,
-            // установка потребителя токена
-            ValidAudience = AuthOptions.AUDIENCE,
-            // будет ли валидироваться время существования
-            ValidateLifetime = true,
-            // установка ключа безопасности
-            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-            // валидация ключа безопасности
-            ValidateIssuerSigningKey = true,
-        };
-    });
+
+var jwtSecretKey = "riRKMrjJ92n5Foc4X1P5asdfasfdasdfvvxcdsg";
+//var jwtSecretKey = "password123casdsadsaiodiasdsadas";
+var tokenExpiryMinutes = WebAppSettings.TokenLifeTimeInMinutes;
+
+builder.Services.AddJwtAuthentication(jwtSecretKey);
 
 var app = builder.Build();
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
+//app.UseDefaultFiles();
+//app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-
-
-
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+#region ForTestOnly
 
+/*app.MapPost("/token", (HttpContext context) =>
+{
+    // Generate JWT token
+    var generatedToken = TokenGenerator.GenerateToken(jwtSecretKey, tokenExpiryMinutes, "token_user");
+    return generatedToken;
+    //return  TokenGenerator.GenerateTokenEndpoint(jwtSecretKey, tokenExpiryMinutes);
+}).WithName("Token").AllowAnonymous();
 
+app.MapGet("/getteststring", () => "test").WithName("GetTestString").AllowAnonymous();
 
-//app.MapGet("/api/bggcollection", () =>
-//{
-//    var coll = RequestHandler.GetBggCollection();
-//    return coll;
-//}).WithName("GetBGGCollection");
+app.MapGet("/getauthstring", () => "testauth").WithName("GetAuthString").RequireAuthorization();*/
 
+#endregion
 
 app.MapPost("/api/login", (LoginPrm login) =>
 {
@@ -73,24 +53,16 @@ app.MapPost("/api/login", (LoginPrm login) =>
     var loginError = string.Empty;
     var loginResult = DBUser.Validate(user, login.PasswordCache, out loginError);
     if (!loginResult) return Results.Unauthorized();
-    var claims = new List<Claim> { new Claim(ClaimTypes.Name, login.UserName) };
+    //var claims = new List<Claim> { new Claim(ClaimTypes.Name, login.UserName) };
 
     // создаем JWT-токен
-    var jwt = new JwtSecurityToken(
-        issuer: AuthOptions.ISSUER,
-        audience: AuthOptions.AUDIENCE,
-        claims: claims,
-        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(WebAppSettings.TokenLifeTimeInMinutes)),//нужно вычитать 5 минут (значение по умолчанию)
-        signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-    var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
+    var encodedJwt = TokenGenerator.GenerateToken(jwtSecretKey, tokenExpiryMinutes, login.UserName);
     // формируем ответ
     var response = new
     {
         access_token = encodedJwt,
         username = login.UserName
     };
-
     return Results.Json(response);
 
 }).WithName("Login");
@@ -118,7 +90,7 @@ app.MapGet("/api/getrawgames", [Authorize] (HttpContext context) =>
 {
     var games = RequestHandler.GetRawGamesShortInfo();
     return games;
-}).WithName("GetRawGames"); 
+}).WithName("GetRawGames");
 
 
 app.MapPost("/api/saveusersrating", [Authorize] (List<RatingItem> rating, HttpContext context) => {
@@ -167,11 +139,6 @@ app.MapPost("/api/clearbggteserarawtable", [Authorize] (HttpContext context) => 
     RequestHandler.ClearBGGTeseraRawTable();
 }).WithName("ClearBGGTeseraRawTable");
 
-//app.MapPost("/api/saveteseragamesrawinfo", [Authorize] (List<TeseraRawGame> teseraGames, HttpContext context) => {
-//    if (!AuthUtils.IsUserAdmin(context))
-//        return;
-//    RequestHandler.SaveTeseraRawInfoGames(teseraGames);
-//}).WithName("SaveTeseraGamesRawInfo");
 
 app.MapPost("/api/saveteseragamesrawinfo", [Authorize] (HttpContext context) => {
     if (!AuthUtils.IsUserAdmin(context))
@@ -186,10 +153,6 @@ app.MapPost("/api/savebggandteseragamesrawinfo", [Authorize] (HttpContext contex
     RequestHandler.SaveBGGAndTeseraRawGames();
 }).WithName("SaveBGGAndTeseraGamesRawInfo");
 
-//app.MapPost("/api/updatebggcoll", [Authorize] (HttpContext context) => {
-
-//    TaskWorker.LoadBGGCollectionToDB();
-//}).WithName("UpdateBGGColl");
 
 app.MapGet("/api/getgameimagebybggid", [Authorize] (HttpContext context, int bggid) =>
 {
@@ -199,26 +162,42 @@ app.MapGet("/api/getgameimagebybggid", [Authorize] (HttpContext context, int bgg
 }).WithName("GetGameImageByBGGId");
 
 
-
 app.MapGet("/test/getteststring", () => "test").WithName("GetTestString");
-
-
-
-//app.MapGet("/test/getteststringauth", [Authorize] (HttpContext context) => "test").WithName("GetTestStringAuth");
 
 
 
 
 app.Run();
 
+//app.MapGet("/test/getteststringauth", [Authorize] (HttpContext context) => "test").WithName("GetTestStringAuth");
+
+//app.MapPost("/api/updatebggcoll", [Authorize] (HttpContext context) => {
+
+//    TaskWorker.LoadBGGCollectionToDB();
+//}).WithName("UpdateBGGColl");
+
+//app.MapPost("/api/saveteseragamesrawinfo", [Authorize] (List<TeseraRawGame> teseraGames, HttpContext context) => {
+//    if (!AuthUtils.IsUserAdmin(context))
+//        return;
+//    RequestHandler.SaveTeseraRawInfoGames(teseraGames);
+//}).WithName("SaveTeseraGamesRawInfo");
 
 
 
-public class AuthOptions
-{
-    public const string ISSUER = "zhukbggserver"; // издатель токена
-    public const string AUDIENCE = "zhukbggclient"; // потребитель токена
-    const string KEY = "riRKMrjJ92n5Foc4X1P5asdfasfdasdfvvxcdsg";   // ключ для шифрации
-    public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
-        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
-}
+
+
+
+//public class AuthOptions
+//{
+//    public const string ISSUER = "zhukbggserver"; // издатель токена
+//    public const string AUDIENCE = "zhukbggclient"; // потребитель токена
+//    const string KEY = "riRKMrjJ92n5Foc4X1P5asdfasfdasdfvvxcdsg";   // ключ для шифрации
+//    public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
+//        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
+//}
+
+//app.MapGet("/api/bggcollection", () =>
+//{
+//    var coll = RequestHandler.GetBggCollection();
+//    return coll;
+//}).WithName("GetBGGCollection");

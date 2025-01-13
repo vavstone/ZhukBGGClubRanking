@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using ZhukBGGClubRanking.Core;
+﻿using System.Data;
 using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WebApi.Code;
 
