@@ -107,12 +107,25 @@ app.MapPost("/api/createuserbyadmin", [Authorize] (User newUser, HttpContext con
     RequestHandler.CreateNewUser(newUser);
 }).WithName("CreateUserByAdmin");
 
-app.MapPost("/api/initiatedb", [Authorize] (HttpContext context) => {
-    if (!AuthUtils.IsUserAdmin(context))
-        return;
+app.MapPost("/api/initiatedb", /*[Authorize]*/ (HttpContext context) =>
+{
+    //if (!AuthUtils.IsUserAdmin(context))
+    //    return;
     var currentUser = new User { Id = 1 };
     RequestHandler.InitiateDB(currentUser);
 }).WithName("InitiateDB");
+
+//app.MapPost("/api/clearlinksbggtables", /*[Authorize]*/ (HttpContext context) => {
+//    //if (!AuthUtils.IsUserAdmin(context))
+//    //    return;
+//    RequestHandler.ClearLinksBGGTables();
+//}).WithName("ClearLinksBGGTables");
+
+//app.MapPost("/api/updatebgglinks", /*[Authorize]*/ (HttpContext context) => {
+//    //if (!AuthUtils.IsUserAdmin(context))
+//    //    return;
+//    RequestHandler.UpdateBGGLinks();
+//}).WithName("UpdateBGGLinks");
 
 app.MapPost("/api/saveratingstoCSVfiles", [Authorize] (HttpContext context) => {
     if (!AuthUtils.IsUserAdmin(context))
@@ -152,6 +165,18 @@ app.MapPost("/api/savebggandteseragamesrawinfo", [Authorize] (HttpContext contex
         return;
     RequestHandler.SaveBGGAndTeseraRawGames();
 }).WithName("SaveBGGAndTeseraGamesRawInfo");
+
+app.MapPost("/api/addgamesforuser", [Authorize] (List<Game> games, HttpContext context) => {
+    var userIdentity = context.User.Identity;
+    var user = DBUser.GetUserByName(userIdentity.Name);
+    RequestHandler.AddGamesForUser(games,user);
+}).WithName("AddGamesForUser");
+
+app.MapPost("/api/removegamesfromuser", [Authorize] (List<Game> games, HttpContext context) => {
+    var userIdentity = context.User.Identity;
+    var user = DBUser.GetUserByName(userIdentity.Name);
+    RequestHandler.RemoveGamesFromUser(games, user);
+}).WithName("RemoveGamesFromUser");
 
 
 app.MapGet("/api/getgameimagebybggid", [Authorize] (HttpContext context, int bggid) =>

@@ -133,6 +133,20 @@ namespace ZhukBGGClubRanking.WinApp.Core
             var client = GetClientWithAuth(url, login, password, token, 10, "application/octet-stream");
             return await client.GetAsync("api/getgameimagebybggid?bggid=" + bggId);
         }
+
+        public static async Task<HttpResponseMessage> AddGamesForUser(string url, string login, string password, string token, List<Game> games)
+        {
+            var client = GetClientWithAuth(url, login, password, token);
+            HttpContent content = JsonContent.Create(games);
+            return await client.PostAsync("api/addgamesforuser", content);
+        }
+
+        public static async Task<HttpResponseMessage> RemoveGamesFromUser(string url, string login, string password, string token, List<Game> games)
+        {
+            var client = GetClientWithAuth(url, login, password, token);
+            HttpContent content = JsonContent.Create(games);
+            return await client.PostAsync("api/removegamesfromuser", content);
+        }
     }
 }
 

@@ -303,11 +303,12 @@ namespace ZhukBGGClubRanking.WinApp
             var topValue = GetTopXValue();
             var checkedLists = GetSelectedUsersRatings();
             currentAvarageRatingList = UsersRating.CalculateAvarageRating(checkedLists, Cache.Games, topValue);
-            currentAvarageRatingList.UpdateGamesCrossRatings(Cache.UsersRating, Cache.Users);
+           
             if (currentAvarageRatingList != null)
             {
+                currentAvarageRatingList.UpdateGamesCrossRatings(Cache.UsersRating, Cache.Users);
                 //currentAvarageRatingList.SetBGGCollection(CommonCollection);
-                
+
                 Utils.CalcComplianceAverateRatingToSelectedUser_v2(GetCurrentSelectedUser(), currentAvarageRatingList, Cache.UsersRating);
                 //dataGridView1.DataSource = currentAvarageRatingList.Rating.RatingItems.OrderBy(c => c.RatingOrder).ThenBy(c => c.GameId).ToList();
                 dataGridView1.DataSource = DataGridViewHelper.CreateDataSourceWrapper(currentAvarageRatingList.Rating.RatingItems, Cache.Games);

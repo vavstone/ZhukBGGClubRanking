@@ -2,6 +2,7 @@
 {
     public class BoardGamePublisher : BGGGameLink
     {
-        public static string LinkType = "bgpublisher";
+        public const string LinkType = "boardgamepublisher";
+        public const string TableName = "bgpublisher";
     }
 }

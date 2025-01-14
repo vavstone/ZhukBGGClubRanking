@@ -110,7 +110,7 @@ namespace ZhukBGGClubRanking.Core
                         //2. вставить запись в users
 
                         cmd.CommandText =
-                            "insert into users (name,password,email,full_name,is_active,create_time,role) values (@name,@password,@email,@full_name,@is_active,@create_time,@role)";
+                            "insert into users (name,password,email,full_name,is_active,create_time,role,create_user_id) values (@name,@password,@email,@full_name,@is_active,@create_time,@role,@create_user_id)";
                         cmd.Parameters.Clear();
                         cmd.CreateParameter(DbType.String, "name", newUser.Name);
                         cmd.CreateParameter(DbType.String, "password", newUser.Password);

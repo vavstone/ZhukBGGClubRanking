@@ -30,6 +30,8 @@ namespace ZhukBGGClubRanking.WebApi.DB
                             cmd.Transaction = transaction;
                             try
                             {
+                                ClearLinksBGGTables(cmd);
+                                
                                 //очищаем таблицы БД: rating_items_history, rating_items, users_ratings, games, users(кроме записи 1 - admin), ...
                                 ClearTable(cmd, "rating_items_history",0);
                                 ClearTable(cmd, "rating_items", 0);
@@ -37,6 +39,59 @@ namespace ZhukBGGClubRanking.WebApi.DB
                                 ClearTable(cmd, "games_owners", 0);
                                 ClearTable(cmd, "games", 0);
                                 ClearTable(cmd, "users", 1);
+
+                            }
+                            catch (Exception ex)
+                            {
+                                transaction.Rollback();
+                                Log.WriteError(ex);
+                                throw;
+                            }
+                            transaction.Commit();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteError(ex);
+                throw;
+            }
+        }
+
+        static void ClearLinksBGGTables(DbCommand cmd)
+        {
+            ClearTable(cmd, "bgunknownlinktype", 0);
+            ClearTable(cmd, "game_bgunknownlinktype", 0);
+            ClearTable(cmd, "game_bgaccessory", 0);
+            ClearTable(cmd, "game_bgartist", 0);
+            ClearTable(cmd, "game_bgcategory", 0);
+            ClearTable(cmd, "game_bgdesigner", 0);
+            ClearTable(cmd, "game_bgexpansion", 0);
+            ClearTable(cmd, "game_bgfamily", 0);
+            ClearTable(cmd, "game_bgimplementation", 0);
+            ClearTable(cmd, "game_bgmechanic", 0);
+            ClearTable(cmd, "game_bgpublisher", 0);
+            ClearTable(cmd, "game_bgintegration", 0);
+            ClearTable(cmd, "game_bgcompilation", 0);
+        }
+
+        public static void ClearLinksBGGTables()
+        {
+            try
+            {
+                using (var con = DBHelper.CreateConnection())
+                {
+                    con.Open();
+
+                    using (var transaction = con.BeginTransaction())
+                    {
+                        using (var cmd = con.CreateCommand())
+                        {
+                            cmd.Transaction = transaction;
+                            try
+                            {
+                                ClearLinksBGGTables(cmd);
                             }
                             catch (Exception ex)
                             {

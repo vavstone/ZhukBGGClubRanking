@@ -28,20 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageMyCollection));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.dgvMyCollection = new ZhukBGGClubRanking.WinApp.DataGridViewCustom();
             this.btCancel = new System.Windows.Forms.Button();
             this.btSave = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lblIsStandalone = new System.Windows.Forms.Label();
+            this.lblShortDesctiption = new System.Windows.Forms.Label();
             this.picBoxGame = new System.Windows.Forms.PictureBox();
             this.lblNewGameFullName = new System.Windows.Forms.LinkLabel();
             this.btAddGame = new System.Windows.Forms.Button();
             this.cbSelectRawGame = new System.Windows.Forms.ComboBox();
-            this.lblShortDesctiption = new System.Windows.Forms.Label();
-            this.lblIsStandalone = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -80,9 +80,9 @@
             this.dgvMyCollection.Location = new System.Drawing.Point(0, 0);
             this.dgvMyCollection.Name = "dgvMyCollection";
             this.dgvMyCollection.RowHeadersVisible = false;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
-            this.dgvMyCollection.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
+            this.dgvMyCollection.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvMyCollection.ShowEditingIcon = false;
             this.dgvMyCollection.Size = new System.Drawing.Size(1054, 455);
             this.dgvMyCollection.TabIndex = 0;
@@ -95,6 +95,7 @@
             this.btCancel.TabIndex = 2;
             this.btCancel.Text = "Отменить изменения";
             this.btCancel.UseVisualStyleBackColor = true;
+            this.btCancel.Click += new System.EventHandler(this.btCancel_Click);
             // 
             // btSave
             // 
@@ -104,6 +105,7 @@
             this.btSave.TabIndex = 1;
             this.btSave.Text = "Сохранить изменения";
             this.btSave.UseVisualStyleBackColor = true;
+            this.btSave.Click += new System.EventHandler(this.btSave_Click);
             // 
             // groupBox1
             // 
@@ -120,6 +122,37 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Добавление новой игры";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 163);
+            this.label1.MaximumSize = new System.Drawing.Size(600, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(595, 39);
+            this.label1.TabIndex = 7;
+            this.label1.Text = resources.GetString("label1.Text");
+            // 
+            // lblIsStandalone
+            // 
+            this.lblIsStandalone.AutoSize = true;
+            this.lblIsStandalone.Location = new System.Drawing.Point(6, 139);
+            this.lblIsStandalone.MaximumSize = new System.Drawing.Size(580, 0);
+            this.lblIsStandalone.Name = "lblIsStandalone";
+            this.lblIsStandalone.Size = new System.Drawing.Size(276, 13);
+            this.lblIsStandalone.TabIndex = 6;
+            this.lblIsStandalone.Text = "Является самостоятельной игрой (не дополнением):";
+            // 
+            // lblShortDesctiption
+            // 
+            this.lblShortDesctiption.AutoSize = true;
+            this.lblShortDesctiption.Location = new System.Drawing.Point(6, 76);
+            this.lblShortDesctiption.MaximumSize = new System.Drawing.Size(600, 0);
+            this.lblShortDesctiption.Name = "lblShortDesctiption";
+            this.lblShortDesctiption.Size = new System.Drawing.Size(106, 13);
+            this.lblShortDesctiption.TabIndex = 5;
+            this.lblShortDesctiption.Text = "Краткое описание: ";
+            this.lblShortDesctiption.Click += new System.EventHandler(this.lblShortDesctiption_Click);
             // 
             // picBoxGame
             // 
@@ -163,37 +196,6 @@
             this.cbSelectRawGame.TextUpdate += new System.EventHandler(this.cbSelectRawGame_TextUpdate);
             this.cbSelectRawGame.TextChanged += new System.EventHandler(this.cbSelectRawGame_TextChanged);
             // 
-            // lblShortDesctiption
-            // 
-            this.lblShortDesctiption.AutoSize = true;
-            this.lblShortDesctiption.Location = new System.Drawing.Point(6, 76);
-            this.lblShortDesctiption.MaximumSize = new System.Drawing.Size(600, 0);
-            this.lblShortDesctiption.Name = "lblShortDesctiption";
-            this.lblShortDesctiption.Size = new System.Drawing.Size(106, 13);
-            this.lblShortDesctiption.TabIndex = 5;
-            this.lblShortDesctiption.Text = "Краткое описание: ";
-            this.lblShortDesctiption.Click += new System.EventHandler(this.lblShortDesctiption_Click);
-            // 
-            // lblIsStandalone
-            // 
-            this.lblIsStandalone.AutoSize = true;
-            this.lblIsStandalone.Location = new System.Drawing.Point(6, 139);
-            this.lblIsStandalone.MaximumSize = new System.Drawing.Size(580, 0);
-            this.lblIsStandalone.Name = "lblIsStandalone";
-            this.lblIsStandalone.Size = new System.Drawing.Size(276, 13);
-            this.lblIsStandalone.TabIndex = 6;
-            this.lblIsStandalone.Text = "Является самостоятельной игрой (не дополнением):";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 163);
-            this.label1.MaximumSize = new System.Drawing.Size(600, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(595, 39);
-            this.label1.TabIndex = 7;
-            this.label1.Text = resources.GetString("label1.Text");
-            // 
             // ManageMyCollection
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -204,6 +206,7 @@
             this.Name = "ManageMyCollection";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ManageMyCollection";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ManageMyCollection_FormClosing);
             this.Load += new System.EventHandler(this.ManageMyCollection_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);

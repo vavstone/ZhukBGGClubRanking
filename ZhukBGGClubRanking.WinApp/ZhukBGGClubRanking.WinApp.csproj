@@ -35,6 +35,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BoardGamer.BoardGameGeek">
+      <HintPath>..\dll\BoardGamer.BoardGameGeek.dll</HintPath>
+    </Reference>
     <Reference Include="Csv">
       <HintPath>..\dll\Csv.dll</HintPath>
     </Reference>

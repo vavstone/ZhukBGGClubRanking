@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BoardGamer.BoardGameGeek">
+      <HintPath>..\dll\BoardGamer.BoardGameGeek.dll</HintPath>
+    </Reference>
     <Reference Include="Csv, Version=2.0.93.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dll\Csv.dll</HintPath>

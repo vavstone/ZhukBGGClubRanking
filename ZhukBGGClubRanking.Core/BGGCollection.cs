@@ -74,12 +74,14 @@ namespace ZhukBGGClubRanking.Core
                     var res = new List<string>();
                     if (!string.IsNullOrWhiteSpace(Comment))
                     {
-                        var ar = Comment.Split('+');
+                        var ar = Comment.Split(new []{'+',',',';','/'});
                         res = ar.Select(c=>c.Trim()).ToList();
                     }
                     return res;
                 }
             }
+
+            
 
             public ItemElement()
             {
@@ -192,6 +194,9 @@ namespace ZhukBGGClubRanking.Core
         {
             var url = CoreConstants.BGGCollectionUrl;
             var fileFullName = CoreConstants.InitiateCommonCollectionFilePath;
+            var dir = Path.GetDirectoryName(fileFullName);
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
             using (WebClient webClient = new WebClient())
             {
                 if (File.Exists(fileFullName))
@@ -229,6 +234,8 @@ namespace ZhukBGGClubRanking.Core
             }
         }
 
+       
+
         //public void SetParents()
         //{
         //    foreach (var item in Items)
@@ -242,7 +249,7 @@ namespace ZhukBGGClubRanking.Core
         //    }
         //}
 
-        
+
 
 
     }

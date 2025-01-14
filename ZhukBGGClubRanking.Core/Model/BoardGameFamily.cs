@@ -2,6 +2,7 @@
 {
     public class BoardGameFamily : BGGGameLink
     {
-        public static string LinkType = "bgfamily";
+        public const string LinkType = "boardgamefamily";
+        public const string TableName = "bgfamily";
     }
 }

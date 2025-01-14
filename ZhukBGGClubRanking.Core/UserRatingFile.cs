@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ZhukBGGClubRanking.Core.Model;
+using static BoardGamer.BoardGameGeek.BoardGameGeekXmlApi2.ThingResponse;
 
 namespace ZhukBGGClubRanking.Core
 {
@@ -77,6 +78,15 @@ namespace ZhukBGGClubRanking.Core
                     CreateTime = DateTime.Now,
                     Rating = new RatingCollection { RatingItems = ratingItems }
                 });
+            }
+            foreach (var user in users.Where(c => c.Id != 1))
+            {
+                if (!list.Any(c => c.UserId == user.Id))
+                    list.Add(new UsersRating()
+                    {
+                        UserId = user.Id,
+                        CreateTime = DateTime.Now
+                    });
             }
             return list;
         }

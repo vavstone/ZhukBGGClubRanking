@@ -52,6 +52,15 @@ namespace ZhukBGGClubRanking.Core
         {
             get { return Path.Combine(ImgCacheBGGFilesDir, "small"); }
         }
+        public static string ImgagesFilesDir
+        {
+            get { return Path.Combine(AppFilesDir, "Images"); }
+        }
+        public static string ImgNotFound
+        {
+            get { return Path.Combine(ImgagesFilesDir, "NotFound.webp"); }
+        }
+
 
         public static string BGGCardPrefixUrl
         {

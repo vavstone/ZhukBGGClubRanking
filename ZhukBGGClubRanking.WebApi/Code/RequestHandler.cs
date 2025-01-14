@@ -4,6 +4,8 @@ using ZhukBGGClubRanking.Core.Code;
 using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WebApi.Core;
 using ZhukBGGClubRanking.WebApi.DB;
+using static BoardGamer.BoardGameGeek.BoardGameGeekXmlApi2.UserResponse;
+using User = ZhukBGGClubRanking.Core.User;
 
 namespace ZhukBGGClubRanking.WebApi
 {
@@ -16,7 +18,7 @@ namespace ZhukBGGClubRanking.WebApi
 
         public static List<Game> GetGamesCollection(List<User> users)
         {
-            return DBGame.GetGamesCollection(users);
+            return DBGame.GetGamesCollection(users, true);
         }
 
         public static List<TeseraBGGRawGame> GetRawGamesShortInfo()
@@ -55,11 +57,16 @@ namespace ZhukBGGClubRanking.WebApi
         {
             var ratings = DBUsersRating.GetUsersActualRatings();
             var users = DBUser.GetUsers();
-            var games = DBGame.GetGamesCollection(users);
+            var games = DBGame.GetGamesCollection(users,true);
             foreach (var rating in ratings)
             {
                 UserRatingFile.SaveRatingToCSVFile(rating, games, users);
             } 
+        }
+
+        public static void ClearLinksBGGTables()
+        {
+            DBCommon.ClearLinksBGGTables();
         }
 
         public static void InitiateDB(User currentUser)
@@ -70,11 +77,21 @@ namespace ZhukBGGClubRanking.WebApi
             //2. читаем translate\collection.csv
             var translateFile = GamesNamesTranslateFile.LoadFromFile();
 
-            //3. очищаем таблицы БД
+            //3. читаем игры в games из club_collection\collection.xml (с использованием информации из translate\collection.csv)
+            var bggColl = BGGCollection.LoadFromFile();
+
+            //4. очищаем таблицы БД
             DBCommon.ClearDB();
 
-            //4. создаем пользователей в users по названиям файлов в lists\
-            foreach (var userName in UserRatingFile.GetFilesNamesWithoutExt())
+            //5. получаем список пользователей (по названиям файлов в lists\ и по владельцам игр в комментах БГГ) и создаем пользователей в users 
+            var userNames = UserRatingFile.GetFilesNamesWithoutExt();
+            var userNamesFromComments = bggColl.Items.SelectMany(c => c.OwnersList).ToList().Distinct();
+            foreach (var name in userNamesFromComments)
+            {
+                if (!userNames.Any(c=>c.ToUpper()==name.ToUpper()))
+                    userNames.Add(name);
+            }
+            foreach (var userName in userNames)
             {
                 var user = new User();
                 user.Name = user.FullName = user.Password = userName;
@@ -87,41 +104,67 @@ namespace ZhukBGGClubRanking.WebApi
                 DBUser.CreateNewUser(user);
             }
 
-            //5. получаем созданных пользователей
+            //6. получаем созданных пользователей
             var users = DBUser.GetUsers();
 
-            //6. читаем игры в games из club_collection\collection.xml (с использованием информации из translate\collection.csv)
-            var bggColl = BGGCollection.LoadFromFile();
+            //7. применяем файл Translate при необходимости
             if (translateFile != null)
             {
                 bggColl.ApplyTranslation(translateFile.GamesTranslate);
             }
 
-            //7. созданием игры в БД с использованием инфо пользователей из БД
+            //8. получаем информацию из bgg_raw_info,bgg_tesera_raw_info
+            var rawGames = DBTeseraBGGRawGame.GetGamesShortInfo();
+
+            //9. применяем информацию из bgg_raw_info,bgg_tesera_raw_info, создаем игру
             List<Game> games = new List<Game>();
-            foreach (var bggGame in bggColl.Items)
+            foreach (var item in bggColl.Items)
             {
-                var game = bggGame.CreateGame(users, currentUser);
-                games.Add(game);
+                if (!games.Any(c => c.BGGObjectId == item.ObjectId))
+                {
+                    var ownersNameList = item.OwnersList;
+                    var owners = new List<User>();
+                    foreach (var ownerName in ownersNameList)
+                    {
+                        var owner = users.FirstOrDefault(c => c.Name.ToUpper() == ownerName.ToUpper());
+                        if (owner != null)
+                            owners.Add(owner);
+                    }
+
+                    var game = Game.CreateGame(rawGames, owners, false, item.ObjectId, null, item.TeseraKey,
+                        item.ParentName);
+                    if (!string.IsNullOrWhiteSpace(item.Thumbnail))
+                        game.ThumbnailBGG = item.Thumbnail;
+                    if (!string.IsNullOrWhiteSpace(item.Image))
+                        game.ImageBGG = item.Image;
+                    games.Add(game);
+                }
+
             }
+            //10. сохраняем игры и bgg линки
             foreach (var game in games)
             {
                 DBGame.SaveGame(game, false);
+                DBGGGLinks.SaveLinksForBGGGame(game.BGGExtendedInfo);
             }
+            //11. обновляем парентс
             foreach (var game in games)
             {
                 game.SetParents(games);
                 DBGame.UpdateParent(game);
             }
 
-            //8. создаем рейтинги (rating_items, users_ratings) из файлов в lists\
+            //12. создаем рейтинги (rating_items, users_ratings) из файлов в lists\
             var ratings = UserRatingFile.GetUsersRatingsFromListsFolder(users, games);
+            
             foreach (var userRating in ratings)
             {
                 userRating.ReCalculateRatingAfterRemoveItems();
                 DBUsersRating.SaveRating(userRating);
             }
         }
+
+        
 
         public static void ClearTeseraRawTable()
         {
@@ -189,7 +232,47 @@ namespace ZhukBGGClubRanking.WebApi
                 }
             }
 
-            return string.Empty;
+            return CoreConstants.ImgNotFound;
+        }
+
+        public static void UpdateBGGLinks()
+        {
+            var users = DBUser.GetUsers();
+            var games = DBGame.GetGamesCollection(users, true);
+            foreach (var game in games)
+            {
+                if (new[] { 312484, 266192 }.Contains(game.BGGObjectId)) continue;
+                var existingLinks = DBGGGLinks.GetLinksForBGGGame(game.BGGObjectId);
+                if (!existingLinks.Any())
+                {
+                    System.Threading.Thread.Sleep(1000);
+                    game.BGGExtendedInfo = BGGHelper.GetGame(game.BGGObjectId);
+                    if (game.BGGExtendedInfo != null)
+                    {
+                        DBGGGLinks.SaveLinksForBGGGame(game.BGGExtendedInfo);
+                    }
+                }
+            }
+        }
+
+        public static void AddGamesForUser(List<Game> games, User user)
+        {
+            foreach (var game in games)
+            {
+                game.Owners.Clear();
+                game.Owners.Add(new GameOwner() {CreateTime = DateTime.Now, UserId = user.Id});
+                DBGame.SaveGame(game, false);
+            }
+        }
+
+        public static void RemoveGamesFromUser(List<Game> games, User user)
+        {
+            foreach (var game in games)
+            {
+                game.Owners.Clear();
+                game.Owners.Add(new GameOwner() { CreateTime = DateTime.Now, DeleteTime = DateTime.Now, UserId = user.Id });
+                DBGame.SaveGame(game, false);
+            }
         }
     }
 }
