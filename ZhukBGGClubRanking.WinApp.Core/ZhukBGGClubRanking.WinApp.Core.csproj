@@ -85,6 +85,7 @@
   <ItemGroup>
     <Compile Include="AppCache.cs" />
     <Compile Include="AsyncRequestsWrappers\SaveAsyncRequestToDBAPIWrapper.cs" />
+    <Compile Include="AsyncRequestsWrappers\SimpleAsyncRequestToAPIWrapper2.cs" />
     <Compile Include="AsyncRequestsWrappers\SimpleAsyncRequestToAPIWrapper.cs" />
     <Compile Include="AsyncRequestsWrappers\TeseraRawInfoWrapper.cs" />
     <Compile Include="Constants.cs" />

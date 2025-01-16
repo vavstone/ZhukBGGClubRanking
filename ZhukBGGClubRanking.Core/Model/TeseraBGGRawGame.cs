@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 namespace ZhukBGGClubRanking.Core.Model
 {
@@ -10,9 +11,63 @@ namespace ZhukBGGClubRanking.Core.Model
         public int Id {  get; set; }
         public TeseraRawGame TeseraInfo { get; set; }
         public BGGRawGame BGGInfo { get; set; }
-
         public bool IsAddition { get; set; }
         public int ParentId { get; set; }
+
+        public string NameEng
+        {
+            get
+            {
+                if (BGGInfo != null) return BGGInfo.Name;
+                return null;
+            }
+        }
+        public string NameRus
+        {
+            get
+            {
+                if (TeseraInfo != null) return TeseraInfo.Title;
+                return null;
+            }
+        }
+        public int? YearPublished
+        {
+            get
+            {
+                if (BGGInfo!=null && BGGInfo.YearPublished != null && BGGInfo.YearPublished.Value > 0)
+                    return BGGInfo.YearPublished.Value;
+                if (TeseraInfo != null && TeseraInfo.Year != null && TeseraInfo.Year.Value > 0)
+                    return TeseraInfo.Year.Value;
+                return null;
+            }
+        }
+        public int? BGGObjectId
+        {
+            get
+            {
+                if (BGGInfo != null)
+                    return BGGInfo.Id;
+                return null;
+            }
+        }
+        public string TeseraAlias
+        {
+            get
+            {
+                if (TeseraInfo != null) return TeseraInfo.Alias;
+                return null;
+            }
+        }
+        public int? TeseraId
+        {
+            get
+            {
+                if (TeseraInfo != null) return TeseraInfo.TeseraId;
+                return null;
+            }
+        }
+
+
 
         public static List<TeseraBGGRawGame> GetMergedTeseraBGGInfoList(List<BGGRawGame> bggGames, List<TeseraRawGame> teseraGames)
         {
@@ -67,26 +122,29 @@ namespace ZhukBGGClubRanking.Core.Model
 
         public override string ToString()
         {
-            return FullName;
+            return NameWithYear;
         }
 
-        public string FullName
+        public string Name
         {
             get
             {
-                if (TeseraInfo != null && BGGInfo != null)
-                {
-                    if (TeseraInfo.Title.ToUpper() == BGGInfo.Name.ToUpper())
-                        return String.Format("{0}{1}", BGGInfo.Name, BGGInfo.YearPublished == null || BGGInfo.YearPublished.Value == 0 ? "" : " " + BGGInfo.YearPublished.Value);
-                    return String.Format("{0} <{1}>{2}", TeseraInfo.Title, BGGInfo.Name,
-                        BGGInfo.YearPublished == null || BGGInfo.YearPublished.Value==0 ? "" : " " + BGGInfo.YearPublished.Value);
-                }
-
+                if (TeseraInfo != null && BGGInfo != null && TeseraInfo.Title.ToUpper() != BGGInfo.Name.ToUpper())
+                    return string.Format("{0} <{1}>", TeseraInfo.Title, BGGInfo.Name);
                 if (TeseraInfo != null)
-                    return String.Format("{0}{1}", TeseraInfo.Title, TeseraInfo.Year == null || TeseraInfo.Year.Value == 0 ? "" : " " + TeseraInfo.Year.Value);
+                    return TeseraInfo.Title;
                 if (BGGInfo != null)
-                    return String.Format("{0}{1}", BGGInfo.Name, BGGInfo.YearPublished == null || BGGInfo.YearPublished.Value == 0 ? "" : " " + BGGInfo.YearPublished.Value);
+                    return BGGInfo.Name;
                 return "";
+            }
+        }
+
+        public string NameWithYear
+        {
+            get
+            {
+                var yearAddStr = (YearPublished==null || YearPublished == 0) ? "" : " " + YearPublished;
+                return Name + yearAddStr;
             }
         }
 
@@ -94,7 +152,7 @@ namespace ZhukBGGClubRanking.Core.Model
         {
             if (minSearchMaskLength==0 || searchMask.Length<minSearchMaskLength)
                 return new List<TeseraBGGRawGame>();
-            return sourceList.Where(c => c.FullName.ToUpper().Contains(searchMask.ToUpper())).OrderBy(c=>c.FullName).ToList();
+            return sourceList.Where(c => c.NameWithYear.ToUpper().Contains(searchMask.ToUpper())).OrderBy(c=>c.NameWithYear).ToList();
         }
 
     }

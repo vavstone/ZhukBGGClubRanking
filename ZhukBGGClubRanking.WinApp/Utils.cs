@@ -90,9 +90,11 @@ namespace ZhukBGGClubRanking.WinApp
             return null;
         }
 
-        public static string GetBGGCardUrl(int bggObjectId)
+        public static string GetBGGCardUrl(int? bggObjectId)
         {
-            return Constants.BGGCardPrefixUrl + bggObjectId;
+            if (bggObjectId!=null && bggObjectId>0)
+                return Constants.BGGCardPrefixUrl + bggObjectId;
+            return null;
         }
 
         public static Bitmap ByteToImage(byte[] blob)

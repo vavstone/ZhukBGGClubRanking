@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Jacob Bruun</Authors>
+    <Company />
+    <Description>A BGG XML API2 client that provides full fidelity responses that will help you to easily integrate your app with boardgamegeek.com</Description>
+    <Version>0.8.1</Version>
+    <PackageProjectUrl>https://github.com/Cobster/BoardGamer.BoardGameGeek</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Cobster/BoardGamer.BoardGameGeek.git</RepositoryUrl>
+    <PackageTags>BGG BoardGameGeek Board Game Geek</PackageTags>
+    <Copyright>Copyright 2019 Jacob Bruun</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

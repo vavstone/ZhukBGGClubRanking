@@ -76,6 +76,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="GamesListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GamesListForm.Designer.cs">
+      <DependentUpon>GamesListForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoadCSVRatingFileForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,6 +132,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GamesListForm.resx">
+      <DependentUpon>GamesListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoadCSVRatingFileForm.resx">
       <DependentUpon>LoadCSVRatingFileForm.cs</DependentUpon>

@@ -22,8 +22,8 @@ namespace ZhukBGGClubRanking.WinAdminApp
             InitializeComponent();
             bwTeseraCollection.WorkerSupportsCancellation = true;
             bwTeseraCollection.WorkerReportsProgress = true;
-            bwTeseraCollection.DoWork += BwTeseraCollection_DoWork; ;
-            bwTeseraCollection.RunWorkerCompleted += BwTeseraCollection_RunWorkerCompleted; ;
+            bwTeseraCollection.DoWork += BwTeseraCollection_DoWork; 
+            bwTeseraCollection.RunWorkerCompleted += BwTeseraCollection_RunWorkerCompleted; 
         }
 
         async void DoGamesRequest(HttpClient client, List<TeseraRawGame> games, WebPrmGetGames prm)

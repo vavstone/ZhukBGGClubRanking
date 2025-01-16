@@ -595,5 +595,12 @@ namespace ZhukBGGClubRanking.WinApp
         {
             UserSettings.SaveUserSettings();
         }
+
+        private void menuShowGamesList_Click(object sender, EventArgs e)
+        {
+            var gamesList = new GamesListForm();
+            gamesList.Settings = UserSettings;
+            gamesList.ShowDialog(this);
+        }
     }
 }

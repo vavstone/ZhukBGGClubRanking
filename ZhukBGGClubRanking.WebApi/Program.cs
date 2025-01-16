@@ -80,6 +80,13 @@ app.MapGet("/api/getgamescollection", [Authorize] (HttpContext context) =>
     return coll;
 }).WithName("GetGamesCollection");
 
+app.MapPost("/api/getgameswithbgglinks", [Authorize] (GamesFilter filter) =>
+{
+    var users = DBUser.GetUsers();
+    var coll = RequestHandler.GetGamesWithBGGLinks(users,filter);
+    return coll;
+}).WithName("GetGamesWithBGGLinks");
+
 app.MapGet("/api/getusersactualratings", [Authorize] (HttpContext context) =>
 {
     var coll = RequestHandler.GetUsersActualRatings();
@@ -107,25 +114,27 @@ app.MapPost("/api/createuserbyadmin", [Authorize] (User newUser, HttpContext con
     RequestHandler.CreateNewUser(newUser);
 }).WithName("CreateUserByAdmin");
 
-app.MapPost("/api/initiatedb", /*[Authorize]*/ (HttpContext context) =>
+//app.MapPost("/api/initiatedb", /*[Authorize]*/ (HttpContext context) =>
+//{
+//    //if (!AuthUtils.IsUserAdmin(context))
+//    //    return;
+//    var currentUser = new User { Id = 1 };
+//    RequestHandler.InitiateDB(currentUser);
+//}).WithName("InitiateDB");
+
+app.MapPost("/api/clearlinksbggtables", /*[Authorize]*/ (HttpContext context) =>
 {
     //if (!AuthUtils.IsUserAdmin(context))
     //    return;
-    var currentUser = new User { Id = 1 };
-    RequestHandler.InitiateDB(currentUser);
-}).WithName("InitiateDB");
+    RequestHandler.ClearLinksBGGTables();
+}).WithName("ClearLinksBGGTables");
 
-//app.MapPost("/api/clearlinksbggtables", /*[Authorize]*/ (HttpContext context) => {
-//    //if (!AuthUtils.IsUserAdmin(context))
-//    //    return;
-//    RequestHandler.ClearLinksBGGTables();
-//}).WithName("ClearLinksBGGTables");
-
-//app.MapPost("/api/updatebgglinks", /*[Authorize]*/ (HttpContext context) => {
-//    //if (!AuthUtils.IsUserAdmin(context))
-//    //    return;
-//    RequestHandler.UpdateBGGLinks();
-//}).WithName("UpdateBGGLinks");
+app.MapPost("/api/updatebgglinks", /*[Authorize]*/ (HttpContext context) =>
+{
+    //if (!AuthUtils.IsUserAdmin(context))
+    //    return;
+    RequestHandler.UpdateBGGLinks();
+}).WithName("UpdateBGGLinks");
 
 app.MapPost("/api/saveratingstoCSVfiles", [Authorize] (HttpContext context) => {
     if (!AuthUtils.IsUserAdmin(context))
@@ -189,7 +198,7 @@ app.MapGet("/api/getgameimagebybggid", [Authorize] (HttpContext context, int bgg
 
 app.MapGet("/test/getteststring", () => "test").WithName("GetTestString");
 
-
+//app.MapGet("/xmlapi/boardgame/35424", () => "<xml>testtest</xml>").WithName("GetTestXML");
 
 
 app.Run();

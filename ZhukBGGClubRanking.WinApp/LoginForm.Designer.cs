@@ -30,16 +30,16 @@
         {
             this.btSubmit = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tbHostingPassword = new System.Windows.Forms.TextBox();
+            this.lblHostingPassword = new System.Windows.Forms.Label();
+            this.tbHostingLogin = new System.Windows.Forms.TextBox();
+            this.lblHostingLogin = new System.Windows.Forms.Label();
+            this.tbHostingUrl = new System.Windows.Forms.TextBox();
+            this.lblHostingUrl = new System.Windows.Forms.Label();
             this.tbPassword = new System.Windows.Forms.TextBox();
             this.tbLogin = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tbHostingUrl = new System.Windows.Forms.TextBox();
-            this.lblHostingUrl = new System.Windows.Forms.Label();
-            this.tbHostingLogin = new System.Windows.Forms.TextBox();
-            this.lblHostingLogin = new System.Windows.Forms.Label();
-            this.tbHostingPassword = new System.Windows.Forms.TextBox();
-            this.lblHostingPassword = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,6 +71,60 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Параметры входа";
+            // 
+            // tbHostingPassword
+            // 
+            this.tbHostingPassword.Location = new System.Drawing.Point(122, 134);
+            this.tbHostingPassword.Name = "tbHostingPassword";
+            this.tbHostingPassword.Size = new System.Drawing.Size(235, 20);
+            this.tbHostingPassword.TabIndex = 10;
+            this.tbHostingPassword.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
+            // 
+            // lblHostingPassword
+            // 
+            this.lblHostingPassword.AutoSize = true;
+            this.lblHostingPassword.Location = new System.Drawing.Point(23, 137);
+            this.lblHostingPassword.Name = "lblHostingPassword";
+            this.lblHostingPassword.Size = new System.Drawing.Size(93, 13);
+            this.lblHostingPassword.TabIndex = 9;
+            this.lblHostingPassword.Text = "Пароль хостинга";
+            this.lblHostingPassword.Click += new System.EventHandler(this.label5_Click);
+            // 
+            // tbHostingLogin
+            // 
+            this.tbHostingLogin.Location = new System.Drawing.Point(122, 108);
+            this.tbHostingLogin.Name = "tbHostingLogin";
+            this.tbHostingLogin.Size = new System.Drawing.Size(235, 20);
+            this.tbHostingLogin.TabIndex = 8;
+            this.tbHostingLogin.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // lblHostingLogin
+            // 
+            this.lblHostingLogin.AutoSize = true;
+            this.lblHostingLogin.Location = new System.Drawing.Point(23, 111);
+            this.lblHostingLogin.Name = "lblHostingLogin";
+            this.lblHostingLogin.Size = new System.Drawing.Size(86, 13);
+            this.lblHostingLogin.TabIndex = 7;
+            this.lblHostingLogin.Text = "Логин хостинга";
+            this.lblHostingLogin.Click += new System.EventHandler(this.label4_Click);
+            // 
+            // tbHostingUrl
+            // 
+            this.tbHostingUrl.Location = new System.Drawing.Point(122, 82);
+            this.tbHostingUrl.Name = "tbHostingUrl";
+            this.tbHostingUrl.Size = new System.Drawing.Size(235, 20);
+            this.tbHostingUrl.TabIndex = 6;
+            this.tbHostingUrl.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // lblHostingUrl
+            // 
+            this.lblHostingUrl.AutoSize = true;
+            this.lblHostingUrl.Location = new System.Drawing.Point(23, 85);
+            this.lblHostingUrl.Name = "lblHostingUrl";
+            this.lblHostingUrl.Size = new System.Drawing.Size(77, 13);
+            this.lblHostingUrl.TabIndex = 5;
+            this.lblHostingUrl.Text = "URL хостинга";
+            this.lblHostingUrl.Click += new System.EventHandler(this.label3_Click);
             // 
             // tbPassword
             // 
@@ -110,60 +164,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Логин";
             this.label1.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // tbHostingUrl
-            // 
-            this.tbHostingUrl.Location = new System.Drawing.Point(122, 82);
-            this.tbHostingUrl.Name = "tbHostingUrl";
-            this.tbHostingUrl.Size = new System.Drawing.Size(235, 20);
-            this.tbHostingUrl.TabIndex = 6;
-            this.tbHostingUrl.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // lblHostingUrl
-            // 
-            this.lblHostingUrl.AutoSize = true;
-            this.lblHostingUrl.Location = new System.Drawing.Point(23, 85);
-            this.lblHostingUrl.Name = "lblHostingUrl";
-            this.lblHostingUrl.Size = new System.Drawing.Size(77, 13);
-            this.lblHostingUrl.TabIndex = 5;
-            this.lblHostingUrl.Text = "URL хостинга";
-            this.lblHostingUrl.Click += new System.EventHandler(this.label3_Click);
-            // 
-            // tbHostingLogin
-            // 
-            this.tbHostingLogin.Location = new System.Drawing.Point(122, 108);
-            this.tbHostingLogin.Name = "tbHostingLogin";
-            this.tbHostingLogin.Size = new System.Drawing.Size(235, 20);
-            this.tbHostingLogin.TabIndex = 8;
-            this.tbHostingLogin.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            // 
-            // lblHostingLogin
-            // 
-            this.lblHostingLogin.AutoSize = true;
-            this.lblHostingLogin.Location = new System.Drawing.Point(23, 111);
-            this.lblHostingLogin.Name = "lblHostingLogin";
-            this.lblHostingLogin.Size = new System.Drawing.Size(86, 13);
-            this.lblHostingLogin.TabIndex = 7;
-            this.lblHostingLogin.Text = "Логин хостинга";
-            this.lblHostingLogin.Click += new System.EventHandler(this.label4_Click);
-            // 
-            // tbHostingPassword
-            // 
-            this.tbHostingPassword.Location = new System.Drawing.Point(122, 134);
-            this.tbHostingPassword.Name = "tbHostingPassword";
-            this.tbHostingPassword.Size = new System.Drawing.Size(235, 20);
-            this.tbHostingPassword.TabIndex = 10;
-            this.tbHostingPassword.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
-            // 
-            // lblHostingPassword
-            // 
-            this.lblHostingPassword.AutoSize = true;
-            this.lblHostingPassword.Location = new System.Drawing.Point(23, 137);
-            this.lblHostingPassword.Name = "lblHostingPassword";
-            this.lblHostingPassword.Size = new System.Drawing.Size(93, 13);
-            this.lblHostingPassword.TabIndex = 9;
-            this.lblHostingPassword.Text = "Пароль хостинга";
-            this.lblHostingPassword.Click += new System.EventHandler(this.label5_Click);
             // 
             // LoginForm
             // 

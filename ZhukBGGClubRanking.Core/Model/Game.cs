@@ -22,13 +22,10 @@ namespace ZhukBGGClubRanking.Core
         public string TeseraKey { get; set; } = "";
         public int? TeseraId { get; set; }
         public int ParentId { get; set; }
-        //public string BGGComments { get; set; } = "";
         public DateTime CreateTime { get; set; }
         public int CreateUserId { get; set; }
         public bool IsActual { get; set; }
-
         public bool IsAddition { get; set; }
-
         public string ParentEngName { get; set; }
 
         public List<GameOwner> Owners { get; set; } = new List<GameOwner>();
@@ -48,9 +45,13 @@ namespace ZhukBGGClubRanking.Core
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(NameRus))
+                if (NameRus!=null && NameEng!=null && NameRus.ToUpper() != NameEng.ToUpper())
+                    return string.Format("{0} <{1}>", NameRus, NameEng);
+                if (!string.IsNullOrWhiteSpace(NameRus))
+                    return NameRus;
+                if (!string.IsNullOrWhiteSpace(NameEng))
                     return NameEng;
-                return string.Format("{0} <{1}>", NameRus, NameEng);
+                return "";
             }
         }
 
@@ -58,14 +59,16 @@ namespace ZhukBGGClubRanking.Core
         { 
             get
             {
-                var res = string.Empty;
-                foreach (var item in Owners.OrderBy(c=>c.UserName))
-                {
-                    res += item.UserName + " + ";
-                }
-                if (res.Length > 3)
-                    res = res.Substring(0, res.Length - 3);
-                return res;
+                //var res = string.Empty;
+                //foreach (var item in Owners.OrderBy(c=>c.UserName))
+                //{
+                //    res += item.UserName + " + ";
+                //}
+                //if (res.Length > 3)
+                //    res = res.Substring(0, res.Length - 3);
+                //return res;
+                //TODO разобраться с дублированием на форме получения списка игр!!!
+                return Owners.Select(c => c.UserName).Distinct().OrderBy(c => c).JoinToString(" + ");
             }
         }
 
@@ -83,13 +86,22 @@ namespace ZhukBGGClubRanking.Core
             return formattedName;
         }
 
+        public string NameWithYear
+        {
+            get
+            {
+                var yearAddStr = YearPublished == 0 ? "" : " " + YearPublished;
+                return Name + yearAddStr;
+            }
+        }
+
         public override string ToString()
         {
-            var result = Name;
-            if (YearPublished>0)
-                result +=
-            string.Format(" {0}", YearPublished);
-            return result;
+            //var result = Name;
+            //if (YearPublished>0)
+            //    result +=
+            //string.Format(" {0}", YearPublished);
+            return NameWithYear;
         }
 
         public void SetParents( List<Game> games)

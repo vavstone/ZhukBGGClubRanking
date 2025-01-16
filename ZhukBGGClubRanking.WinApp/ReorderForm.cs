@@ -109,7 +109,7 @@ namespace ZhukBGGClubRanking.WinApp
                 if (!string.IsNullOrWhiteSpace(item.ToString()))
                 {
                     var gameEng = Game.GetGameNameEngFromFormattedName(item.ToString());
-                    var game = Cache.Games.FirstOrDefault(c => c.NameEng == gameEng);
+                    var game = Cache.Games.FirstOrDefault(c => c.NameEng.ToUpper() == gameEng.ToUpper());
                     result.Rating.RatingItems.Add(new RatingItem()
                         {GameId = game.Id, RatingOrder = counter++});
                 }

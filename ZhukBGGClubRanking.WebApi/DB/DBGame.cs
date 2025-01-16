@@ -80,6 +80,8 @@ namespace ZhukBGGClubRanking.Core
             return result;
         }
 
+       
+
         public static int SaveGame(Game game, bool clearOwnersIfExists)
         {
             try

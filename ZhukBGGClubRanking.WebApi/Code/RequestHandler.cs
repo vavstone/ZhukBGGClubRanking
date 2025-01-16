@@ -21,6 +21,11 @@ namespace ZhukBGGClubRanking.WebApi
             return DBGame.GetGamesCollection(users, true);
         }
 
+        public static List<GameFullInfoWrapper> GetGamesWithBGGLinks(List<User> users, GamesFilter filter)
+        {
+            return DBGameFullInfoWrapper.GetGames(users, filter);
+        }
+
         public static List<TeseraBGGRawGame> GetRawGamesShortInfo()
         {
             return DBTeseraBGGRawGame.GetGamesShortInfo();
@@ -241,7 +246,7 @@ namespace ZhukBGGClubRanking.WebApi
             var games = DBGame.GetGamesCollection(users, true);
             foreach (var game in games)
             {
-                if (new[] { 312484, 266192 }.Contains(game.BGGObjectId)) continue;
+                //if (new[] { 312484, 266192 }.Contains(game.BGGObjectId)) continue;
                 var existingLinks = DBGGGLinks.GetLinksForBGGGame(game.BGGObjectId);
                 if (!existingLinks.Any())
                 {

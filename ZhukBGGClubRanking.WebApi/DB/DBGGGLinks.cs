@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using System.Data.Common;
+using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WebApi;
 using ZhukBGGClubRanking.WebApi.Core;
 
@@ -35,9 +36,9 @@ namespace ZhukBGGClubRanking.Core
             }
         }
 
-        public static List<BGGGameLink> GetLinksForBGGGame(int bggId)
+        public static BGGGameLinkCollection GetLinksForBGGGame(int bggId)
         {
-            var result = new List<BGGGameLink>();
+            var result = new BGGGameLinkCollection();
             try
             {
                 using (var con = DBHelper.CreateConnection())
@@ -46,18 +47,18 @@ namespace ZhukBGGClubRanking.Core
                     using (var cmd = con.CreateCommand())
                     {
                         cmd.CreateParameter(DbType.Int32, "bgg_id", bggId);
-                        result.AddRange(GetLinksForType(cmd, BoardGameDesigner.TableName));
-                        result.AddRange(GetLinksForType(cmd, BoardGameArtist.TableName));
-                        result.AddRange(GetLinksForType(cmd, BoardGameAccessory.TableName));
-                        result.AddRange(GetLinksForType(cmd, BoardGameCategory.TableName));
-                        result.AddRange(GetLinksForType(cmd, BoardGameExpansion.TableName));
-                        result.AddRange(GetLinksForType(cmd, BoardGameFamily.TableName));
-                        result.AddRange(GetLinksForType(cmd, BoardGameImplementation.TableName));
-                        result.AddRange(GetLinksForType(cmd, BoardGameMechanic.TableName));
-                        result.AddRange(GetLinksForType(cmd, BoardGamePublisher.TableName));
-                        result.AddRange(GetLinksForType(cmd, BoardGameIntegration.TableName));
-                        result.AddRange(GetLinksForType(cmd, BoardGameCompilation.TableName));
-                        result.AddRange(GetLinksForType(cmd, BoardUnknownLinkType.TableName));
+                        result.BGDesigners = GetLinksForType(cmd, BoardGameDesigner.TableName).Cast<BoardGameDesigner>().ToList();
+                        result.BGArtists = GetLinksForType(cmd, BoardGameArtist.TableName).Cast<BoardGameArtist>().ToList();
+                        result.BGAccessories = GetLinksForType(cmd, BoardGameAccessory.TableName).Cast<BoardGameAccessory>().ToList();
+                        result.BGCategories = GetLinksForType(cmd, BoardGameCategory.TableName).Cast<BoardGameCategory>().ToList();
+                        result.BGGExpansions = GetLinksForType(cmd, BoardGameExpansion.TableName).Cast<BoardGameExpansion>().ToList();
+                        result.BGFamilies = GetLinksForType(cmd, BoardGameFamily.TableName).Cast<BoardGameFamily>().ToList();
+                        result.BGImplementations = GetLinksForType(cmd, BoardGameImplementation.TableName).Cast<BoardGameImplementation>().ToList();
+                        result.BGMechanics = GetLinksForType(cmd, BoardGameMechanic.TableName).Cast<BoardGameMechanic>().ToList();
+                        result.BGPublishers = GetLinksForType(cmd, BoardGamePublisher.TableName).Cast<BoardGamePublisher>().ToList();
+                        result.BGIntegrations = GetLinksForType(cmd, BoardGameIntegration.TableName).Cast<BoardGameIntegration>().ToList();
+                        result.BGCompilations = GetLinksForType(cmd, BoardGameCompilation.TableName).Cast<BoardGameCompilation>().ToList();
+                        result.BGUnknownLinks = GetLinksForType(cmd, BoardUnknownLinkType.TableName).Cast<BoardUnknownLinkType>().ToList();
                     }
                 }
 
@@ -166,11 +167,11 @@ namespace ZhukBGGClubRanking.Core
                 cmd.CreateParameter(DbType.Int32, "bgg_game_id", bggId);
                 cmd.ExecuteNonQuery();
 
-                foreach (var item in linkGroup.ToList().Select(c=>c.Value).Distinct())
+                foreach (var item in linkGroup.ToList().Select(c=>c.Value).Distinct(StringComparer.CurrentCultureIgnoreCase))
                 {
 
-
-                        //вставляем линк (например, в таблицу bgartist), если такого еще нет
+                    try
+                    {//вставляем линк (например, в таблицу bgartist), если такого еще нет
                         cmd.CommandText = sqlInsertLink;
                         cmd.Parameters.Clear();
                         cmd.CreateParameter(DbType.String, "title_eng", item);
@@ -178,7 +179,7 @@ namespace ZhukBGGClubRanking.Core
 
                         //получаем айди линка (вставленного или ранее существовавшего)
                         cmd.CommandText = sqlGetLinkId;
-                        var linkId = (Int32) (Int64) cmd.ExecuteScalar();
+                        var linkId = (Int32)(Int64)cmd.ExecuteScalar();
 
                         //добавление связи линков с текущей игрой
                         cmd.CommandText = sqlInsertGameToLink;
@@ -186,6 +187,13 @@ namespace ZhukBGGClubRanking.Core
                         cmd.CreateParameter(DbType.Int32, "bgg_game_id", bggId);
                         cmd.CreateParameter(DbType.Int32, foreignKeyToLinkFieldName, linkId);
                         cmd.ExecuteNonQuery();
+
+                    }
+                    catch (Exception e)
+                    {
+                        var a = e;
+                    }
+                        
 
 
                 }

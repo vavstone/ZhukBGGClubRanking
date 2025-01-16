@@ -77,6 +77,14 @@ namespace ZhukBGGClubRanking.WinApp.Core
             return await client.GetAsync("api/getrawgames");
         }
 
+        public static async Task<HttpResponseMessage> GetGamesWithBGGLinks(string url, string login, string password, string token, GamesFilter filter)
+        {
+            //var filter = new GamesFilter();
+            HttpContent content = JsonContent.Create(filter);
+            var client = GetClientWithAuth(url, login, password, token);
+            return await client.PostAsync("/api/getgameswithbgglinks", content);
+        }
+
         public static async Task<HttpResponseMessage> CreateUserByAdmin(string url, string login, string password, string token, User newUser)
         {
             var client = GetClientWithAuth(url, login, password, token);

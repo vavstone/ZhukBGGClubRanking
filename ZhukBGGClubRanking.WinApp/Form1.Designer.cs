@@ -52,10 +52,11 @@
             this.menuUploadCSVFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuManageMyCollection = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridView1 = new ZhukBGGClubRanking.WinApp.DataGridViewCustom();
             this.panel3 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.dataGridView1 = new ZhukBGGClubRanking.WinApp.DataGridViewCustom();
+            this.menuShowGamesList = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel7.SuspendLayout();
@@ -66,12 +67,12 @@
             this.panel4.SuspendLayout();
             this.panel2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -144,7 +145,7 @@
             this.trBarOnlyTop.Minimum = 1;
             this.trBarOnlyTop.Name = "trBarOnlyTop";
             this.trBarOnlyTop.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.trBarOnlyTop.Size = new System.Drawing.Size(776, 44);
+            this.trBarOnlyTop.Size = new System.Drawing.Size(776, 45);
             this.trBarOnlyTop.TabIndex = 1;
             this.trBarOnlyTop.Value = 1;
             this.trBarOnlyTop.Scroll += new System.EventHandler(this.trBarOnlyTop_Scroll);
@@ -266,7 +267,8 @@
             // 
             this.управлениеРейтингомToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuUploadCSVFile,
-            this.menuManageMyCollection});
+            this.menuManageMyCollection,
+            this.menuShowGamesList});
             this.управлениеРейтингомToolStripMenuItem.Name = "управлениеРейтингомToolStripMenuItem";
             this.управлениеРейтингомToolStripMenuItem.Size = new System.Drawing.Size(85, 20);
             this.управлениеРейтингомToolStripMenuItem.Text = "Управление";
@@ -291,22 +293,6 @@
             this.AboutToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
             this.AboutToolStripMenuItem.Text = "О программе";
             this.AboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 6);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersVisible = false;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
-            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView1.ShowEditingIcon = false;
-            this.dataGridView1.Size = new System.Drawing.Size(694, 489);
-            this.dataGridView1.TabIndex = 0;
             // 
             // panel3
             // 
@@ -347,6 +333,29 @@
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 6);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersVisible = false;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
+            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridView1.ShowEditingIcon = false;
+            this.dataGridView1.Size = new System.Drawing.Size(694, 489);
+            this.dataGridView1.TabIndex = 0;
+            // 
+            // menuShowGamesList
+            // 
+            this.menuShowGamesList.Name = "menuShowGamesList";
+            this.menuShowGamesList.Size = new System.Drawing.Size(267, 22);
+            this.menuShowGamesList.Text = "Список игр...";
+            this.menuShowGamesList.Click += new System.EventHandler(this.menuShowGamesList_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -375,12 +384,12 @@
             this.panel2.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel3.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -414,6 +423,7 @@
         private System.Windows.Forms.ToolStripMenuItem управлениеРейтингомToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menuUploadCSVFile;
         private System.Windows.Forms.ToolStripMenuItem menuManageMyCollection;
+        private System.Windows.Forms.ToolStripMenuItem menuShowGamesList;
     }
 }
 
