@@ -2,6 +2,7 @@
 using ZhukBGGClubRanking.Core;
 using ZhukBGGClubRanking.Core.Code;
 using ZhukBGGClubRanking.Core.Model;
+using ZhukBGGClubRanking.WebApi.Code;
 using ZhukBGGClubRanking.WebApi.Core;
 using ZhukBGGClubRanking.WebApi.DB;
 using static BoardGamer.BoardGameGeek.BoardGameGeekXmlApi2.UserResponse;
@@ -240,7 +241,7 @@ namespace ZhukBGGClubRanking.WebApi
             return CoreConstants.ImgNotFound;
         }
 
-        public static void UpdateBGGLinks()
+        public static void UpdateBGGLinksForClubGames(int sleepInterval)
         {
             var users = DBUser.GetUsers();
             var games = DBGame.GetGamesCollection(users, true);
@@ -250,11 +251,30 @@ namespace ZhukBGGClubRanking.WebApi
                 var existingLinks = DBGGGLinks.GetLinksForBGGGame(game.BGGObjectId);
                 if (!existingLinks.Any())
                 {
-                    System.Threading.Thread.Sleep(1000);
+                    System.Threading.Thread.Sleep(sleepInterval);
                     game.BGGExtendedInfo = BGGHelper.GetGame(game.BGGObjectId);
                     if (game.BGGExtendedInfo != null)
                     {
                         DBGGGLinks.SaveLinksForBGGGame(game.BGGExtendedInfo);
+                    }
+                }
+            }
+        }
+
+        public static void UpdateBGGLinksForAllGames(int sleepInterval)
+        {
+            var games = DBTeseraBGGRawGame.GetGamesShortInfo();
+            foreach (var game in games.Where(c=>c.BGGInfo!=null && c.BGGObjectId!=null && c.BGGObjectId>0).OrderByDescending(c=>c.BGGInfo.Usersrated))
+            {
+                //if (new[] { 312484, 266192 }.Contains(game.BGGObjectId)) continue;
+                var existingLinks = DBGGGLinks.GetLinksForBGGGame(game.BGGObjectId.Value);
+                if (!existingLinks.Any())
+                {
+                    System.Threading.Thread.Sleep(sleepInterval);
+                    var info = BGGHelper.GetGame(game.BGGObjectId.Value);
+                    if (info != null)
+                    {
+                        DBGGGLinks.SaveLinksForBGGGame(info);
                     }
                 }
             }
@@ -278,6 +298,61 @@ namespace ZhukBGGClubRanking.WebApi
                 game.Owners.Add(new GameOwner() { CreateTime = DateTime.Now, DeleteTime = DateTime.Now, UserId = user.Id });
                 DBGame.SaveGame(game, false);
             }
+        }
+
+        public static void TranslateBGGLinks(int itemsInPartToYandexCount, int sleepInterval)
+        {
+            TranslateBGGLinksForTable(BoardGameMechanic.TableName, itemsInPartToYandexCount, sleepInterval);
+            TranslateBGGLinksForTable(BoardGameCategory.TableName, itemsInPartToYandexCount, sleepInterval);
+            TranslateBGGLinksForTable(BoardGameDesigner.TableName, itemsInPartToYandexCount, sleepInterval);
+        }
+
+        static void TranslateBGGLinksForTable(string tableName, int itemsInPartToYandexCount, int sleepInterval)
+        {
+            var linksDict = DBGGGLinks.GetBggGameLinksDictionaryForTable(tableName);
+            var linksToTranslate = linksDict.Where(c => string.IsNullOrWhiteSpace(c.TitleRus)).ToList();
+            foreach (var bggGameLink in linksToTranslate)
+            {
+                var cacheTextRus = DBTranslate.GetTranslationCache(bggGameLink.TitleEng);
+                if (!string.IsNullOrWhiteSpace(cacheTextRus))
+                    bggGameLink.TitleRus = cacheTextRus;
+            }
+            var linksToSendToYandexTranslate = linksToTranslate.Where(c => string.IsNullOrWhiteSpace(c.TitleRus));
+            var cnt = 0;
+            var portion = new List<BGGGameLink>();
+            foreach (var bggGameLink in linksToSendToYandexTranslate)
+            {
+                if (cnt >= itemsInPartToYandexCount || linksToSendToYandexTranslate.Count()< itemsInPartToYandexCount)
+                {
+                    if (linksToSendToYandexTranslate.Count() < itemsInPartToYandexCount)
+                        portion.AddRange(linksToSendToYandexTranslate);
+                    var textsEng = portion.Select(c => c.TitleEng).ToArray();
+                    System.Threading.Thread.Sleep(sleepInterval);
+                    var textsRus = YandexTranslateHelper.GetTranslationFromEng(textsEng).Result;
+                    var dic = new Dictionary<string, string>();
+                    for (int i = 0; i <= textsEng.Length; i++)
+                    {
+                        if (textsRus.Count > i)
+                        {
+                            dic[textsEng[i]] = textsRus[i];
+                            var bgglinkToUpdate = linksToTranslate.FirstOrDefault(c => c.TitleEng == textsEng[i] && string.IsNullOrWhiteSpace(c.TitleRus));
+                            if (bgglinkToUpdate!=null)
+                                bgglinkToUpdate.TitleRus = textsRus[i];
+                        }
+                    }
+                    DBTranslate.SaveCache(dic);
+                    if (linksToSendToYandexTranslate.Count() < itemsInPartToYandexCount) 
+                        break;
+                    portion.Clear();
+                    cnt = 0;
+                }
+                else
+                {
+                    portion.Add(bggGameLink);
+                    cnt++;
+                }
+            }
+            DBGGGLinks.UpdateBggGameLinksDictionaryForTable(tableName, linksToTranslate);
         }
     }
 }

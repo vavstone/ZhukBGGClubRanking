@@ -84,6 +84,11 @@ namespace ZhukBGGClubRanking.Core
             get { return "https://tesera.ru/game/"; }
         }
 
+        public static string YandexTranslationAPIUrl
+        {
+            get { return "https://translate.api.cloud.yandex.net/translate/v2/translate"; }
+        }
+
         public const string CommonUserErrorMessage = "Произошла ошибка. Обратитесь к администратору системы.";
     }
 }

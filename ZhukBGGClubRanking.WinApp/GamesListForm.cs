@@ -27,8 +27,8 @@ namespace ZhukBGGClubRanking.WinApp
         private async void GamesListForm_Load(object sender, EventArgs e)
         {
             PrepareDataGrid();
-            LoadGames(); 
-            grid.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(DataBindingComplete);
+            grid.DataBindingComplete += DataBindingComplete;
+            LoadGames();
         }
 
         private void DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -147,6 +147,11 @@ namespace ZhukBGGClubRanking.WinApp
         {
             grid.DataSource = null;
             grid.DataSource = games;
+        }
+
+        private void btApply_Click(object sender, EventArgs e)
+        {
+            LoadGames();
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using ZhukBGGClubRanking.Core.Model;
 using ZhukBGGClubRanking.WebApi;
+using ZhukBGGClubRanking.WebApi.Code;
 using ZhukBGGClubRanking.WebApi.Core;
 
 namespace ZhukBGGClubRanking.Core
@@ -241,10 +242,67 @@ namespace ZhukBGGClubRanking.Core
 
                 }
             }
+        }
 
 
+        public static List<BGGGameLink> GetBggGameLinksDictionaryForTable(string tableName)
+        {
+            var result = new List<BGGGameLink>();
+            try
+            {
+                using (var con = DBHelper.CreateConnection())
+                {
+                    con.Open();
+                    using (var cmd = con.CreateCommand())
+                    {
+                        cmd.CommandText = string.Format("select id,title_eng,title_rus from {0}", tableName);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var item = new BGGGameLink();
+                                item.Id = reader.GetFieldValue<int>("id");
+                                item.TitleEng = reader.GetFieldValue<string>("title_eng");
+                                item.TitleRus = reader.GetFieldValueNullSafe<string>("title_rus");
+                                result.Add(item);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteError(ex);
+                throw;
+            }
+            return result;
+        }
 
-
+        public static void UpdateBggGameLinksDictionaryForTable(string tableName, List<BGGGameLink> list)
+        {
+            try
+            {
+                using (var con = DBHelper.CreateConnection())
+                {
+                    con.Open();
+                    using (var cmd = con.CreateCommand())
+                    {
+                        cmd.CommandText = string.Format("update {0} set title_rus=@title_rus where id=@id", tableName);
+                        foreach (var item in list.Where(c=>!string.IsNullOrWhiteSpace(c.TitleRus)))
+                        {
+                            cmd.Parameters.Clear();
+                            cmd.CreateParameter(DbType.Int32, "id", item.Id);
+                            cmd.CreateParameter(DbType.String, "title_rus", item.TitleRus);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteError(ex);
+                throw;
+            }
         }
     }
 }

@@ -41,7 +41,7 @@ namespace ZhukBGGClubRanking.Core.Model
         {
             get
             {
-                return BGDesigners.Select(c => c.TitleEng).JoinToString(", ");
+                return BGDesigners.Select(c => c.TitleRus).JoinToString(Environment.NewLine);
             }
         }
 
@@ -49,7 +49,7 @@ namespace ZhukBGGClubRanking.Core.Model
         {
             get
             {
-                return BGMechanics.Select(c => c.TitleEng).JoinToString(", ");
+                return BGMechanics.Select(c => c.TitleRus).JoinToString(Environment.NewLine);
             }
         }
 
@@ -57,7 +57,7 @@ namespace ZhukBGGClubRanking.Core.Model
         {
             get
             {
-                return BGCategories.Select(c => c.TitleEng).JoinToString(", ");
+                return BGCategories.Select(c => c.TitleRus).JoinToString(Environment.NewLine);
             }
         }
         public string FamiliesString

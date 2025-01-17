@@ -95,6 +95,7 @@
             this.btApply.TabIndex = 0;
             this.btApply.Text = "Применить";
             this.btApply.UseVisualStyleBackColor = true;
+            this.btApply.Click += new System.EventHandler(this.btApply_Click);
             // 
             // GamesListForm
             // 

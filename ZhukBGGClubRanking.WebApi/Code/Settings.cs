@@ -28,6 +28,16 @@
             get { return int.Parse(Config["AppSettings:TokenLifeTimeInMinutes"]); }
         }
 
+        public static string YandexAPIToken
+        {
+            get { return Config["AppSettings:YandexAPIToken"]; }
+        }
+
+        public static string YandexAPIFolderId
+        {
+            get { return Config["AppSettings:YandexAPIFolderId"]; }
+        }
+
         public static string ConnectionString
         {
             get { return Config["ConnectionStrings:ConnectionString"]; }
