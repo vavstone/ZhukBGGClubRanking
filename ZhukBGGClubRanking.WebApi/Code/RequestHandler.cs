@@ -263,6 +263,7 @@ namespace ZhukBGGClubRanking.WebApi
 
         public static void UpdateBGGLinksForAllGames(int sleepInterval)
         {
+            var cnt = 0;
             var games = DBTeseraBGGRawGame.GetGamesShortInfo();
             foreach (var game in games.Where(c=>c.BGGInfo!=null && c.BGGObjectId!=null && c.BGGObjectId>0).OrderByDescending(c=>c.BGGInfo.Usersrated))
             {
@@ -270,12 +271,14 @@ namespace ZhukBGGClubRanking.WebApi
                 var existingLinks = DBGGGLinks.GetLinksForBGGGame(game.BGGObjectId.Value);
                 if (!existingLinks.Any())
                 {
+                    if (cnt>=2000) break;
                     System.Threading.Thread.Sleep(sleepInterval);
                     var info = BGGHelper.GetGame(game.BGGObjectId.Value);
                     if (info != null)
                     {
                         DBGGGLinks.SaveLinksForBGGGame(info);
                     }
+                    cnt++;
                 }
             }
         }

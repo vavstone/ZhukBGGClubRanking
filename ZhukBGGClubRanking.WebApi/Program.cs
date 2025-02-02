@@ -25,7 +25,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -140,7 +140,7 @@ app.MapPost("/api/updatebgglinksforallgames", /*[Authorize]*/ (HttpContext conte
 {
     //if (!AuthUtils.IsUserAdmin(context))
     //    return;
-    RequestHandler.UpdateBGGLinksForAllGames(500);
+    RequestHandler.UpdateBGGLinksForAllGames(300);
 }).WithName("UpdateBGGLinksForAllGames");
 
 app.MapPost("/api/translatebgglinks", /*[Authorize]*/ (HttpContext context) =>

@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhukBGGClubRanking.WinAdmin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoardGamer.BoardGameGeek", "BoardGamer.BoardGameGeek\BoardGamer.BoardGameGeek.csproj", "{EDBFDF32-506B-4FE8-8085-6781814794D1}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "zhukbggclubranking.webapp", "ZhukBGGClubRanking.WebApp\zhukbggclubranking.webapp.esproj", "{3C84DF08-AC2E-4765-B72A-793B8A630E4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,12 @@ Global
 		{EDBFDF32-506B-4FE8-8085-6781814794D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDBFDF32-506B-4FE8-8085-6781814794D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDBFDF32-506B-4FE8-8085-6781814794D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C84DF08-AC2E-4765-B72A-793B8A630E4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C84DF08-AC2E-4765-B72A-793B8A630E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C84DF08-AC2E-4765-B72A-793B8A630E4A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3C84DF08-AC2E-4765-B72A-793B8A630E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C84DF08-AC2E-4765-B72A-793B8A630E4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C84DF08-AC2E-4765-B72A-793B8A630E4A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
