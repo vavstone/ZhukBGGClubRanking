@@ -112,10 +112,6 @@
       <Project>{3f1a45c7-96cb-4bad-a931-792d04b96128}</Project>
       <Name>Oli.Controls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ZhukBGGClubRanking.Core\ZhukBGGClubRanking.Core.csproj">
-      <Project>{7f86274c-4b94-4f53-b6ea-9df076620c3d}</Project>
-      <Name>ZhukBGGClubRanking.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ZhukBGGClubRanking.WinApp.Core\ZhukBGGClubRanking.WinApp.Core.csproj">
       <Project>{dac04874-dba5-47cd-be61-df1fa9c446b4}</Project>
       <Name>ZhukBGGClubRanking.WinApp.Core</Name>
