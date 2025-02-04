@@ -166,7 +166,9 @@ namespace ZhukBGGClubRanking.Core
                 gamesInCommonColl = CommonCollection.Items.Where(c=>c.Status.Own).Select(c => c.Name).ToList();
                 foreach (var commonGame in gamesInCommonColl)
                 {
-                    if (!CommonCollection.GamesTranslation.TranslateList.Any(c=>c.NameEng==commonGame || c.Parent==null))
+                    var translateGame =
+                        CommonCollection.GamesTranslation.TranslateList.FirstOrDefault(c => c.NameEng == commonGame);
+                    if (translateGame == null || translateGame.Parent==null)
                         allGames.Add(commonGame);
                 }
                 

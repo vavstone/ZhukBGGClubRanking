@@ -32,6 +32,10 @@ namespace ZhukBGGClubRanking.Core
         {
             get { return Path.Combine(AppFilesDir, "Export"); }
         }
+        public static string ExportTranslateFilePath
+        {
+            get { return Path.Combine(ExportFilesDir, "translate", "collection.csv"); }
+        }
         public static string OuterRawInfoFilesDir
         {
             get { return Path.Combine(AppFilesDir, "OuterRawInfo"); }

@@ -114,13 +114,13 @@ app.MapPost("/api/createuserbyadmin", [Authorize] (User newUser, HttpContext con
     RequestHandler.CreateNewUser(newUser);
 }).WithName("CreateUserByAdmin");
 
-//app.MapPost("/api/initiatedb", /*[Authorize]*/ (HttpContext context) =>
-//{
-//    //if (!AuthUtils.IsUserAdmin(context))
-//    //    return;
-//    var currentUser = new User { Id = 1 };
-//    RequestHandler.InitiateDB(currentUser);
-//}).WithName("InitiateDB");
+app.MapPost("/api/initiatedb", /*[Authorize]*/ (HttpContext context) =>
+{
+    //if (!AuthUtils.IsUserAdmin(context))
+    //    return;
+    var currentUser = new User { Id = 1 };
+    RequestHandler.InitiateDB(currentUser);
+}).WithName("InitiateDB");
 
 app.MapPost("/api/clearlinksbggtables", /*[Authorize]*/ (HttpContext context) =>
 {
@@ -155,6 +155,12 @@ app.MapPost("/api/saveratingstoCSVfiles", [Authorize] (HttpContext context) => {
         return;
     RequestHandler.SaveRatingsToCSVFiles();
 }).WithName("SaveRatingsToCSVFiles");
+
+app.MapPost("/api/updatetranslatefile", /*[Authorize]*/ (HttpContext context) => {
+    //if (!AuthUtils.IsUserAdmin(context))
+    //    return;
+    RequestHandler.UpdateTranslateFile();
+}).WithName("UpdateTranslateFile");
 
 
 app.MapPost("/api/clearteserarawtable", [Authorize] (HttpContext context) => {
@@ -217,18 +223,20 @@ app.MapGet("/test/getteststring", () => "test").WithName("GetTestString");
 
 app.Run();
 
-//app.MapGet("/test/getteststringauth", [Authorize] (HttpContext context) => "test").WithName("GetTestStringAuth");
+app.MapGet("/test/getteststringauth", [Authorize] (HttpContext context) => "test").WithName("GetTestStringAuth");
 
-//app.MapPost("/api/updatebggcoll", [Authorize] (HttpContext context) => {
+//app.MapPost("/api/updatebggcoll", [Authorize] (HttpContext context) =>
+//{
 
 //    TaskWorker.LoadBGGCollectionToDB();
 //}).WithName("UpdateBGGColl");
 
-//app.MapPost("/api/saveteseragamesrawinfo", [Authorize] (List<TeseraRawGame> teseraGames, HttpContext context) => {
-//    if (!AuthUtils.IsUserAdmin(context))
-//        return;
-//    RequestHandler.SaveTeseraRawInfoGames(teseraGames);
-//}).WithName("SaveTeseraGamesRawInfo");
+app.MapPost("/api/saveteseragamesrawinfo", [Authorize] (List<TeseraRawGame> teseraGames, HttpContext context) =>
+{
+    if (!AuthUtils.IsUserAdmin(context))
+        return;
+    RequestHandler.SaveTeseraRawInfoGames(teseraGames);
+}).WithName("SaveTeseraGamesRawInfo");
 
 
 

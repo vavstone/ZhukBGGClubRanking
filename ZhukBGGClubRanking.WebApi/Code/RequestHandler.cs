@@ -357,5 +357,22 @@ namespace ZhukBGGClubRanking.WebApi
             }
             DBGGGLinks.UpdateBggGameLinksDictionaryForTable(tableName, linksToTranslate);
         }
+
+        internal static void UpdateTranslateFile()
+        {
+            var bggColl = BGGCollection.LoadFromFile();
+            var rawGames = DBTeseraBGGRawGame.GetGamesShortInfo();
+            List<Game> games = new List<Game>();
+            foreach (var item in bggColl.Items)
+            {
+                if (!games.Any(c => c.BGGObjectId == item.ObjectId))
+                {
+                    var game = Game.CreateGame(rawGames, new List<User>(), false, item.ObjectId, null, item.TeseraKey,
+                        item.ParentName);
+                    games.Add(game);
+                }
+            }
+            GamesNamesTranslateFile.UpdateTranslateFile(games);
+        }
     }
 }
