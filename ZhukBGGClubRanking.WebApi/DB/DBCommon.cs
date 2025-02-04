@@ -30,7 +30,7 @@ namespace ZhukBGGClubRanking.WebApi.DB
                             cmd.Transaction = transaction;
                             try
                             {
-                                ClearLinksBGGTables(cmd);
+                                //ClearLinksBGGTables(cmd);
                                 
                                 //очищаем таблицы БД: rating_items_history, rating_items, users_ratings, games, users(кроме записи 1 - admin), ...
                                 ClearTable(cmd, "rating_items_history",0);

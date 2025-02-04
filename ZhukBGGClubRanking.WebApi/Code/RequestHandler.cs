@@ -241,45 +241,83 @@ namespace ZhukBGGClubRanking.WebApi
             return CoreConstants.ImgNotFound;
         }
 
-        public static void UpdateBGGLinksForClubGames(int sleepInterval)
+        //public static void UpdateBGGLinksForClubGames(int sleepInterval)
+        //{
+        //    var users = DBUser.GetUsers();
+        //    var games = DBGame.GetGamesCollection(users, true);
+        //    foreach (var game in games)
+        //    {
+        //        var existingLinks = DBGGGLinks.GetLinksForBGGGame(game.BGGObjectId);
+        //        if (!existingLinks.Any())
+        //        {
+        //            Thread.Sleep(sleepInterval);
+        //            game.BGGExtendedInfo = BGGHelper.GetGame(game.BGGObjectId);
+        //            if (game.BGGExtendedInfo != null)
+        //            {
+        //                DBGGGLinks.SaveLinksForBGGGame(game.BGGExtendedInfo);
+        //            }
+        //        }
+        //    }
+        //}
+
+        public static void UpdateBGGLinksForGames(int sleepInterval, int portionSize)
         {
             var users = DBUser.GetUsers();
-            var games = DBGame.GetGamesCollection(users, true);
-            foreach (var game in games)
-            {
-                //if (new[] { 312484, 266192 }.Contains(game.BGGObjectId)) continue;
-                var existingLinks = DBGGGLinks.GetLinksForBGGGame(game.BGGObjectId);
-                if (!existingLinks.Any())
-                {
-                    System.Threading.Thread.Sleep(sleepInterval);
-                    game.BGGExtendedInfo = BGGHelper.GetGame(game.BGGObjectId);
-                    if (game.BGGExtendedInfo != null)
-                    {
-                        DBGGGLinks.SaveLinksForBGGGame(game.BGGExtendedInfo);
-                    }
-                }
-            }
-        }
-
-        public static void UpdateBGGLinksForAllGames(int sleepInterval)
-        {
+            var colgames = DBGame.GetGamesCollection(users, true);
             var cnt = 0;
-            var games = DBTeseraBGGRawGame.GetGamesShortInfo();
-            foreach (var game in games.Where(c=>c.BGGInfo!=null && c.BGGObjectId!=null && c.BGGObjectId>0).OrderByDescending(c=>c.BGGInfo.Usersrated))
+
+            foreach (var game in colgames)
             {
-                //if (new[] { 312484, 266192 }.Contains(game.BGGObjectId)) continue;
-                var existingLinks = DBGGGLinks.GetLinksForBGGGame(game.BGGObjectId.Value);
+                UpdateLinkForBGGGame(game.BGGObjectId, sleepInterval, ref cnt);
+
+                //var existingLinks = DBGGGLinks.GetLinksForBGGGame(game.BGGObjectId);
+                //if (!existingLinks.Any())
+                //{
+                //    Thread.Sleep(sleepInterval);
+                //    game.BGGExtendedInfo = BGGHelper.GetGame(game.BGGObjectId);
+                //    if (game.BGGExtendedInfo != null)
+                //    {
+                //        DBGGGLinks.SaveLinksForBGGGame(game.BGGExtendedInfo);
+                //    }
+                //}
+            }
+
+
+            var games = DBTeseraBGGRawGame.GetGamesShortInfo();
+            foreach (var game in games.Where
+                         (c=>c.BGGInfo!=null && c.BGGObjectId!=null && c.BGGObjectId>0 && 
+                             !colgames.Any(c1=> c1.BGGObjectId!=null && c1.BGGObjectId==c.BGGObjectId)).
+                         OrderByDescending(c=>c.BGGInfo.Usersrated))
+            {
+                UpdateLinkForBGGGame(game.BGGObjectId.Value, sleepInterval, ref cnt);
+                if (cnt >= portionSize) break;
+
+                /*var existingLinks = DBGGGLinks.GetLinksForBGGGame(game.BGGObjectId.Value);
                 if (!existingLinks.Any())
                 {
                     if (cnt>=2000) break;
-                    System.Threading.Thread.Sleep(sleepInterval);
+                    Thread.Sleep(sleepInterval);
                     var info = BGGHelper.GetGame(game.BGGObjectId.Value);
                     if (info != null)
                     {
                         DBGGGLinks.SaveLinksForBGGGame(info);
                     }
                     cnt++;
-                }
+                }*/
+            }
+        }
+
+        static void UpdateLinkForBGGGame(int bggid, int sleepInterval, ref int cnt)
+        {
+            var existingLinks = DBGGGLinks.GetLinksForBGGGame(bggid);
+            if (!existingLinks.Any())
+            {
+                
+                Thread.Sleep(sleepInterval);
+                var info = BGGHelper.GetGame(bggid);
+                if (info != null)
+                    DBGGGLinks.SaveLinksForBGGGame(info);
+                cnt++;
             }
         }
 

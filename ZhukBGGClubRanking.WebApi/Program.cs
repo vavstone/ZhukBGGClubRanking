@@ -129,18 +129,18 @@ app.MapPost("/api/clearlinksbggtables", /*[Authorize]*/ (HttpContext context) =>
     RequestHandler.ClearLinksBGGTables();
 }).WithName("ClearLinksBGGTables");
 
-app.MapPost("/api/updatebgglinksforclubgames", /*[Authorize]*/ (HttpContext context) =>
-{
-    //if (!AuthUtils.IsUserAdmin(context))
-    //    return;
-    RequestHandler.UpdateBGGLinksForClubGames(500);
-}).WithName("UpdateBGGLinksForClubGames");
+//app.MapPost("/api/updatebgglinksforclubgames", /*[Authorize]*/ (HttpContext context) =>
+//{
+//    //if (!AuthUtils.IsUserAdmin(context))
+//    //    return;
+//    RequestHandler.UpdateBGGLinksForClubGames(500);
+//}).WithName("UpdateBGGLinksForClubGames");
 
-app.MapPost("/api/updatebgglinksforallgames", /*[Authorize]*/ (HttpContext context) =>
+app.MapPost("/api/updatebgglinksforgames", /*[Authorize]*/ (HttpContext context, int requestInterval, int portionSize) =>
 {
     //if (!AuthUtils.IsUserAdmin(context))
     //    return;
-    RequestHandler.UpdateBGGLinksForAllGames(300);
+    RequestHandler.UpdateBGGLinksForGames(requestInterval<=0?300:requestInterval, portionSize<=0?2000:portionSize);
 }).WithName("UpdateBGGLinksForAllGames");
 
 app.MapPost("/api/translatebgglinks", /*[Authorize]*/ (HttpContext context) =>

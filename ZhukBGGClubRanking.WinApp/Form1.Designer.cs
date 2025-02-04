@@ -51,12 +51,12 @@
             this.управлениеРейтингомToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuUploadCSVFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuManageMyCollection = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuShowGamesList = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.dataGridView1 = new ZhukBGGClubRanking.WinApp.DataGridViewCustom();
-            this.menuShowGamesList = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel7.SuspendLayout();
@@ -80,7 +80,7 @@
             this.panel1.Controls.Add(this.panel5);
             this.panel1.Controls.Add(this.panel4);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 522);
+            this.panel1.Location = new System.Drawing.Point(0, 714);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(5, 5, 5, 0);
             this.panel1.Size = new System.Drawing.Size(1418, 107);
@@ -145,7 +145,7 @@
             this.trBarOnlyTop.Minimum = 1;
             this.trBarOnlyTop.Name = "trBarOnlyTop";
             this.trBarOnlyTop.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.trBarOnlyTop.Size = new System.Drawing.Size(776, 45);
+            this.trBarOnlyTop.Size = new System.Drawing.Size(776, 44);
             this.trBarOnlyTop.TabIndex = 1;
             this.trBarOnlyTop.Value = 1;
             this.trBarOnlyTop.Scroll += new System.EventHandler(this.trBarOnlyTop_Scroll);
@@ -287,6 +287,13 @@
             this.menuManageMyCollection.Text = "Редактирование моей коллекции...";
             this.menuManageMyCollection.Click += new System.EventHandler(this.menuManageMyCollection_Click);
             // 
+            // menuShowGamesList
+            // 
+            this.menuShowGamesList.Name = "menuShowGamesList";
+            this.menuShowGamesList.Size = new System.Drawing.Size(267, 22);
+            this.menuShowGamesList.Text = "Список игр...";
+            this.menuShowGamesList.Click += new System.EventHandler(this.menuShowGamesList_Click);
+            // 
             // AboutToolStripMenuItem
             // 
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
@@ -300,7 +307,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 23);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1418, 499);
+            this.panel3.Size = new System.Drawing.Size(1418, 691);
             this.panel3.TabIndex = 2;
             // 
             // splitContainer1
@@ -317,7 +324,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
             this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(0, 6, 0, 4);
-            this.splitContainer1.Size = new System.Drawing.Size(1418, 499);
+            this.splitContainer1.Size = new System.Drawing.Size(1418, 691);
             this.splitContainer1.SplitterDistance = 720;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -329,7 +336,7 @@
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(720, 499);
+            this.tabControl1.Size = new System.Drawing.Size(720, 691);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -346,21 +353,14 @@
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
             this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.ShowEditingIcon = false;
-            this.dataGridView1.Size = new System.Drawing.Size(694, 489);
+            this.dataGridView1.Size = new System.Drawing.Size(694, 681);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // menuShowGamesList
-            // 
-            this.menuShowGamesList.Name = "menuShowGamesList";
-            this.menuShowGamesList.Size = new System.Drawing.Size(267, 22);
-            this.menuShowGamesList.Text = "Список игр...";
-            this.menuShowGamesList.Click += new System.EventHandler(this.menuShowGamesList_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1418, 629);
+            this.ClientSize = new System.Drawing.Size(1418, 821);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
