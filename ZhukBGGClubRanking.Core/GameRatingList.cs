@@ -163,21 +163,23 @@ namespace ZhukBGGClubRanking.Core
             var allGames = new List<string>();
             if (CommonCollection != null)
             {
-                gamesInCommonColl = CommonCollection.Items.Where(c=>c.Status.Own).Select(c => c.Name).ToList();
+                gamesInCommonColl = CommonCollection.Items.Where(c => c.Status.Own).Select(c => c.Name).ToList();
                 foreach (var commonGame in gamesInCommonColl)
                 {
-                    if (!CommonCollection.GamesTranslation.TranslateList.Any(c=>c.NameEng==commonGame || c.Parent==null))
+                    var translateGame =
+                        CommonCollection.GamesTranslation.TranslateList.FirstOrDefault(c => c.NameEng == commonGame);
+                    if (translateGame == null || translateGame.Parent == null)
                         allGames.Add(commonGame);
                 }
-                
+
             }
-            allGames.AddRange(otherCollections.SelectMany(c=>c.GameList).Select(c=>c.GameEng).Distinct());
+            allGames.AddRange(otherCollections.SelectMany(c => c.GameList).Select(c => c.GameEng).Distinct());
 
 
-            foreach (var game in allGames.Distinct().OrderBy(c=>c))
+            foreach (var game in allGames.Distinct().OrderBy(c => c))
             {
                 if (GameList.All(c => c.GameEng != game))
-                    result.Add(new GameRating {GameEng = game, GameRus = CommonCollection.GamesTranslation.GetNameRus(game), Rating = lastRating++});
+                    result.Add(new GameRating { GameEng = game, GameRus = CommonCollection.GamesTranslation.GetNameRus(game), Rating = lastRating++ });
             }
             return result;
         }
