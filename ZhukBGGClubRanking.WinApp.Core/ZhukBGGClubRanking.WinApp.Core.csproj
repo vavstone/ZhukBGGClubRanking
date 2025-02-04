@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ZhukBGGClubRanking.WinApp.Core</RootNamespace>
     <AssemblyName>ZhukBGGClubRanking.WinApp.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,7 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZhukBGGClubRanking.Core\ZhukBGGClubRanking.Core.csproj">
-      <Project>{aba6d626-0948-49bc-8586-ae98abe38ec2}</Project>
+      <Project>{7f86274c-4b94-4f53-b6ea-9df076620c3d}</Project>
       <Name>ZhukBGGClubRanking.Core</Name>
     </ProjectReference>
   </ItemGroup>

@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oli.Controls", "Oli.Control
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhukBGGClubRanking.WinApp.Core", "ZhukBGGClubRanking.WinApp.Core\ZhukBGGClubRanking.WinApp.Core.csproj", "{DAC04874-DBA5-47CD-BE61-DF1FA9C446B4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZhukBGGClubRanking.Core", "ZhukBGGClubRanking.Core\ZhukBGGClubRanking.Core.csproj", "{ABA6D626-0948-49BC-8586-AE98ABE38EC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhukBGGClubRanking.Core", "ZhukBGGClubRanking.Core\ZhukBGGClubRanking.Core.csproj", "{7F86274C-4B94-4F53-B6EA-9DF076620C3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{DAC04874-DBA5-47CD-BE61-DF1FA9C446B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAC04874-DBA5-47CD-BE61-DF1FA9C446B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAC04874-DBA5-47CD-BE61-DF1FA9C446B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ABA6D626-0948-49BC-8586-AE98ABE38EC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABA6D626-0948-49BC-8586-AE98ABE38EC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABA6D626-0948-49BC-8586-AE98ABE38EC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABA6D626-0948-49BC-8586-AE98ABE38EC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F86274C-4B94-4F53-B6EA-9DF076620C3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F86274C-4B94-4F53-B6EA-9DF076620C3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F86274C-4B94-4F53-B6EA-9DF076620C3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F86274C-4B94-4F53-B6EA-9DF076620C3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
